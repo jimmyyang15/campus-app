@@ -28,7 +28,7 @@ const SigninForm = () => {
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -49,12 +49,12 @@ const SigninForm = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" >
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe@mail.com" {...field} />
+                    <Input placeholder="johndoe12" {...field} />
                   </FormControl>
 
                   <FormMessage />

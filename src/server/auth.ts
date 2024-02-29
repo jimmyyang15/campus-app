@@ -97,7 +97,7 @@ export const lucia = new Lucia(adapter, {
   export const google = new Google(
     process.env.GOOGLE_CLIENT_ID!, 
     process.env.GOOGLE_CLIENT_SECRET!,
-    'https://localhost:3000'
+    'https://localhost:3000/auth/signin/google/callback'
   );
 
   export const validateRequest = cache(
