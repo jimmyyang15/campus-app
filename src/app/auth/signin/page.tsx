@@ -1,4 +1,3 @@
-"use client";
 
 import SigninForm from "@/app/_components/auth/signin-form";
 import BackgroundDot from "@/app/_components/ui/background-dot";

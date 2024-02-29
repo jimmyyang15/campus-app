@@ -1,3 +1,6 @@
+"use client";
+
+
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -16,7 +19,11 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
+import Link from "next/link";
+import { router } from "@trpc/server";
+import { useRouter } from "next/navigation";
 const SigninForm = () => {
+  const router = useRouter()
   // 1. Define your form.
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
@@ -37,9 +44,9 @@ const SigninForm = () => {
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="text-center text-xl font-semibold">Welcome Back!</p>
+        <p className="text-center text-xl font-semibold mb-8">Welcome Back!</p>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" >
             <FormField
               control={form.control}
               name="email"
@@ -56,7 +63,7 @@ const SigninForm = () => {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
@@ -76,8 +83,16 @@ const SigninForm = () => {
               <span>or</span>
               <Separator className="flex-[0.5]" />
             </div>
+            <Button onClick={()=>{
+              router.push("/auth/signin/google")
+            }} type="button" variant={'outline'} className="w-full">
+                  Sign in with Google
+            </Button>
+            
+            <p className="text-sm">Don't have an account yet? <Link href={'/auth/signup'} className="font-bold underline">Sign up</Link></p>
           </form>
         </Form>
+
       </BackgroundGradient>
     </BackgroundDot>
   );
