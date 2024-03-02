@@ -1,3 +1,4 @@
+import {  userExistsByUsername } from "@/app/_actions/auth";
 import { errorUtil } from "node_modules/zod/lib/helpers/errorUtil";
 import { z } from "zod";
 //schema validations 
