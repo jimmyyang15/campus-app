@@ -2,7 +2,7 @@
 
 
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
-import React from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackgroundGradient } from "@/app/_components/ui/background-gradient";
@@ -10,7 +10,6 @@ import BackgroundDot from "@/app/_components/ui/background-dot";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,10 +19,14 @@ import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
 import Link from "next/link";
-import { router } from "@trpc/server";
 import { useRouter } from "next/navigation";
+import FormAlert from "./alert";
+import { AlertType } from "./signup-form";
+import { signin } from "@/app/_actions/signin";
 const SigninForm = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
   // 1. Define your form.
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
@@ -32,11 +35,23 @@ const SigninForm = () => {
       password: "",
     },
   });
+  const [error,setError] = useState<AlertType | null>(null);
   // 2. Define a submit handler.
   function onSubmit(values: LoginSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    setError(null);
+    startTransition(async () => {
+      const res = await signin(values);
+      if(res.error) {
+        setError({
+          message:res.error,
+          status:"error",
+          desc:"Make sure you type in the correct credentials"
+        })
+      }
+     
+    });
   }
   return (
     <BackgroundDot>
@@ -75,6 +90,8 @@ const SigninForm = () => {
                 </FormItem>
               )}
             />
+            <FormAlert alert={error}  />
+
             <Button type="submit" className="w-full">
               Sign in
             </Button>
@@ -92,6 +109,7 @@ const SigninForm = () => {
             <p className="text-sm">Don't have an account yet? <Link href={'/auth/signup'} className="font-bold underline">Sign up</Link></p>
           </form>
         </Form>
+        
 
       </BackgroundGradient>
     </BackgroundDot>

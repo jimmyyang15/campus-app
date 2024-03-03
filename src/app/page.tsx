@@ -6,6 +6,8 @@ import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
 import { validateRequest } from "@/server/auth";
 import { redirect } from "next/navigation";
+import { Button } from "./_components/ui/button";
+import { signOut } from "./_actions/signout";
 
 export default async function Home() {
   noStore();
@@ -19,6 +21,7 @@ export default async function Home() {
   return (
     <main >
       {hello.greeting}
+      <Button onClick={signOut}>Sign out</Button>
     </main>
   );
 }

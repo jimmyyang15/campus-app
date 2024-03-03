@@ -1,12 +1,11 @@
 "use client";
-import React, { useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,9 +19,17 @@ import BackgroundDot from "@/app/_components/ui/background-dot";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
-import { toast } from "sonner";
+import FormAlert from "./alert";
+
+export interface AlertType {
+  status:'error' | 'success';
+  message:string;
+  desc:string
+}
 const SignupForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [error,setError] = useState<AlertType | null>(null);
+  const [success,setSuccess] = useState<AlertType | null>(null);
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -38,12 +45,22 @@ const SignupForm = () => {
   function onSubmit(values: RegisterSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setError(null);
+    setSuccess(null)
     startTransition(async () => {
       const res = await signUp(values);
       if (res?.success) {
-        toast.success("Email sent")
+        setSuccess({
+          status:"success",
+          message:"Successfully signed up!",
+          desc:"Email verification has been sent to " + res.data.email
+        })
       } else  {
-        toast.error(res?.error)
+        setError({
+          status:"error",
+          message:res?.error as string,
+          desc:"Try another one!"
+        })
       }
      
     });
@@ -153,6 +170,7 @@ const SignupForm = () => {
                 </FormItem>
               )}
             />
+            <FormAlert alert={success || error}  />
             <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
               

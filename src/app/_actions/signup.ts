@@ -6,6 +6,7 @@ import { db } from "@/server/db";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
+import { findUserByEmail, findUserByUsername } from "./auth";
 
 export const signUp = async (values: RegisterSchemaType) => {
 
@@ -24,6 +25,19 @@ export const signUp = async (values: RegisterSchemaType) => {
     const hashedPassword = await new Argon2id().hash(values.password);
     const userId = generateId(15);
 
+    const userExistsByUsername =await findUserByUsername(username)
+    const userExistsByEmail =await findUserByEmail(email);
+
+    if(userExistsByEmail) {
+       return {
+        error:"Email has been used!"
+       } 
+    }
+    if(userExistsByUsername) {
+       return {
+        error:"Username is not available!"
+       } 
+    }
 
     try {
         await db.user.create({
@@ -55,7 +69,8 @@ export const signUp = async (values: RegisterSchemaType) => {
         return {
             success: true,
             data: {
-                userId
+                userId,
+                email
             }
         }
     } catch (err) {
