@@ -18,10 +18,14 @@ export default async function Home() {
 	}
   const hello = await api.post.hello.query({ text: "from tRPC" });
 
+
   return (
     <main >
       {hello.greeting}
-      <Button onClick={signOut}>Sign out</Button>
+      <form action={signOut}>
+      <Button type="submit">Sign out</Button>
+
+      </form>
     </main>
   );
 }
