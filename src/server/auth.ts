@@ -77,6 +77,20 @@ import { Lucia, Session, User } from "lucia";
 import { db } from "./db";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { Profile } from "@prisma/client";
+
+declare module "lucia" {
+	interface Register {
+		Lucia: typeof lucia;
+		DatabaseUserAttributes: {
+			email: string;
+			// email_verified: boolean;
+      profile:Profile;
+      googleId:string;
+      username:string;
+		};
+	}
+}
 const adapter = new PrismaAdapter(db.session, db.user);
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
@@ -84,13 +98,15 @@ export const lucia = new Lucia(adapter, {
         secure: process.env.NODE_ENV === "production",
       }
     },
-    // getUserAttributes: (attributes) => {
-    //   return {
-    //           role: attributes.role,
-    //     githubId: attributes.githubId,
-    //     username: attributes.username,
-    //   }
-    // }
+    getUserAttributes: (attributes) => {
+      return {
+              // role: attributes.role,
+        googleId: attributes.googleId,
+        username: attributes.username,
+        profile:attributes.profile,
+        email:attributes.email
+      }
+    }
   });
 
   export const google = new Google(
@@ -127,8 +143,3 @@ export const lucia = new Lucia(adapter, {
 
 
 
-  declare module "lucia" {
-	interface Register {
-		Lucia: typeof lucia;
-	}
-}

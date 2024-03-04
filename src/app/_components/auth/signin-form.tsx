@@ -1,6 +1,5 @@
 "use client";
 
-
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -23,6 +22,7 @@ import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
 import { signin } from "@/app/_actions/signin";
+import { Loader2 } from "lucide-react";
 const SigninForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -35,7 +35,7 @@ const SigninForm = () => {
       password: "",
     },
   });
-  const [error,setError] = useState<AlertType | null>(null);
+  const [error, setError] = useState<AlertType | null>(null);
   // 2. Define a submit handler.
   function onSubmit(values: LoginSchemaType) {
     // Do something with the form values.
@@ -43,14 +43,13 @@ const SigninForm = () => {
     setError(null);
     startTransition(async () => {
       const res = await signin(values);
-      if(res.error) {
+      if (res.error) {
         setError({
-          message:res.error,
-          status:"error",
-          desc:"Make sure you type in the correct credentials"
-        })
+          message: res.error,
+          status: "error",
+          desc: "Make sure you type in the correct credentials",
+        });
       }
-     
     });
   }
   return (
@@ -59,9 +58,9 @@ const SigninForm = () => {
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="text-center text-xl font-semibold mb-8">Welcome Back!</p>
+        <p className="mb-8 text-center text-xl font-semibold">Welcome Back!</p>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="username"
@@ -90,27 +89,38 @@ const SigninForm = () => {
                 </FormItem>
               )}
             />
-            <FormAlert alert={error}  />
+            <FormAlert alert={error} />
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={isPending}>
+              {isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               Sign in
             </Button>
-            <div className="flex items-center gap-x-2 w-full">
-              <Separator className="flex-[0.5]"  />
+            <div className="flex w-full items-center gap-x-2">
+              <Separator className="flex-[0.5]" />
               <span>or</span>
               <Separator className="flex-[0.5]" />
             </div>
-            <Button onClick={()=>{
-              router.push("/auth/signin/google")
-            }} type="button" variant={'outline'} className="w-full">
-                  Sign in with Google
+            <Button
+              onClick={() => {
+                router.push("/auth/signin/google");
+              }}
+              type="button"
+              variant={"outline"}
+              className="w-full"
+            >
+              Sign in with Google
             </Button>
-            
-            <p className="text-sm">Don't have an account yet? <Link href={'/auth/signup'} className="font-bold underline">Sign up</Link></p>
+
+            <p className="text-sm">
+              Don't have an account yet?{" "}
+              <Link href={"/auth/signup"} className="font-bold underline">
+                Sign up
+              </Link>
+            </p>
           </form>
         </Form>
-        
-
       </BackgroundGradient>
     </BackgroundDot>
   );

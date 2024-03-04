@@ -7,6 +7,8 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { findUserByEmail, findUserByUsername } from "./auth";
+import { generateEmailVerificationCode } from "./email-verification";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const signUp = async (values: RegisterSchemaType) => {
 
@@ -55,6 +57,8 @@ export const signUp = async (values: RegisterSchemaType) => {
                 // googleId:"fsdfs"
             }
         });
+        const verificationCode = await generateEmailVerificationCode(userId, email);
+        await sendVerificationEmail(email,verificationCode)
         const session = await lucia.createSession(userId, {
             expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
         })

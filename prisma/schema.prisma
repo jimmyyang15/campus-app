@@ -13,16 +13,17 @@ enum Role {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  role           Role      @default(USER)
-  googleId       String?   @unique
-  email          String    @unique
-  hashedPassword String?
-  isMentor       Boolean   @default(false)
-  username       String    @unique
-  sessions       Session[]
-  profile        Profile?
-
+  id                String             @id @default(uuid())
+  role              Role               @default(USER)
+  googleId          String?            @unique
+  email             String             @unique
+  hashedPassword    String?
+  isMentor          Boolean            @default(false)
+  username          String             @unique
+  sessions          Session[]
+  profile           Profile?
+  emailVerified     Boolean            @default(false)
+  emailVerification EmailVerification?
 }
 
 model Profile {
@@ -39,4 +40,13 @@ model Session {
   userId    String
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model EmailVerification {
+  id     String @id @default(uuid())
+  code   String
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  email String
 }
