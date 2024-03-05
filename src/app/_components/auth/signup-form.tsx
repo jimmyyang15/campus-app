@@ -20,6 +20,7 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
+import { redirect } from "next/navigation";
 
 export interface AlertType {
   status:'error' | 'success';
@@ -49,18 +50,18 @@ const SignupForm = () => {
     setSuccess(null)
     startTransition(async () => {
       const res = await signUp(values);
-      if (res?.success) {
-        setSuccess({
-          status:"success",
-          message:"Successfully signed up!",
-          desc:"Email verification has been sent to " + res.data.email
-        })
-      } else  {
+      if (res?.error) {
+        // setSuccess({
+        //   status:"success",
+        //   message:"Successfully signed up!",
+        //   desc:"Email verification has been sent to " + res.data.email
+        // })
         setError({
           status:"error",
           message:res?.error as string,
           desc:"Try another one!"
         })
+
       }
      
     });

@@ -9,7 +9,7 @@ export async function generateEmailVerificationCode(userId: string, email: strin
             userId
         }
     })
-    const code = generateRandomString(8, alphabet("0-9", "A-Z"));
+    const code = Math.random().toString(36).substring(2, 8)
 	// await db.table("email_verification_code").insert({
 	// 	user_id: userId,
 	// 	email,

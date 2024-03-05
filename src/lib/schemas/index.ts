@@ -1,4 +1,3 @@
-import { errorUtil } from "node_modules/zod/lib/helpers/errorUtil";
 import { z } from "zod";
 //schema validations 
 export const LoginSchema = z.object({
@@ -39,9 +38,16 @@ export const RegisterSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
-});;
+});
+
+export const EmailVerificationSchema = z.object({
+  code:z.string().min(8,{
+    message:"Code should be contain 8 characters"
+  })
+})
 
 
 //types
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
+export type EmailVerificationSchemaType = z.infer<typeof EmailVerificationSchema>
