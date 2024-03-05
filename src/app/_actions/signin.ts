@@ -38,11 +38,17 @@ export async function signin(values: LoginSchemaType) {
         };
     }
 
+
+
     const validPassword = await new Argon2id().verify(existingUser.hashedPassword as string, password);
     if (!validPassword) {
         return {
             error: "Incorrect username or password"
         };
+    }
+
+    if(!existingUser.emailVerified) {
+        redirect
     }
 
     const session = await lucia.createSession(existingUser.id, {});

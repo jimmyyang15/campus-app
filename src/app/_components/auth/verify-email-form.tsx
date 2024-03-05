@@ -28,7 +28,7 @@ import FormAlert from "@/app/_components/auth/alert";
 import { AlertType } from "@/app/_components/auth/signup-form";
 import { signin } from "@/app/_actions/signin";
 import { Loader2 } from "lucide-react";
-const VerifyEmailForm = () => {
+const VerifyEmailForm = ({ email }: { email: string }) => {
   const [isPending, startTransition] = useTransition();
 
   // 1. Define your form.
@@ -46,14 +46,19 @@ const VerifyEmailForm = () => {
     setError(null);
     startTransition(async () => {});
   }
+  let futureDate = new Date(new Date().getTime() + 5 * 60000);
   return (
     <BackgroundDot>
       <BackgroundGradient
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <Form {...form}>
+        <h1 className="text-center font-bold text-xl ">Verify your email</h1>
+        <Form {...form} >
+
+            <p className="text-sm my-4">We just sent your email verification code via email to {email}</p>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormLabel>Email Verification code</FormLabel>
             <FormField
               control={form.control}
               name="code"

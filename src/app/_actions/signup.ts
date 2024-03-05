@@ -7,7 +7,7 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { findUserByEmail, findUserByUsername } from "./auth";
-import { generateEmailVerificationCode } from "./email-verification";
+import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
 import jwt from "jsonwebtoken"
@@ -59,16 +59,11 @@ export const signUp = async (values: RegisterSchemaType) => {
     });
     const verificationCode = await generateEmailVerificationCode(userId, email);
     await sendVerificationEmail(email, verificationCode);
-    const temporaryCode = Math.random().toString(36).substring(2, 8)
-    const token = jwt.sign(
-        { email, userId, temporaryCode },
-        process.env.JWT_SECRET!,
-        {
-            expiresIn: "5m",
-        }
-    )
+    const redirectUrl = await generateRedirectUrl({
+        email,
+        userId
+    })
 
-    const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`
     // const session = await lucia.createSession(userId, {
     //     expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
     // })

@@ -49,4 +49,5 @@ model EmailVerification {
   user   User   @relation(fields: [userId], references: [id])
   expiresAt DateTime
   email String
+  temporaryToken String?
 }
