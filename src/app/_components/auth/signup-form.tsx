@@ -20,7 +20,6 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
-import { redirect } from "next/navigation";
 
 export interface AlertType {
   status:'error' | 'success';

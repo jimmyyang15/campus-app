@@ -3,15 +3,10 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle, CheckCircle2, Terminal } from "lucide-react";
 import { AlertType } from "./signup-form";
 
-
-const FormAlert = ({
-  alert,
-}: {
-  alert:AlertType | null
-}) => {
+const FormAlert = ({ alert }: { alert: AlertType | null }) => {
   if (!alert) return null;
-  const { message,desc,status } =alert;
-  const isSuccess = status==='success'
+  const { message, desc, status } = alert;
+  const isSuccess = status === "success";
   return (
     <Alert variant={isSuccess ? "success" : "destructive"}>
       {isSuccess ? (
@@ -21,9 +16,7 @@ const FormAlert = ({
       )}
       <Terminal />
       <AlertTitle>{message}</AlertTitle>
-      <AlertDescription>
-        {desc}
-        </AlertDescription>
+      <AlertDescription>{desc}</AlertDescription>
     </Alert>
   );
 };

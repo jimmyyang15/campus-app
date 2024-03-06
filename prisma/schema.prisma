@@ -43,11 +43,11 @@ model Session {
 }
 
 model EmailVerification {
-  id     String @id @default(uuid())
-  code   String
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-  expiresAt DateTime
-  email String
+  id             String   @id @default(uuid())
+  code           String
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  expiresAt      DateTime
+  email          String   @unique
   temporaryToken String?
 }

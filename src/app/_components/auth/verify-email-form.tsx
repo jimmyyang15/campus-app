@@ -19,18 +19,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Button } from "@/app/_components/ui/button";
-import { Separator } from "@/app/_components/ui/separator";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import FormAlert from "@/app/_components/auth/alert";
 import { AlertType } from "@/app/_components/auth/signup-form";
-import { signin } from "@/app/_actions/signin";
-import { Loader2 } from "lucide-react";
-const VerifyEmailForm = ({ email }: { email: string }) => {
-  const [isPending, startTransition] = useTransition();
 
+import { OTPInput, SlotProps } from "input-otp";
+import { cn } from "@/lib/utils";
+import { verifyEmail } from "@/app/_actions/email-verification";
+const VerifyEmailForm = ({
+  email,
+  userId,
+}: {
+  email: string;
+  userId: string;
+}) => {
+  const [isPending, startTransition] = useTransition();
+  const [otp,setOtp] = useState<string|null>(null)
   // 1. Define your form.
   const form = useForm<EmailVerificationSchemaType>({
     resolver: zodResolver(EmailVerificationSchema),
@@ -44,48 +48,132 @@ const VerifyEmailForm = ({ email }: { email: string }) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setError(null);
-    startTransition(async () => {});
+    startTransition(async () => {
+      const res = await verifyEmail(
+        {
+          email,
+          userId,
+        },
+        values,
+      );
+      if (res?.error) {
+        // setSuccess({
+        //   status:"success",
+        //   message:"Successfully signed up!",
+        //   desc:"Email verification has been sent to " + res.data.email
+        // })
+        setError({
+          status:"error",
+          message:res?.error as string,
+          desc:"Please make sure it's the correct validation code"
+        })
+
+      }
+    });
   }
-  let futureDate = new Date(new Date().getTime() + 5 * 60000);
+  // let futureDate = new Date(new Date().getTime() + 5 * 60000);
   return (
     <BackgroundDot>
       <BackgroundGradient
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <h1 className="text-center font-bold text-xl ">Verify your email</h1>
-        <Form {...form} >
-
-            <p className="text-sm my-4">We just sent your email verification code via email to {email}</p>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <h1 className="text-center text-xl font-bold ">Verify your email</h1>
+        <Form {...form}>
+          <p className="my-4 text-sm">
+            We just sent your email verification code via email to {email}
+          </p>
+          <form  className="space-y-4">
             <FormLabel>Email Verification code</FormLabel>
-            <FormField
+            {/* <FormField
               control={form.control}
               name="code"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="johndoe12" {...field} />
+                    <Input   {...field} />
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
+            /> */}
+            <OTPInput
+            onComplete={onSubmit}
+            onChange={setOtp}
+            value={otp ?? ""}
+              maxLength={6}
+              containerClassName="group flex items-center has-[:disabled]:opacity-30"
+              render={({ slots }) => (
+                <>
+                  <div className="flex">
+                    {slots.slice(0, 3).map((slot, idx) => (
+                      <Slot key={idx} {...slot} />
+                    ))}
+                  </div>
+
+                  <FakeDash />
+
+                  <div className="flex">
+                    {slots.slice(3).map((slot, idx) => (
+                      <Slot key={idx} {...slot} />
+                    ))}
+                  </div>
+                </>
+              )}
             />
 
             <FormAlert alert={error} />
 
-            <Button type="submit" className="w-full" disabled={isPending}>
+            {/* <Button type="submit" className="w-full" disabled={isPending}>
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
               Submit
-            </Button>
+            </Button> */}
           </form>
         </Form>
       </BackgroundGradient>
     </BackgroundDot>
   );
 };
+
+// Feel free to copy. Uses @shadcn/ui tailwind colors.
+function Slot(props: SlotProps) {
+  return (
+    <div
+      className={cn(
+        "relative h-7 w-5 text-[2rem]",
+        "flex items-center justify-center",
+        "transition-all duration-300",
+        "border-y border-r border-border first:rounded-l-md first:border-l last:rounded-r-md",
+        "group-focus-within:border-accent-foreground/20 group-hover:border-accent-foreground/20",
+        "outline outline-0 outline-accent-foreground/20",
+        { "outline-4 outline-accent-foreground": props.isActive },
+      )}
+    >
+      {props.char !== null && <div>{props.char}</div>}
+      {props.hasFakeCaret && <FakeCaret />}
+    </div>
+  );
+}
+
+// You can emulate a fake textbox caret!
+function FakeCaret() {
+  return (
+    <div className="animate-caret-blink pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div className="h-4 w-px bg-white" />
+    </div>
+  );
+}
+
+// Inspired by Stripe's MFA input.
+function FakeDash() {
+  return (
+    <div className="flex w-10 items-center justify-center">
+      <div className="h-1 w-2 rounded-full bg-border" />
+    </div>
+  );
+}
 
 export default VerifyEmailForm;

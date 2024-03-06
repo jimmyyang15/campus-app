@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss"
 const svgToDataUri = require("mini-svg-data-uri");
 const colors = require("tailwindcss/colors");
+
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
@@ -22,6 +23,9 @@ const config = {
       },
     },
     extend: {
+      boxShadow: {
+        input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -63,6 +67,14 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        shimmer: {
+          from: {
+            "backgroundPosition": "0 0"
+          },
+          to: {
+            "backgroundPosition": "-200% 0"
+          }
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -71,11 +83,18 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'caret-blink': 'caret-blink 1.2s ease-out infinite',
+        shimmer: "shimmer 2s linear infinite"
       },
+      
     },
   },
   plugins: [require("tailwindcss-animate"),
@@ -100,7 +119,19 @@ const config = {
       },
       { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
     );
-  },],
+  },
+  addVariablesForColors
+],
 } satisfies Config
 
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}
 export default config

@@ -61,7 +61,8 @@ export const signUp = async (values: RegisterSchemaType) => {
     await sendVerificationEmail(email, verificationCode);
     const redirectUrl = await generateRedirectUrl({
         email,
-        userId
+        userId,
+        username
     })
 
     // const session = await lucia.createSession(userId, {
@@ -75,6 +76,6 @@ export const signUp = async (values: RegisterSchemaType) => {
     //     sessionCookie.attributes
     // );
 
-    redirect(redirectUrl)
+    return redirect(redirectUrl)
 
 }

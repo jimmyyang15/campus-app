@@ -5,6 +5,9 @@ import { lucia } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
+import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
+import { sendVerificationEmail } from "@/lib/mail";
+import { findUserByUsername } from "./auth";
 export async function signin(values: LoginSchemaType) {
 
     const validatedFields = LoginSchema.safeParse(values);
@@ -18,11 +21,7 @@ export async function signin(values: LoginSchemaType) {
 
 
 
-    const existingUser = await db.user.findFirst({
-        where: {
-            username
-        }
-    })
+    const existingUser = await findUserByUsername(username)
     if (!existingUser) {
         // NOTE:
         // Returning immediately allows malicious actors to figure out valid usernames from response times,
@@ -47,8 +46,17 @@ export async function signin(values: LoginSchemaType) {
         };
     }
 
-    if(!existingUser.emailVerified) {
-        redirect
+    if (!existingUser.emailVerified) {
+        const userByUsername = await findUserByUsername(username)
+        const verificationCode = await generateEmailVerificationCode(userByUsername?.email as string, userByUsername?.email as string);
+        await sendVerificationEmail(userByUsername?.email as string, verificationCode);
+        const redirectUrl = await generateRedirectUrl({
+            email: userByUsername?.email as string,
+            userId: userByUsername?.id as string,
+            username
+        })
+        return redirect(redirectUrl)
+
     }
 
     const session = await lucia.createSession(existingUser.id, {});
