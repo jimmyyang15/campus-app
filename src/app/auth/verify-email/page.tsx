@@ -13,42 +13,41 @@ const VerifyPage = async ({
 }: {
   searchParams: { token: string };
 }) => {
-  let decoded:{
-    email: string;
-    userId: string;
-    temporaryCode: string;
-    exp: number;
-  };
-  const { token } = searchParams;
-  if (!token) {
-    return notFound();
-  }
+  // let decoded:{
+  //   email: string;
+  //   userId: string;
+  //   temporaryCode: string;
+  //   exp: number;
+  // };
+  // const { token } = searchParams;
+  // if (!token) {
+  //   return notFound();
+  // }
 
-  try {
-    decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-      email: string;
-      userId: string;
-      temporaryCode: string;
-      exp: number;
-    };
+  // try {
+  //   decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+  //     email: string;
+  //     userId: string;
+  //     temporaryCode: string;
+  //     exp: number;
+  //   };
 
-    console.log(decoded);
 
-    const emailVerificationQuery = await emailVerification(decoded);
-    const hasExpired =
-      emailVerificationQuery!.expiresAt >
-      new Date(new Date().getTime() + 5 * 60000);
-    console.log(hasExpired);
-    if (!emailVerificationQuery) {
-      return notFound();
-    }
-  } catch (error) {
-    return notFound();
-  }
+  //   const emailVerificationQuery = await emailVerification(decoded);
+  //   // const hasExpired =
+  //   //   emailVerificationQuery!.expiresAt >
+  //   //   new Date(new Date().getTime() + 5 * 60000);
+  //   // console.log(hasExpired);
+  //   if (!emailVerificationQuery) {
+  //     return notFound();
+  //   }
+  // } catch (error) {
+  //   return notFound();
+  // }
 
   return (
     <div>
-      <VerifyEmailForm email={decoded.email} userId={decoded.userId} />
+      <VerifyEmailForm  />
     </div>
   );
 };

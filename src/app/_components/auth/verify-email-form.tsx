@@ -26,15 +26,13 @@ import { AlertType } from "@/app/_components/auth/signup-form";
 import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
 import { verifyEmail } from "@/app/_actions/email-verification";
-const VerifyEmailForm = ({
-  email,
-  userId,
-}: {
-  email: string;
-  userId: string;
-}) => {
+const VerifyEmailForm = ({ email, userId }: any) => {
+  // {
+  //   email: string;
+  //   userId: string;
+  // }
   const [isPending, startTransition] = useTransition();
-  const [otp,setOtp] = useState<string|null>(null)
+  const [otp, setOtp] = useState<string | null>(null);
   // 1. Define your form.
   const form = useForm<EmailVerificationSchemaType>({
     resolver: zodResolver(EmailVerificationSchema),
@@ -63,11 +61,10 @@ const VerifyEmailForm = ({
         //   desc:"Email verification has been sent to " + res.data.email
         // })
         setError({
-          status:"error",
-          message:res?.error as string,
-          desc:"Please make sure it's the correct validation code"
-        })
-
+          status: "error",
+          message: res?.error as string,
+          desc: "Please make sure it's the correct validation code",
+        });
       }
     });
   }
@@ -83,7 +80,7 @@ const VerifyEmailForm = ({
           <p className="my-4 text-sm">
             We just sent your email verification code via email to {email}
           </p>
-          <form  className="space-y-4">
+          <form className="space-y-4">
             <FormLabel>Email Verification code</FormLabel>
             {/* <FormField
               control={form.control}
@@ -99,11 +96,11 @@ const VerifyEmailForm = ({
               )}
             /> */}
             <OTPInput
-            onComplete={onSubmit}
-            onChange={setOtp}
-            value={otp ?? ""}
+              onComplete={onSubmit}
+              onChange={setOtp}
+              value={otp ?? ""}
               maxLength={6}
-              containerClassName="group flex items-center has-[:disabled]:opacity-30"
+              containerClassName="group flex w-full items-center justify-center has-[:disabled]:opacity-30"
               render={({ slots }) => (
                 <>
                   <div className="flex">
@@ -131,6 +128,9 @@ const VerifyEmailForm = ({
               ) : null}
               Submit
             </Button> */}
+            {isPending ? (
+              <p className="flex justify-end text-sm">Verifying...</p>
+            ) : null}
           </form>
         </Form>
       </BackgroundGradient>
@@ -143,7 +143,7 @@ function Slot(props: SlotProps) {
   return (
     <div
       className={cn(
-        "relative h-7 w-5 text-[2rem]",
+        "relative h-8 w-8 text-[1.25rem]",
         "flex items-center justify-center",
         "transition-all duration-300",
         "border-y border-r border-border first:rounded-l-md first:border-l last:rounded-r-md",
