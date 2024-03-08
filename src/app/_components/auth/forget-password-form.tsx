@@ -1,6 +1,9 @@
 "use client";
 
-import { LoginSchema, LoginSchemaType, ResetPasswordSchemaType } from "@/lib/schemas";
+import {
+  ResetPasswordSchema,
+  ResetPasswordSchemaType,
+} from "@/lib/schemas";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,13 +19,11 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import { Separator } from "@/app/_components/ui/separator";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
-import { signin } from "@/app/_actions/signin";
 import { Loader2 } from "lucide-react";
+import { forgotPassword } from "@/app/_actions/reset-password";
 
 const ForgetPasswordForm = () => {
   const router = useRouter();
@@ -30,12 +31,12 @@ const ForgetPasswordForm = () => {
 
   // 1. Define your form.
   const form = useForm<ResetPasswordSchemaType>({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      email:""
+      email: "",
     },
   });
-  const [success,setSuccess] = useState<AlertType | null>(null);
+  const [success, setSuccess] = useState<AlertType | null>(null);
   const [error, setError] = useState<AlertType | null>(null);
   // 2. Define a submit handler.
   function onSubmit(values: ResetPasswordSchemaType) {
@@ -43,8 +44,26 @@ const ForgetPasswordForm = () => {
     // ✅ This will be type-safe and validated.
     setError(null);
     setSuccess(null);
+    startTransition(async () => {
+      const res = await forgotPassword(values);
+      if (res.error) {
+        setError({
+          message: res.error,
+          status: "error",
+          desc: "Make sure the email has been registered to this app",
+        });
+      }
 
-   console.log(values)
+      if (res.success) {
+        setSuccess({
+          message: res.success,
+          status: "success",
+          desc: `Please check it on ${values.email}`,
+        });
+      }
+    });
+
+    console.log(values);
   }
   return (
     <BackgroundDot>
@@ -69,9 +88,8 @@ const ForgetPasswordForm = () => {
                 </FormItem>
               )}
             />
-           
-        
-            <FormAlert alert={error} />
+
+            <FormAlert alert={success || error} />
 
             <Button type="submit" className="w-full " disabled={isPending}>
               {isPending ? (
@@ -79,7 +97,6 @@ const ForgetPasswordForm = () => {
               ) : null}
               Send email
             </Button>
-            
           </form>
         </Form>
       </BackgroundGradient>

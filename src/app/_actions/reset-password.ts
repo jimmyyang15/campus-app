@@ -1,9 +1,11 @@
+"use server"
+
 import { ResetPasswordSchema, ResetPasswordSchemaType } from "@/lib/schemas";
 import { db } from "@/server/db";
 import { generateId } from "lucia";
 import { TimeSpan, createDate } from "oslo";
 import { findUserByEmail } from "./user";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendResetPasswordToken, sendVerificationEmail } from "@/lib/mail";
 
 async function createPasswordResetToken(userId: string): Promise<string> {
     // optionally invalidate all existing tokens
@@ -41,10 +43,10 @@ export const forgotPassword = async (values: ResetPasswordSchemaType) => {
 
     const verificationToken = await createPasswordResetToken(user.id);
 	const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${verificationToken}`;
-    await sendVerificationEmail(email, verificationLink);
+    await sendResetPasswordToken(email, verificationLink);
 
     return {
-        success:`Email sent! Please check it on ${email}`
+        success:`Email sent! `
     }
 
 }
