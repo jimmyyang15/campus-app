@@ -46,8 +46,14 @@ export const EmailVerificationSchema = z.object({
   })
 })
 
+export const ResetPasswordSchema = z.object({
+  email:z.string().email({
+    message:"Email is required"
+  })
+})
 
 //types
 export type LoginSchemaType = z.infer<typeof LoginSchema>
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>
 export type EmailVerificationSchemaType = z.infer<typeof EmailVerificationSchema>
+export type ResetPasswordSchemaType = z.infer<typeof ResetPasswordSchema>

@@ -6,7 +6,7 @@ import { db } from "@/server/db";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
-import { findUserByEmail, findUserByUsername } from "./auth";
+import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";

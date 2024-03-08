@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
+import { LoginSchema, LoginSchemaType, ResetPasswordSchemaType } from "@/lib/schemas";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,34 +23,28 @@ import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
 import { signin } from "@/app/_actions/signin";
 import { Loader2 } from "lucide-react";
-const SigninForm = () => {
+
+const ForgetPasswordForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   // 1. Define your form.
-  const form = useForm<LoginSchemaType>({
+  const form = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      username: "",
-      password: "",
+      email:""
     },
   });
+  const [success,setSuccess] = useState<AlertType | null>(null);
   const [error, setError] = useState<AlertType | null>(null);
   // 2. Define a submit handler.
-  function onSubmit(values: LoginSchemaType) {
+  function onSubmit(values: ResetPasswordSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setError(null);
-    startTransition(async () => {
-      const res = await signin(values);
-      if (res.error) {
-        setError({
-          message: res.error,
-          status: "error",
-          desc: "Make sure you type in the correct credentials",
-        });
-      }
-    });
+    setSuccess(null);
+
+   console.log(values)
   }
   return (
     <BackgroundDot>
@@ -63,63 +57,29 @@ const SigninForm = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe12" {...field} />
+                    <Input placeholder="johndoe@gmail.com" {...field} />
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="******" {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Link href={"/auth/reset-password"} className="text-sm text-destructive underline">Forgot password?</Link>
+           
+        
             <FormAlert alert={error} />
 
             <Button type="submit" className="w-full " disabled={isPending}>
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              Sign in
+              Send email
             </Button>
-            <div className="flex w-full items-center gap-x-2">
-              <Separator className="flex-[0.5]" />
-              <span>or</span>
-              <Separator className="flex-[0.5]" />
-            </div>
-            <Button
-              onClick={() => {
-                router.push("/auth/signin/google");
-              }}
-              type="button"
-              variant={"outline"}
-              className="w-full"
-            >
-              Sign in with Google
-            </Button>
-
-            <p className="text-sm">
-              Don't have an account yet?{" "}
-              <Link href={"/auth/signup"} className="font-bold underline">
-                Sign up
-              </Link>
-            </p>
+            
           </form>
         </Form>
       </BackgroundGradient>
@@ -127,4 +87,4 @@ const SigninForm = () => {
   );
 };
 
-export default SigninForm;
+export default ForgetPasswordForm;

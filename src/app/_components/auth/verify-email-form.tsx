@@ -146,10 +146,10 @@ function Slot(props: SlotProps) {
         "relative h-8 w-8 text-[1.25rem]",
         "flex items-center justify-center",
         "transition-all duration-300",
-        "border-y border-r border-border first:rounded-l-md first:border-l last:rounded-r-md",
+        "border-y border-r border-border first:rounded-l-[4px] first:border-l last:rounded-r-[4px]",
         "group-focus-within:border-accent-foreground/20 group-hover:border-accent-foreground/20",
         "outline outline-0 outline-accent-foreground/20",
-        { "outline-4 outline-accent-foreground": props.isActive },
+        { "outline-2 outline-primary": props.isActive },
       )}
     >
       {props.char !== null && <div>{props.char}</div>}

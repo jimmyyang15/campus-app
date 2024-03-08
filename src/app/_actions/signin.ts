@@ -7,7 +7,7 @@ import { db } from "@/server/db";
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
-import { findUserByUsername } from "./auth";
+import { findUserByUsername } from "./user";
 export async function signin(values: LoginSchemaType) {
 
     const validatedFields = LoginSchema.safeParse(values);
