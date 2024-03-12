@@ -24,7 +24,7 @@ export const sendResetPasswordToken = async(email:string,verificationLink:string
         to: email,
         subject: "Reset password",
         html: `
-        <div> <p>Hi! Here's your link for password reset <a>${verificationLink}</a> </p>
+        <p>Click <a href=${verificationLink}>here</a> to reset password</p>
       
        `
     })

@@ -26,11 +26,11 @@ import { AlertType } from "@/app/_components/auth/signup-form";
 import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
 import { verifyEmail } from "@/app/_actions/email-verification";
-const VerifyEmailForm = ({ email, userId }: any) => {
-  // {
-  //   email: string;
-  //   userId: string;
-  // }
+const VerifyEmailForm = ({ email, userId }:   {
+  email: string;
+  userId: string;
+}) => {
+
   const [isPending, startTransition] = useTransition();
   const [otp, setOtp] = useState<string | null>(null);
   // 1. Define your form.

@@ -96,6 +96,7 @@ export const verifyEmail = async (decodedValue:{
 },values:EmailVerificationSchemaType) => {
     const { email,userId } = decodedValue;
     const { code} = values;
+    console.log('email: ',email,' userId: ',userId)
     const verifyCode = await db.emailVerification.findFirst({
         where:{
             code,

@@ -71,7 +71,7 @@ const ForgetPasswordForm = () => {
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="mb-8 text-center text-xl font-semibold">Welcome Back!</p>
+        <p className="mb-8 text-center text-xl font-semibold">Reset Password</p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
