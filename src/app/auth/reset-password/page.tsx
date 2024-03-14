@@ -6,6 +6,11 @@ import { sha256 } from 'oslo/crypto';
 import { encodeHex } from 'oslo/encoding';
 import React from 'react'
 import { isWithinExpirationDate } from "oslo";
+import { Metadata } from 'next';
+export const metadata: Metadata = {
+  title: 'Reset Password',
+  description: 'Reset Password page',
+}
 const ResetPassword = async({
     searchParams
 }: {

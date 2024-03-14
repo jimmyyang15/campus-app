@@ -9,6 +9,11 @@ import { redirect } from "next/navigation";
 import { Button } from "./_components/ui/button";
 import { signOut } from "./_actions/signout";
 
+export const metadata = {
+  title: "Home",
+  description: "This is the home page",
+  // icons: [{ rel: "icon", url: "/favicon.ico" }],
+};
 export default async function Home() {
   noStore();
   const { user } = await validateRequest();
