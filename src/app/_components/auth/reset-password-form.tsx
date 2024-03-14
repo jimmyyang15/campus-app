@@ -2,7 +2,7 @@
 
 import {
   NewPasswordSchema,
-    NewPasswordSchemaType,
+  NewPasswordSchemaType,
   ResetPasswordSchema,
   ResetPasswordSchemaType,
 } from "@/lib/schemas";
@@ -24,10 +24,13 @@ import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { forgotPassword, resetPassword } from "@/app/_actions/reset-password";
 
-const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
+const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [passwordConfirmVisible, setPasswordConfirmVisible] =
+    useState<boolean>(false);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -35,8 +38,8 @@ const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
   const form = useForm<NewPasswordSchemaType>({
     resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      password:"",
-      confirmPassword:""
+      password: "",
+      confirmPassword: "",
     },
   });
   const [success, setSuccess] = useState<AlertType | null>(null);
@@ -48,7 +51,7 @@ const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
     setError(null);
     setSuccess(null);
     startTransition(async () => {
-      const res = await resetPassword(values,tokenHash);
+      const res = await resetPassword(values, tokenHash);
       if (res?.error) {
         setError({
           message: res.error,
@@ -56,7 +59,7 @@ const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
           desc: "Try again",
         });
       }
-      });
+    });
 
     console.log(values);
   }
@@ -72,12 +75,25 @@ const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
             <FormField
               control={form.control}
               name="password"
-              
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe@gmail.com" type='password' {...field} />
+                    <div className="relative">
+                      <Input
+                        type={passwordVisible ? "text" : "password"}
+                        placeholder="******"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() => setPasswordVisible((prev) => !prev)}
+                        type="button"
+                        variant={"outline"}
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                      >
+                        {passwordVisible ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
@@ -87,12 +103,27 @@ const ResetPasswordForm = ({ tokenHash }:{tokenHash:string}) => {
             <FormField
               control={form.control}
               name="confirmPassword"
-              
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe@gmail.com" type='password' {...field} />
+                    <div className="relative">
+                      <Input
+                        type={passwordConfirmVisible ? "text" : "password"}
+                        placeholder="******"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() =>
+                          setPasswordConfirmVisible((prev) => !prev)
+                        }
+                        type="button"
+                        variant={"outline"}
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                      >
+                        {passwordConfirmVisible ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />

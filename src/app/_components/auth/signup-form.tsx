@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useTransition } from "react";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -20,16 +20,22 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
 import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
+import { useRouter } from "next/navigation";
 
 export interface AlertType {
-  status:'error' | 'success';
-  message:string;
-  desc:string
+  status: "error" | "success";
+  message: string;
+  desc: string;
 }
 const SignupForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [error,setError] = useState<AlertType | null>(null);
-  const [success,setSuccess] = useState<AlertType | null>(null);
+  const [error, setError] = useState<AlertType | null>(null);
+  const [success, setSuccess] = useState<AlertType | null>(null);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+  const [passwordConfirmVisible, setPasswordConfirmVisible] = useState<boolean>(false);
+
+  const router = useRouter();
+
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -46,7 +52,7 @@ const SignupForm = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setError(null);
-    setSuccess(null)
+    setSuccess(null);
     startTransition(async () => {
       const res = await signUp(values);
       if (res?.error) {
@@ -56,13 +62,11 @@ const SignupForm = () => {
         //   desc:"Email verification has been sent to " + res.data.email
         // })
         setError({
-          status:"error",
-          message:res?.error as string,
-          desc:"Try another one!"
-        })
-
+          status: "error",
+          message: res?.error as string,
+          desc: "Try another one!",
+        });
       }
-     
     });
   }
   return (
@@ -125,12 +129,22 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="******"
-                      {...field}
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        type={passwordVisible ? "text" : "password"}
+                        placeholder="******"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() => setPasswordVisible((prev) => !prev)}
+
+                        type="button"
+                        variant={"outline"}
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                      >
+                        {passwordVisible ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
@@ -144,12 +158,21 @@ const SignupForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="******"
-                      {...field}
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        type={passwordConfirmVisible ? "text" : "password"}
+                        placeholder="******"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() => setPasswordConfirmVisible((prev) => !prev)}
+                        type="button"
+                        variant={"outline"}
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                      >
+                        {passwordConfirmVisible ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
@@ -170,10 +193,11 @@ const SignupForm = () => {
                 </FormItem>
               )}
             />
-            <FormAlert alert={success || error}  />
+            <FormAlert alert={success || error} />
             <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              
+              {isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               Sign up
             </Button>
             <div className="flex w-full items-center gap-x-2">
@@ -187,9 +211,14 @@ const SignupForm = () => {
 
             <p className="text-sm">
               Already have an account?{" "}
-              <Link href={"/auth/signin"} className="font-bold underline">
+              <Button
+                variant={"link"}
+                className="p-0"
+                type="button"
+                onClick={() => router.push("/auth/signin")}
+              >
                 Sign in
-              </Link>
+              </Button>
             </p>
           </form>
         </Form>

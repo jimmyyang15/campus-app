@@ -22,8 +22,10 @@ import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
 import { signin } from "@/app/_actions/signin";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 const SigninForm = () => {
+  const [passwordVisible,setPasswordVisible] = useState<boolean>(false);
+
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -52,6 +54,7 @@ const SigninForm = () => {
       }
     });
   }
+
   return (
     <BackgroundDot>
       <BackgroundGradient
@@ -82,14 +85,29 @@ const SigninForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="******" {...field} />
+                    <div className="relative">
+                      <Input type={passwordVisible ? "text" : "password"} placeholder="******" {...field} />
+                      <Button onClick={()=>setPasswordVisible((prev)=>!prev)} type="button" variant={'outline'} className="absolute  right-0 bottom-0 cursor-pointer text-input ">
+                        {
+                          passwordVisible ? <EyeOff /> : <Eye />
+                        }
+                        
+                      </Button>
+                    </div>
                   </FormControl>
 
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Link href={"/auth/forget-password"} className="text-sm text-primary/90 underline">Forgot password?</Link>
+            <Button
+              onClick={() => router.push("/auth/forget-password")}
+              variant={"link"}
+              className="p-0"
+              type="button"
+            >
+              Forgot password?
+            </Button>
             <FormAlert alert={error} />
 
             <Button type="submit" className="w-full " disabled={isPending}>
@@ -116,9 +134,14 @@ const SigninForm = () => {
 
             <p className="text-sm">
               Don't have an account yet?{" "}
-              <Link href={"/auth/signup"} className="font-bold underline">
+              <Button
+                variant={"link"}
+                className="p-0"
+                type="button"
+                onClick={() => router.push("/auth/signup")}
+              >
                 Sign up
-              </Link>
+              </Button>
             </p>
           </form>
         </Form>
