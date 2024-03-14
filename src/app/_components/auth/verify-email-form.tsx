@@ -25,13 +25,15 @@ import { AlertType } from "@/app/_components/auth/signup-form";
 
 import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
-import { verifyEmail } from "@/app/_actions/email-verification";
+import { resendVerificationEmail, verifyEmail } from "@/app/_actions/email-verification";
+import { Button } from "@/app/_components/ui/button";
 const VerifyEmailForm = ({ email, userId }:   {
   email: string;
   userId: string;
 }) => {
 
   const [isPending, startTransition] = useTransition();
+  const [isResendingEmail,startResendTransition] = useTransition()
   const [otp, setOtp] = useState<string | null>(null);
   // 1. Define your form.
   const form = useForm<EmailVerificationSchemaType>({
@@ -41,8 +43,10 @@ const VerifyEmailForm = ({ email, userId }:   {
     },
   });
   const [error, setError] = useState<AlertType | null>(null);
+  const [successResend,setSuccessResend] = useState<AlertType | null>(null)
+  const [errorResend,setErrorResend] = useState<AlertType | null>(null)
   // 2. Define a submit handler.
-  function onSubmit(values: EmailVerificationSchemaType) {
+  function onSubmit() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setError(null);
@@ -52,7 +56,7 @@ const VerifyEmailForm = ({ email, userId }:   {
           email,
           userId,
         },
-        values,
+        otp as string,
       );
       if (res?.error) {
         // setSuccess({
@@ -69,6 +73,26 @@ const VerifyEmailForm = ({ email, userId }:   {
     });
   }
   // let futureDate = new Date(new Date().getTime() + 5 * 60000);
+  const resendEmailVerification =async() => {
+    setSuccessResend(null);
+    startResendTransition(async()=>{
+      const res = await resendVerificationEmail(userId,email);
+      if(res.success) {
+        setSuccessResend({
+          status:'success',
+          message:res.success,
+          desc:"Please check your email for confirmation"
+        })
+      }
+      if(res.error) {
+        setErrorResend({
+          status:"error",
+          message:res.error,
+          desc:"Please try again later"
+        })
+      }
+    })
+  } 
   return (
     <BackgroundDot>
       <BackgroundGradient
@@ -131,6 +155,9 @@ const VerifyEmailForm = ({ email, userId }:   {
             {isPending ? (
               <p className="flex justify-end text-sm">Verifying...</p>
             ) : null}
+            <Button variant={'link'} type="button" onClick={resendEmailVerification}>Resend verification email</Button>
+            <FormAlert alert={successResend || errorResend} />
+
           </form>
         </Form>
       </BackgroundGradient>

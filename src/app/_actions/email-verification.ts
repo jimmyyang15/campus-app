@@ -8,15 +8,21 @@ import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { EmailVerificationSchemaType } from "@/lib/schemas";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
     // await db.table("email_verification_code").where("user_id", "=", userId).deleteAll();
+
+    //delete email verification, otherwise it'll cause foreign key issue
     await db.emailVerification.deleteMany({
         where: {
             userId
         }
     })
+
+    //6 digit code in string for verification
     const code = Math.floor(100000 + Math.random() * 900000).toString()
+
     // await db.table("email_verification_code").insert({
     // 	user_id: userId,
     // 	email,
@@ -24,6 +30,7 @@ export async function generateEmailVerificationCode(userId: string, email: strin
     // 	expires_at: createDate(new TimeSpan(5, "m")) // 5 minutes
     // });
 
+    //create email verification 
     await db.emailVerification.create({
         data: {
             userId,
@@ -89,25 +96,32 @@ export const emailVerification = async (decodedValue: {
 
 }
 
-export const verifyEmail = async (decodedValue:{
-    email:string,
-    userId:string,
+export const verifyEmail = async (decodedValue: {
+    email: string,
+    userId: string,
 
-},values:EmailVerificationSchemaType) => {
-    const { email,userId } = decodedValue;
-    const { code} = values;
-    console.log('email: ',email,' userId: ',userId)
+}, otp:string) => {
+    const { email, userId } = decodedValue;
+
     const verifyCode = await db.emailVerification.findFirst({
-        where:{
-            code,
-            email,
-            userId
+        where: {
+          AND:[
+            {
+                email
+            },{
+                userId
+            },{
+                code:otp
+            }
+          ]
         }
     });
 
-    if(!verifyCode) {
+    console.log("fdddd", !!verifyCode)
+
+    if (!verifyCode) {
         return {
-            error:"Incorrect code"
+            error: "Incorrect code"
         }
     }
 
@@ -141,4 +155,48 @@ export const verifyEmail = async (decodedValue:{
         sessionCookie.attributes
     );
     return redirect("/");
+}
+
+export const resendVerificationEmail = async (userId: string, email: string) => {
+
+    //find existing email verification
+    const existingVerification = await db.emailVerification.findFirst({
+        where:{
+            AND:[
+                {
+                    email
+                },{
+                    userId
+                }
+            ]
+        }
+    })
+
+    //resend limit
+    const curDate = new Date()
+    const dateLimit = new Date(existingVerification!.expiresAt.getTime()  - (2 * 60000 + 30 * 1000))
+
+    if(curDate < dateLimit) {
+        return {
+            error:"Please wait for a while!"
+        }
+    }
+
+    //6 digit code in string for verification
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+    await db.emailVerification.update({
+        where: {
+            userId,
+            email,
+        }, data: {
+            code,
+            expiresAt: createDate(new TimeSpan(5, "m")),
+
+        }
+    });
+    await sendVerificationEmail(email, code);
+    return {
+        success:"Email resent successfully!"
+    }
 }

@@ -47,12 +47,11 @@ export async function signin(values: LoginSchemaType) {
     }
 
     if (!existingUser.emailVerified) {
-        const userByUsername = await findUserByUsername(username)
-        const verificationCode = await generateEmailVerificationCode(userByUsername?.email as string, userByUsername?.email as string);
-        await sendVerificationEmail(userByUsername?.email as string, verificationCode);
+        const verificationCode = await generateEmailVerificationCode(existingUser?.id as string, existingUser?.email as string);
+        await sendVerificationEmail(existingUser?.email as string, verificationCode);
         const redirectUrl = await generateRedirectUrl({
-            email: userByUsername?.email as string,
-            userId: userByUsername?.id as string,
+            email: existingUser?.email as string,
+            userId: existingUser?.id as string,
             username
         })
         return redirect(redirectUrl)
