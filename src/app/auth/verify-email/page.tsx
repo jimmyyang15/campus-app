@@ -13,12 +13,13 @@ const VerifyPage = async ({
 }: {
   searchParams: { token: string };
 }) => {
-  let decoded:{
+  let decoded: {
     email: string;
     userId: string;
     temporaryCode: string;
     exp: number;
   };
+  let expiresAt:number | undefined;
   const { token } = searchParams;
   if (!token) {
     return notFound();
@@ -32,12 +33,14 @@ const VerifyPage = async ({
       exp: number;
     };
 
-
     const emailVerificationQuery = await emailVerification(decoded);
-    // const hasExpired =
-    //   emailVerificationQuery!.expiresAt >
-    //   new Date(new Date().getTime() + 5 * 60000);
-    // console.log(hasExpired);
+    expiresAt = emailVerificationQuery?.expiresAt.getTime();
+    const hasExpired =
+      emailVerificationQuery!.expiresAt.getTime() >
+      new Date(new Date().getTime() + 5 * 60000).getTime();
+    if (hasExpired) {
+      return notFound();
+    }
     if (!emailVerificationQuery) {
       return notFound();
     }
@@ -47,7 +50,7 @@ const VerifyPage = async ({
 
   return (
     <div>
-      <VerifyEmailForm email={decoded.email} userId={decoded.userId}  />
+      <VerifyEmailForm email={decoded.email} userId={decoded.userId} expiresAt={expiresAt as number} />
     </div>
   );
 };

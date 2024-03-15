@@ -6,7 +6,7 @@ import {
   LoginSchema,
   LoginSchemaType,
 } from "@/lib/schemas";
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BackgroundGradient } from "@/app/_components/ui/background-gradient";
@@ -27,10 +27,51 @@ import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
 import { resendVerificationEmail, verifyEmail } from "@/app/_actions/email-verification";
 import { Button } from "@/app/_components/ui/button";
-const VerifyEmailForm = ({ email, userId }:   {
+const VerifyEmailForm = ({ email, userId,expiresAt }:   {
   email: string;
   userId: string;
+  expiresAt:number
 }) => {
+
+  //set resend time limit by 2.30 minutes depends on the expiresAt field of email verification
+ // Subtract 2 minutes and 30 seconds
+ const subtractedDate = new Date(expiresAt - (2 * 60 * 1000 + 30 * 1000));
+
+ // Calculate the time difference in seconds
+ const timeDifferenceInSeconds = (expiresAt - subtractedDate.getTime()) / 1000;
+  const [timeLeft,setTimeLeft] = useState<number|null>(timeDifferenceInSeconds)
+  // //limit by 150 seconds
+  // const resendLimit = expiresAt - ((2 * 60 + 150) * 1000);
+
+
+    
+    
+  //   // Convert milliseconds to seconds
+  //   const seconds = Math.floor(resendLimit / 1000);
+    
+
+  useEffect(() => {
+    if(timeLeft===0){
+       console.log("TIME LEFT IS 0");
+       setTimeLeft(null)
+    }
+
+    console.log(timeLeft)
+    // exit early when we reach 0
+    if (!timeLeft) return;
+
+    // save intervalId to clear the interval when the
+    // component re-renders
+    const intervalId = setInterval(() => {
+
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    // clear interval on re-render to avoid memory leaks
+    return () => clearInterval(intervalId);
+    // add timeLeft as a dependency to re-rerun the effect
+    // when we update it
+  }, [timeLeft]);
 
   const [isPending, startTransition] = useTransition();
   const [isResendingEmail,startResendTransition] = useTransition()

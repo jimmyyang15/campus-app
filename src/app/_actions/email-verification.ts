@@ -62,7 +62,7 @@ export async function generateRedirectUrl(props: {
         { email, temporaryCode, userId },
         process.env.JWT_SECRET!,
         {
-            expiresIn: "5m",
+            expiresIn: "1h",
         }
     );
 
