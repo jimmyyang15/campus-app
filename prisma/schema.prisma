@@ -13,18 +13,24 @@ enum Role {
 }
 
 model User {
-  id                 String              @id @default(uuid())
-  role               Role                @default(USER)
-  googleId           String?             @unique
-  email              String              @unique
-  hashedPassword     String?
-  isMentor           Boolean             @default(false)
-  username           String              @unique
-  sessions           Session[]
-  profile            Profile?
-  emailVerified      Boolean             @default(false)
-  emailVerification  EmailVerification?
-  passwordResetToken PasswordResetToken?
+  id                  String              @id @default(uuid())
+  role                Role                @default(USER)
+  email               String              @unique
+  hashedPassword      String?
+  isMentor            Boolean             @default(false)
+  username            String              @unique
+  sessions            Session[]
+  profile             Profile?
+  emailVerified       Boolean             @default(false)
+  emailVerification   EmailVerification?
+  passwordResetToken  PasswordResetToken?
+  posts               Post[]
+  club                Club?               @relation(fields: [clubId], references: [id])
+  clubId              String?
+  invitationsSent     Invitation[]        @relation("SentInvitations") // Invitations sent by the user
+  invitationsReceived Invitation[]        @relation("ReceivedInvitations") // Invitations received by the user
+  rewardsSent         Reward[]            @relation("SentRewards")
+  rewardsReceived     Reward[]            @relation("ReceivedRewards")
 }
 
 model Profile {
@@ -54,9 +60,112 @@ model EmailVerification {
 }
 
 model PasswordResetToken {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
   expiresAt DateTime
   tokenHash String
+}
+
+model Post {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  title     String
+  desc      String?
+  media     String
+  comments  Comment[]
+  reactions Reaction[]
+  isClub    Boolean    @default(false)
+  club      Club?      @relation(fields: [clubId], references: [id])
+  clubId    String?
+}
+
+model Reaction {
+  id     String  @id @default(uuid())
+  type   String
+  post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String   @unique
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    String?
+  text      String
+}
+
+model Club {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  name        String
+  desc        String?
+  members     User[]
+  posts       Post[]
+  clubImage   String
+  schedules   Schedule[]
+  albums      Album[]
+  assignments Assignment[]
+}
+
+model Schedule {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  date      DateTime
+  club      Club?    @relation(fields: [clubId], references: [id])
+  clubId    String?
+}
+
+model Album {
+  id     String   @id @default(uuid())
+  media  String[]
+  club   Club?    @relation(fields: [clubId], references: [id])
+  clubId String?
+}
+
+model Invitation {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sender      User     @relation("SentInvitations", fields: [senderId], references: [id]) // Sender of the invitation
+  senderId    String // ID of the sender
+  recipient   User     @relation("ReceivedInvitations", fields: [recipientId], references: [id]) // Recipient of the invitation
+  recipientId String // ID of the recipient
+}
+
+model Reward {
+  id          String @id @default(uuid())
+  file        String
+  sender      User   @relation("SentRewards", fields: [senderId], references: [id])
+  senderId    String
+  recipient   User   @relation("ReceivedRewards", fields: [recipientId], references: [id])
+  recipientId String
+}
+
+model Assignment {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  name        String
+  desc        String?
+  file        String
+  dueDate     DateTime
+  submissions Submission[]
+  club        Club?        @relation(fields: [clubId], references: [id])
+  clubId      String?
+}
+
+model Submission {
+  id           String      @id @default(uuid())
+  createdAt    DateTime    @default(now())
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignmentId String?
+  files String[]
 }

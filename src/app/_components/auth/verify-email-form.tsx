@@ -25,45 +25,48 @@ import { AlertType } from "@/app/_components/auth/signup-form";
 
 import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
-import { resendVerificationEmail, verifyEmail } from "@/app/_actions/email-verification";
+import {
+  resendVerificationEmail,
+  verifyEmail,
+} from "@/app/_actions/email-verification";
 import { Button } from "@/app/_components/ui/button";
-const VerifyEmailForm = ({ email, userId,expiresAt }:   {
+const VerifyEmailForm = ({
+  email,
+  userId,
+  expiresAt,
+}: {
   email: string;
   userId: string;
-  expiresAt:number
+  expiresAt: number;
 }) => {
-
   //set resend time limit by 2.30 minutes depends on the expiresAt field of email verification
- // Subtract 2 minutes and 30 seconds
- const subtractedDate = new Date(expiresAt - (2 * 60 * 1000 + 30 * 1000));
-
- // Calculate the time difference in seconds
- const timeDifferenceInSeconds = (expiresAt - subtractedDate.getTime()) / 1000;
-  const [timeLeft,setTimeLeft] = useState<number|null>(timeDifferenceInSeconds)
+  // Subtract 2 minutes and 30 seconds
+  // (2 * 60 * 1000 + 30 * 1000)
+  const curDate = new Date()
+  // Calculate the time difference in seconds
+  const timeDifferenceInSeconds = Math.floor((expiresAt - curDate.getTime() ) / 1000)
+  const [timeLeft, setTimeLeft] = useState<number | null>(
+    timeDifferenceInSeconds,
+  );
   // //limit by 150 seconds
   // const resendLimit = expiresAt - ((2 * 60 + 150) * 1000);
 
-
-    
-    
   //   // Convert milliseconds to seconds
   //   const seconds = Math.floor(resendLimit / 1000);
-    
 
   useEffect(() => {
-    if(timeLeft===0){
-       console.log("TIME LEFT IS 0");
-       setTimeLeft(null)
+    if (timeLeft === 0) {
+      console.log("TIME LEFT IS 0");
+      setTimeLeft(null);
     }
 
-    console.log(timeLeft)
+    console.log(timeLeft);
     // exit early when we reach 0
     if (!timeLeft) return;
 
     // save intervalId to clear the interval when the
     // component re-renders
     const intervalId = setInterval(() => {
-
       setTimeLeft(timeLeft - 1);
     }, 1000);
 
@@ -74,7 +77,7 @@ const VerifyEmailForm = ({ email, userId,expiresAt }:   {
   }, [timeLeft]);
 
   const [isPending, startTransition] = useTransition();
-  const [isResendingEmail,startResendTransition] = useTransition()
+  const [isResendingEmail, startResendTransition] = useTransition();
   const [otp, setOtp] = useState<string | null>(null);
   // 1. Define your form.
   const form = useForm<EmailVerificationSchemaType>({
@@ -84,8 +87,8 @@ const VerifyEmailForm = ({ email, userId,expiresAt }:   {
     },
   });
   const [error, setError] = useState<AlertType | null>(null);
-  const [successResend,setSuccessResend] = useState<AlertType | null>(null)
-  const [errorResend,setErrorResend] = useState<AlertType | null>(null)
+  const [successResend, setSuccessResend] = useState<AlertType | null>(null);
+  const [errorResend, setErrorResend] = useState<AlertType | null>(null);
   // 2. Define a submit handler.
   function onSubmit() {
     // Do something with the form values.
@@ -114,26 +117,26 @@ const VerifyEmailForm = ({ email, userId,expiresAt }:   {
     });
   }
   // let futureDate = new Date(new Date().getTime() + 5 * 60000);
-  const resendEmailVerification =async() => {
+  const resendEmailVerification = async () => {
     setSuccessResend(null);
-    startResendTransition(async()=>{
-      const res = await resendVerificationEmail(userId,email);
-      if(res.success) {
+    startResendTransition(async () => {
+      const res = await resendVerificationEmail(userId, email);
+      if (res.success) {
         setSuccessResend({
-          status:'success',
-          message:res.success,
-          desc:"Please check your email for confirmation"
-        })
+          status: "success",
+          message: res.success,
+          desc: "Please check your email for confirmation",
+        });
       }
-      if(res.error) {
+      if (res.error) {
         setErrorResend({
-          status:"error",
-          message:res.error,
-          desc:"Please try again later"
-        })
+          status: "error",
+          message: res.error,
+          desc: "Please try again later",
+        });
       }
-    })
-  } 
+    });
+  };
   return (
     <BackgroundDot>
       <BackgroundGradient
@@ -196,9 +199,14 @@ const VerifyEmailForm = ({ email, userId,expiresAt }:   {
             {isPending ? (
               <p className="flex justify-end text-sm">Verifying...</p>
             ) : null}
-            <Button variant={'link'} type="button" onClick={resendEmailVerification}>Resend verification email</Button>
+            <Button
+              variant={"link"}
+              type="button"
+              onClick={resendEmailVerification}
+            >
+              Resend verification email
+            </Button>
             <FormAlert alert={successResend || errorResend} />
-
           </form>
         </Form>
       </BackgroundGradient>
@@ -229,7 +237,7 @@ function Slot(props: SlotProps) {
 // You can emulate a fake textbox caret!
 function FakeCaret() {
   return (
-    <div className="animate-caret-blink pointer-events-none absolute inset-0 flex items-center justify-center">
+    <div className="pointer-events-none absolute inset-0 flex animate-caret-blink items-center justify-center">
       <div className="h-4 w-px bg-white" />
     </div>
   );
