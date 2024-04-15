@@ -71,75 +71,75 @@
 //  * @see https://next-auth.js.org/configuration/nextjs
 //  */
 // export const getServerAuthSession = () => getServerSession(authOptions);
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { Google } from "arctic";
-import { Lucia, Session, User } from "lucia";
-import { db } from "./db";
+import {  Lucia, Session, User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
-import { Profile } from "@prisma/client";
+import {  Profile } from "@prisma/client";
+import { adapter } from "./adapter";
 
 declare module "lucia" {
-	interface Register {
-		Lucia: typeof lucia;
-		DatabaseUserAttributes: {
-			email: string;
-			// email_verified: boolean;
-      profile:Profile;
-      googleId:string;
-      username:string;
-		};
-	}
+  interface Register {
+    Lucia: typeof lucia;
+    DatabaseUserAttributes: {
+      email: string;
+      // email_verified: boolean;
+      profile: Profile;
+      googleId: string;
+      username: string;
+      role: string;
+    };
+  }
 }
-const adapter = new PrismaAdapter(db.session, db.user);
+
 export const lucia = new Lucia(adapter, {
-    sessionCookie: {
-      attributes: {
-        secure: process.env.NODE_ENV === "production",
-      }
-    },
-    getUserAttributes: (attributes) => {
+  sessionCookie: {
+    attributes: {
+      secure: process.env.NODE_ENV === "production",
+    }
+  },
+  getUserAttributes: (attributes) => {
+    return {
+      // role: attributes.role,
+      googleId: attributes.googleId,
+      username: attributes.username,
+      profile: attributes.profile,
+      email: attributes.email,
+      role: attributes.role
+    }
+  }
+});
+
+// export const google = new Google(
+//   process.env.GOOGLE_CLIENT_ID!,
+//   process.env.GOOGLE_CLIENT_SECRET!,
+//   'https://localhost:3000/auth/signin/google/callback'
+// );
+
+export const validateRequest = cache(
+  async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
+    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
+    if (!sessionId) {
       return {
-              // role: attributes.role,
-        googleId: attributes.googleId,
-        username: attributes.username,
-        profile:attributes.profile,
-        email:attributes.email
-      }
+        user: null,
+        session: null
+      };
     }
-  });
 
-  export const google = new Google(
-    process.env.GOOGLE_CLIENT_ID!, 
-    process.env.GOOGLE_CLIENT_SECRET!,
-    'https://localhost:3000/auth/signin/google/callback'
-  );
-
-  export const validateRequest = cache(
-    async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
-      const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-      if (!sessionId) {
-        return {
-          user: null,
-          session: null
-        };
+    const result = await lucia.validateSession(sessionId);
+    // next.js throws when you attempt to set cookie when rendering page
+    try {
+      if (result.session && result.session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(result.session.id);
+        cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
       }
-  
-      const result = await lucia.validateSession(sessionId);
-      // next.js throws when you attempt to set cookie when rendering page
-      try {
-        if (result.session && result.session.fresh) {
-          const sessionCookie = lucia.createSessionCookie(result.session.id);
-          cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-        }
-        if (!result.session) {
-          const sessionCookie = lucia.createBlankSessionCookie();
-          cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-        }
-      } catch {}
-      return result;
-    }
-  );
+      if (!result.session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+      }
+    } catch { }
+    return result;
+  }
+);
 
 
 
