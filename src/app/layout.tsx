@@ -7,8 +7,7 @@ import { Toaster } from "@/app/_components/ui/sonner";
 import Navbar from "@/app/_components/layout/navbar";
 import AuthWrapper from "./_components/auth/auth-wrapper";
 import { validateRequest } from "@/server/auth";
-import { User } from "lucia";
-import BackgroundDot from "./_components/ui/background-dot";
+import { ThemeProvider } from "./_components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,14 +29,21 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-
       <body className={`font-sans ${inter.variable}`}>
         <Toaster richColors />
         <TRPCReactProvider>
-          <AuthWrapper user={user}>
-            <Navbar user={user} />
-            {children}
-          </AuthWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <AuthWrapper user={user}>
+              <Navbar user={user} />
+
+              {children}
+            </AuthWrapper>
+          </ThemeProvider>
         </TRPCReactProvider>
       </body>
     </html>

@@ -10,6 +10,7 @@ import { Button } from "./_components/ui/button";
 import { signOut } from "./_actions/signout";
 import { headers } from "next/headers";
 import BackgroundDot from "./_components/ui/background-dot";
+import MiddleSection from "@/app/_components/home/middle-section";
 
 export const metadata = {
   title: "Home",
@@ -22,13 +23,12 @@ export default async function Home() {
 	if (!user) {
 		return redirect("/auth/signin");
 	}
-  const hello = await api.post.hello.query({ text: "from tRPC" });
 
   return (
-    <main className="min-h-screen container">
-      <form action={signOut}>
-        <button>signout</button>
-      </form>
+    <main className="min-h-screen container flex ">
+      <div className="flex-[.25]"></div>
+      <MiddleSection />
+      <div className="flex-[.25]"></div>
 
     </main>
 
