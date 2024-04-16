@@ -11,6 +11,7 @@ import { signOut } from "./_actions/signout";
 import { headers } from "next/headers";
 import BackgroundDot from "./_components/ui/background-dot";
 import MiddleSection from "@/app/_components/home/middle-section";
+import Guidelines from "@/app/_components/layout/guidelines";
 
 export const metadata = {
   title: "Home",
@@ -28,7 +29,7 @@ export default async function Home() {
     <main className="min-h-screen container flex ">
       <div className="flex-[.25]"></div>
       <MiddleSection />
-      <div className="flex-[.25]"></div>
+      <Guidelines />
 
     </main>
 
