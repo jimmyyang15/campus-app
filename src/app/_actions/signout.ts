@@ -24,6 +24,8 @@ export const signOut = async () => {
         sessionCookie.value,
         sessionCookie.attributes
       )
+
+      return redirect("/auth/signin")
     } catch (error: any) {
       return {
         error: error?.message,

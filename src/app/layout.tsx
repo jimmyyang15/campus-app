@@ -3,7 +3,12 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import { Toaster } from "./_components/ui/sonner";
+import { Toaster } from "@/app/_components/ui/sonner";
+import Navbar from "@/app/_components/layout/navbar";
+import AuthWrapper from "./_components/auth/auth-wrapper";
+import { validateRequest } from "@/server/auth";
+import { User } from "lucia";
+import BackgroundDot from "./_components/ui/background-dot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,16 +21,24 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = await validateRequest();
+
   return (
     <html lang="en">
+
       <body className={`font-sans ${inter.variable}`}>
-      <Toaster richColors />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Toaster richColors />
+        <TRPCReactProvider>
+          <AuthWrapper user={user}>
+            <Navbar user={user} />
+            {children}
+          </AuthWrapper>
+        </TRPCReactProvider>
       </body>
     </html>
   );

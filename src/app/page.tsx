@@ -8,6 +8,8 @@ import { validateRequest } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { Button } from "./_components/ui/button";
 import { signOut } from "./_actions/signout";
+import { headers } from "next/headers";
+import BackgroundDot from "./_components/ui/background-dot";
 
 export const metadata = {
   title: "Home",
@@ -17,21 +19,19 @@ export const metadata = {
 export default async function Home() {
   noStore();
   const { user } = await validateRequest();
-  console.log(user)
 	if (!user) {
 		return redirect("/auth/signin");
 	}
   const hello = await api.post.hello.query({ text: "from tRPC" });
 
-
   return (
-    <main >
-      {hello.greeting}
+    <main className="min-h-screen container">
       <form action={signOut}>
-      <Button type="submit">Sign out</Button>
-      {user.id}
+        <button>signout</button>
       </form>
+
     </main>
+
   );
 }
 

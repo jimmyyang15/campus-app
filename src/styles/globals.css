@@ -58,4 +58,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .link {
+    @apply text-gray-500 hover:text-secondary-foreground transition-colors duration-100 ease-in text-sm
+  }
 }

@@ -4,13 +4,11 @@ import { generateId } from "lucia";
 import { Argon2id } from 'oslo/password'
 import { db } from "@/server/db";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
-import { lucia } from "@/server/auth";
-import { cookies } from "next/headers";
+
 import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
-import jwt from "jsonwebtoken"
 export const signUp = async (values: RegisterSchemaType) => {
 
 
