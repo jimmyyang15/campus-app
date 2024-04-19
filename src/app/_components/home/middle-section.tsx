@@ -5,7 +5,7 @@ import { posts } from "@/data";
 
 const MiddleSection = () => {
   return (
-    <section className="flex-[.50] border-x">
+    <section className="flex-[.70] border-x">
       <CreatePostSection />
       {posts.map((item) => (
         <PostItem item={item} />

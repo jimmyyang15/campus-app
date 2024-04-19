@@ -9,6 +9,7 @@ import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
+import { mentorNid, userNim } from "@/user-nim";
 export const signUp = async (values: RegisterSchemaType) => {
 
 
@@ -40,40 +41,50 @@ export const signUp = async (values: RegisterSchemaType) => {
         }
     }
 
-    await db.user.create({
-        data: {
-            id: userId,
-            username,
-            hashedPassword,
-            email,
-            profile: {
-                create: {
-                    city,
-                    fullName
+
+    if (userNim.includes(username) || mentorNid.includes(username)) {
+        await db.user.create({
+            data: {
+                id: userId,
+                username,
+                hashedPassword,
+                email,
+                isMentor: userNim.includes(username) ? false : mentorNid.includes(username) ? true : false,
+                profile: {
+                    create: {
+                        city,
+                        fullName
+                    }
                 }
+                // googleId:"fsdfs"
             }
-            // googleId:"fsdfs"
+        });
+        const verificationCode = await generateEmailVerificationCode(userId, email);
+        await sendVerificationEmail(email, verificationCode);
+        const redirectUrl = await generateRedirectUrl({
+            email,
+            userId,
+            username
+        })
+
+        // const session = await lucia.createSession(userId, {
+        //     expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
+        // })
+
+        // const sessionCookie = lucia.createSessionCookie(session.id);
+        // cookies().set(
+        //     sessionCookie.name,
+        //     sessionCookie.value,
+        //     sessionCookie.attributes
+        // );
+
+        return redirect(redirectUrl)
+    } else {
+        return {
+            error: "Username is not registered"
         }
-    });
-    const verificationCode = await generateEmailVerificationCode(userId, email);
-    await sendVerificationEmail(email, verificationCode);
-    const redirectUrl = await generateRedirectUrl({
-        email,
-        userId,
-        username
-    })
+    }
 
-    // const session = await lucia.createSession(userId, {
-    //     expiresAt: new Date(Date.now() + 60 * 60 * 24 * 30 * 1000),
-    // })
 
-    // const sessionCookie = lucia.createSessionCookie(session.id);
-    // cookies().set(
-    //     sessionCookie.name,
-    //     sessionCookie.value,
-    //     sessionCookie.attributes
-    // );
-
-    return redirect(redirectUrl)
 
 }

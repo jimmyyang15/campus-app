@@ -27,7 +27,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen container flex ">
-      <div className="flex-[.25]"></div>
+      <div className="flex-[.15]"></div>
       <MiddleSection />
       <Guidelines />
 

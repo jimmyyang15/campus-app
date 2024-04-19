@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { ModeToggle } from "@/app/_components/mode-toggle";
+import AvatarDropdown from "../avatar-dropdown";
 
 interface Props {
   user: User | null;
@@ -46,12 +47,7 @@ const Navbar = ({ user }: Props) => {
       </ul>
       <div className="flex items-center gap-x-4 ml-auto">
         <ModeToggle />
-        <Avatar>
-          <AvatarImage alt="@shadcn" />
-          <AvatarFallback>
-            <div className="h-10 w-10 animate-pulse rounded-full bg-slate-200"></div>
-          </AvatarFallback>
-        </Avatar>
+        <AvatarDropdown />
       </div>
     </nav>
   );
