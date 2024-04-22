@@ -9,7 +9,8 @@ import {
 } from "@/app/_components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { signOut } from "../_actions/signout";
-const AvatarDropdown = () => {
+import { LogOut, User } from "lucide-react";
+const AvatarDropdown = ({ name }: { name: string }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -21,13 +22,23 @@ const AvatarDropdown = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuLabel className="truncate text-center">
+          {name}
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <DropdownMenuItem>
-            <form action={signOut}>
-                <button>Sign out</button>
-            </form>
+          <User size={16} />
+          <DropdownMenuItem>Profile</DropdownMenuItem>
         </DropdownMenuItem>
-  
+        <DropdownMenuItem >
+          <form action={signOut} className="flex items-center gap-x-2">
+          <LogOut size={16} />
+
+            <button>
+                Sign Out
+            </button>
+          </form>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

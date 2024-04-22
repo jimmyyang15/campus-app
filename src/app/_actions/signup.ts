@@ -9,7 +9,7 @@ import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
-import { mentorNid, userNim } from "@/user-nim";
+import { adminUsername, mentorNid, userNim } from "@/user-nim";
 export const signUp = async (values: RegisterSchemaType) => {
 
 
@@ -42,7 +42,7 @@ export const signUp = async (values: RegisterSchemaType) => {
     }
 
 
-    if (userNim.includes(username) || mentorNid.includes(username)) {
+    if (userNim.includes(username) || mentorNid.includes(username) || adminUsername.includes(username)) {
         await db.user.create({
             data: {
                 id: userId,
@@ -50,6 +50,7 @@ export const signUp = async (values: RegisterSchemaType) => {
                 hashedPassword,
                 email,
                 isMentor: userNim.includes(username) ? false : mentorNid.includes(username) ? true : false,
+                role:adminUsername.includes(username) ? "ADMIN" : "USER",
                 profile: {
                     create: {
                         city,
@@ -79,7 +80,8 @@ export const signUp = async (values: RegisterSchemaType) => {
         // );
 
         return redirect(redirectUrl)
-    } else {
+    }  else {
+     
         return {
             error: "Username is not registered"
         }

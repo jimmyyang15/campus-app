@@ -24,11 +24,11 @@ const Navbar = ({ user }: Props) => {
     <nav className="container sticky top-0 z-40 flex items-center border-b bg-white/30 dark:bg-transparent backdrop-blur-sm gap-x-4">
       <Link href="/">
         <Image
+        className="object-cover"
           src="/assets/logo.png"
           alt="logo"
           width={80}
           height={80}
-          objectFit="cover"
         />
       </Link>
       <ul className="flex items-center gap-x-6 font-semibold ">
@@ -47,7 +47,7 @@ const Navbar = ({ user }: Props) => {
       </ul>
       <div className="flex items-center gap-x-4 ml-auto">
         <ModeToggle />
-        <AvatarDropdown />
+        <AvatarDropdown name={user?.profile.fullName as string} />
       </div>
     </nav>
   );
