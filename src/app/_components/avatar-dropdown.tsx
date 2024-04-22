@@ -10,12 +10,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { signOut } from "../_actions/signout";
 import { LogOut, User } from "lucide-react";
+
+
 const AvatarDropdown = ({ name }: { name: string }) => {
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage alt="@shadcn" />
+          <AvatarImage alt="@shadcn" src={`https://ui-avatars.com/api/?background=random&name=${name}`} />
           <AvatarFallback>
             <div className="h-10 w-10 animate-pulse rounded-full bg-slate-200"></div>
           </AvatarFallback>

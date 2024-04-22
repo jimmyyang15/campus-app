@@ -3,10 +3,14 @@ import CreatePostSection from "./create-post-section";
 import PostItem from "./post-item";
 import { posts } from "@/data";
 
-const MiddleSection = () => {
+type Props = {
+  isAdmin:boolean
+}
+const MiddleSection = ({isAdmin}:Props) => {
   return (
     <section className="flex-[.70] border-x">
-      <CreatePostSection />
+      {isAdmin ? <CreatePostSection /> :null}
+      
       {posts.map((item) => (
         <PostItem item={item} />
       ))}

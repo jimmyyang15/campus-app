@@ -28,7 +28,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen container flex ">
       <div className="flex-[.15]"></div>
-      <MiddleSection />
+      <MiddleSection isAdmin={user.role==="ADMIN"} />
       <Guidelines />
 
     </main>
