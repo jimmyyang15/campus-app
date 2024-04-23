@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { lucia } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/server/db";
-import { LoginSchema, LoginSchemaType } from "@/lib/schemas";
+import { LoginSchema, LoginSchemaType } from "@/lib/schemas/auth";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { findUserByUsername } from "./user";

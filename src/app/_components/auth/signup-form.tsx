@@ -16,7 +16,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
 import { BackgroundGradient } from "@/app/_components/ui/background-gradient";
 import BackgroundDot from "@/app/_components/ui/background-dot";
-import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
+import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
 import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";

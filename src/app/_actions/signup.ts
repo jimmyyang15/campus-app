@@ -3,7 +3,7 @@
 import { generateId } from "lucia";
 import { Argon2id } from 'oslo/password'
 import { db } from "@/server/db";
-import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas";
+import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
 
 import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";

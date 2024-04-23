@@ -1,6 +1,6 @@
 "use server"
 
-import { NewPasswordSchema, NewPasswordSchemaType, ResetPasswordSchema, ResetPasswordSchemaType } from "@/lib/schemas";
+import { NewPasswordSchema, NewPasswordSchemaType, ResetPasswordSchema, ResetPasswordSchemaType } from "@/lib/schemas/auth";
 import { db } from "@/server/db";
 import { generateId } from "lucia";
 import { TimeSpan, createDate } from "oslo";

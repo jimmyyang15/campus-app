@@ -11,9 +11,9 @@ const ProtectedRoute = ({ children,user }: { children: React.ReactNode,user:User
     if (!user) {
       router.push('/auth/signin')
     }
-  }, [router])
+  }, [router,user])
 
-  // if (!user) return null
+  if (!user) return null
 
   return <>{children}</>
 }

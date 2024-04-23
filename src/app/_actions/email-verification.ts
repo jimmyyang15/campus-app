@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken"
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { EmailVerificationSchemaType } from "@/lib/schemas";
+import { EmailVerificationSchemaType } from "@/lib/schemas/auth";
 import { sendVerificationEmail } from "@/lib/mail";
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {

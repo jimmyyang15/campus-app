@@ -11,8 +11,8 @@ const MiddleSection = ({isAdmin}:Props) => {
     <section className="flex-[.70] border-x">
       {isAdmin ? <CreatePostSection /> :null}
       
-      {posts.map((item) => (
-        <PostItem item={item} />
+      {posts.map((item,i) => (
+        <PostItem key={i} item={item} />
       ))}
     </section>
   );

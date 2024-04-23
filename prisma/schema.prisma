@@ -25,6 +25,7 @@ model User {
   emailVerification   EmailVerification?
   passwordResetToken  PasswordResetToken?
   posts               Post[]
+  reactions           Reaction[]
   club                Club?               @relation(fields: [clubId], references: [id])
   clubId              String?
   invitationsSent     Invitation[]        @relation("SentInvitations") // Invitations sent by the user
@@ -75,7 +76,7 @@ model Post {
   user      User       @relation(fields: [userId], references: [id])
   title     String
   desc      String?
-  media     String
+  media     String?
   comments  Comment[]
   reactions Reaction[]
   isClub    Boolean    @default(false)
@@ -88,6 +89,8 @@ model Reaction {
   type   String
   post   Post?   @relation(fields: [postId], references: [id])
   postId String?
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 model Comment {
@@ -167,5 +170,5 @@ model Submission {
   createdAt    DateTime    @default(now())
   assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId String?
-  files String[]
+  files        String[]
 }

@@ -15,7 +15,7 @@ interface Props {
 
 const AuthWrapper = ({ children, user }: Props) => {
   const pathname = usePathname();
-  console.log("fdsfsdfds", pathname);
+  // console.log("fdsfsdfds", pathname);
 
 
 

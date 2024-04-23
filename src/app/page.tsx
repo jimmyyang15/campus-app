@@ -21,14 +21,14 @@ export const metadata = {
 export default async function Home() {
   noStore();
   const { user } = await validateRequest();
-	if (!user) {
-		return redirect("/auth/signin");
-	}
+	// if (!user) {
+	// 	return redirect("/auth/signin");
+	// }
 
   return (
     <main className="min-h-screen container flex ">
       <div className="flex-[.15]"></div>
-      <MiddleSection isAdmin={user.role==="ADMIN"} />
+      <MiddleSection isAdmin={user?.role==="ADMIN"} />
       <Guidelines />
 
     </main>

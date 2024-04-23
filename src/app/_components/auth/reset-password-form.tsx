@@ -5,7 +5,7 @@ import {
   NewPasswordSchemaType,
   ResetPasswordSchema,
   ResetPasswordSchemaType,
-} from "@/lib/schemas";
+} from "@/lib/schemas/auth";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
