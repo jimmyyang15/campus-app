@@ -8,6 +8,7 @@ import Navbar from "@/app/_components/layout/navbar";
 import AuthWrapper from "./_components/auth/auth-wrapper";
 import { validateRequest } from "@/server/auth";
 import { ThemeProvider } from "./_components/theme-provider";
+import { TooltipProvider } from "./_components/plate-ui/tooltip";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,9 +40,11 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthWrapper user={user}>
-              <Navbar user={user} />
+              <TooltipProvider>
+                <Navbar user={user} />
 
-              {children}
+                {children}
+              </TooltipProvider>
             </AuthWrapper>
           </ThemeProvider>
         </TRPCReactProvider>
