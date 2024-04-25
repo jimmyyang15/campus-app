@@ -39,6 +39,7 @@ model Profile {
   fullName String
   city     String?
   dob      DateTime?
+  profilePicture String?
   user     User      @relation(fields: [userId], references: [id])
   userId   String    @unique // relation scalar field (used in the `@relation` attribute above)
 }

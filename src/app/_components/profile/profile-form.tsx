@@ -22,22 +22,39 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
-const ProfileForm = () => {
+import ProfileAvatar from "./profile-avatar";
+import { api } from "@/trpc/react";
+import { User } from "lucia";
+
+type Props = {
+  user: User | null
+};
+const ProfileForm = ({ user }: Props) => {
+  
+
+  const updateProfile = api.profile.updateProfile.useMutation()
+
   const form = useForm<ProfileSchemaType>({
     resolver: zodResolver(ProfileSchema),
-    defaultValues: {},
+    defaultValues: {
+      fullName:user?.profile.fullName,
+      city:user?.profile.city as string
+    },
   });
 
-  function onSubmit(values: ProfileSchemaType) {
+
+  async function onSubmit(values: ProfileSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    await updateProfile.mutateAsync(values)
   }
   return (
     <div>
+      <ProfileAvatar name={user?.profile.fullName as string} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
+          defaultValue={user?.profile.fullName}
             control={form.control}
             name="fullName"
             render={({ field }) => (
@@ -53,6 +70,8 @@ const ProfileForm = () => {
           />
           <FormField
             control={form.control}
+          defaultValue={user?.profile.city as string}
+
             name="city"
             render={({ field }) => (
               <FormItem>
@@ -67,6 +86,8 @@ const ProfileForm = () => {
           />
           <FormField
             control={form.control}
+          defaultValue={user?.profile.dob as Date}
+
             name="dob"
             render={({ field }) => (
               <FormItem className="flex flex-col">

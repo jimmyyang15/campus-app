@@ -9,7 +9,17 @@ const config = {
     webpack: (config) => {
 		config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
 		return config;
-	}
+	},
+	images: {
+		remotePatterns: [
+		  {
+			protocol: 'https',
+			hostname: 'ui-avatars.com',
+			port: '',
+			pathname: '/**',
+		  },
+		],
+	  },
 };
 
 export default config;

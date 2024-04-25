@@ -21,8 +21,6 @@ interface Props {
 const Navbar = ({ user }: Props) => {
   const pathname = usePathname();
 
-
-
   if (authRoutes.includes(pathname)) {
     return null;
   }
