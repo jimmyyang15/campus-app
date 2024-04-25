@@ -1,6 +1,10 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/app/_components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/ui/avatar";
 import { authRoutes } from "@/server/authRoutes";
 import { User } from "lucia";
 import Image from "next/image";
@@ -9,6 +13,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { ModeToggle } from "@/app/_components/mode-toggle";
 import AvatarDropdown from "../avatar-dropdown";
+import { api } from "@/trpc/react";
 
 interface Props {
   user: User | null;
@@ -16,15 +21,17 @@ interface Props {
 const Navbar = ({ user }: Props) => {
   const pathname = usePathname();
 
+
+
   if (authRoutes.includes(pathname)) {
     return null;
   }
 
   return (
-    <nav className="container sticky top-0 z-40 flex items-center border-b bg-white/30 dark:bg-transparent backdrop-blur-sm gap-x-4">
+    <nav className="container sticky top-0 z-40 flex items-center gap-x-4 border-b bg-white/30 backdrop-blur-sm dark:bg-transparent">
       <Link href="/">
         <Image
-        className="object-cover"
+          className="object-cover"
           src="/assets/logo.png"
           alt="logo"
           width={80}
@@ -45,7 +52,7 @@ const Navbar = ({ user }: Props) => {
           <Link href="/">Rewards</Link>
         </li>
       </ul>
-      <div className="flex items-center gap-x-4 ml-auto">
+      <div className="ml-auto flex items-center gap-x-4">
         <ModeToggle />
         <AvatarDropdown name={user?.profile.fullName as string} />
       </div>

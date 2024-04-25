@@ -28,7 +28,7 @@ const CreatePostForm = () => {
   });
 
   const { watch } = form;
-  console.log(watch("desc"))
+  console.log(JSON.stringify(watch("desc")))
 
   function onSubmit(values: z.infer<typeof PostSchema>) {
     // Do something with the form values.

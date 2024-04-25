@@ -32,7 +32,7 @@ const AvatarDropdown = ({ name }: { name: string }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center gap-x-2">
           <User size={16} />
-          <Link href="/">Profile</Link>
+          <Link href="/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem >
           <form action={signOut} className="flex items-center gap-x-2">

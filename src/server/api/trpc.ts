@@ -13,6 +13,7 @@ import { ZodError } from "zod";
 
 // import { getServerAuthSession } from "@/server/auth";
 import { db } from "@/server/db";
+import { validateRequest } from "../auth";
 
 /**
  * 1. CONTEXT
@@ -27,10 +28,10 @@ import { db } from "@/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const { user } = await validateRequest();
+
   const session ={
-    user:{
-      
-    }
+    user
   };
 
   return {
