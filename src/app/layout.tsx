@@ -9,6 +9,7 @@ import AuthWrapper from "./_components/auth/auth-wrapper";
 import { validateRequest } from "@/server/auth";
 import { ThemeProvider } from "./_components/theme-provider";
 import { TooltipProvider } from "./_components/plate-ui/tooltip";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +32,14 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <Toaster richColors />
+        <Toaster
+          richColors
+          toastOptions={{
+            classNames: {
+              actionButton: "text-white bg-primary",
+            },
+          }}
+        />
         <TRPCReactProvider>
           <ThemeProvider
             attribute="class"
@@ -40,11 +48,13 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <AuthWrapper user={user}>
-              <TooltipProvider>
-                <Navbar user={user} />
+              <EdgeStoreProvider>
+                <TooltipProvider>
+                  <Navbar user={user} />
 
-                {children}
-              </TooltipProvider>
+                  {children}
+                </TooltipProvider>
+              </EdgeStoreProvider>
             </AuthWrapper>
           </ThemeProvider>
         </TRPCReactProvider>

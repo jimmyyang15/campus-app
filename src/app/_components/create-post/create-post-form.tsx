@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -23,12 +23,11 @@ const CreatePostForm = () => {
     resolver: zodResolver(PostSchema),
     defaultValues: {
       title: "",
-      desc: "",
+      // desc: "",
     },
   });
-
-  const { watch } = form;
-  console.log(JSON.stringify(watch("desc")))
+  const [content,setContent] = useState<any>();
+  console.log(content)
 
   function onSubmit(values: z.infer<typeof PostSchema>) {
     // Do something with the form values.
@@ -58,23 +57,12 @@ const CreatePostForm = () => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="desc"
-          render={({ field }) => (
-            <FormItem>
+       
               <FormLabel>Description</FormLabel>
-              <FormControl>
                 {/* <Input placeholder="Hello..." {...field} /> */}
-                <PlateEditor onChange={field.onChange} />
-              </FormControl>
-              <FormDescription>
-                This is going to be the description of your post
-              </FormDescription>
+                <PlateEditor setContent={setContent}  />
+              
               <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" className="self-end text-white">
           Submit
         </Button>

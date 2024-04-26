@@ -8,8 +8,8 @@ import type { VariantProps } from 'class-variance-authority';
 
 const editorVariants = cva(
   cn(
-    'relative overflow-x-auto whitespace-pre-wrap break-words',
-    'min-h-[80px] w-full rounded-md bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400',
+    'relative overflow-x-auto whitespace-pre-wrap break-words ',
+    'min-h-[80px] w-full rounded-md bg-white px-3 py-2 text-sm ring-offset-blue-500 placeholder:text-neutral-500 focus-visible:outline-none  dark:ring-offset-neutral-950 dark:placeholder:text-neutral-400',
     '[&_[data-slate-placeholder]]:text-neutral-500 [&_[data-slate-placeholder]]:!opacity-100 dark:[&_[data-slate-placeholder]]:text-neutral-400',
     '[&_[data-slate-placeholder]]:top-[auto_!important]',
     '[&_strong]:font-bold'
@@ -17,7 +17,7 @@ const editorVariants = cva(
   {
     variants: {
       variant: {
-        outline: 'border border-neutral-200 dark:border-neutral-800',
+        outline: 'border border-border',
         ghost: '',
       },
       focused: {
@@ -27,7 +27,7 @@ const editorVariants = cva(
         true: 'cursor-not-allowed opacity-50',
       },
       focusRing: {
-        true: 'focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 dark:focus-visible:ring-neutral-300',
+        true: 'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background',
         false: '',
       },
       size: {

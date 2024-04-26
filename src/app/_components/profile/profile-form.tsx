@@ -2,7 +2,7 @@
 
 import { ProfileSchema, ProfileSchemaType } from "@/lib/schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -18,43 +18,94 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 import ProfileAvatar from "./profile-avatar";
 import { api } from "@/trpc/react";
 import { User } from "lucia";
+import { toast } from "sonner";
+import { useEdgeStore } from "@/lib/edgestore";
+import { Profile } from "@prisma/client";
 
 type Props = {
-  user: User | null
+  user: User | null;
 };
 const ProfileForm = ({ user }: Props) => {
-  
+  const [file, setFile] = useState<File>();
+  const [preview, setPreview] = useState<string | undefined>()
+  const { edgestore } = useEdgeStore();
 
-  const updateProfile = api.profile.updateProfile.useMutation()
+  console.log(file);
+  useEffect(() => {
+    if (!file) {
+        setPreview(undefined)
+        return
+    }
+
+    const objectUrl = URL.createObjectURL(file)
+    setPreview(objectUrl)
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl)
+}, [file])
+
+  const { isLoading, mutateAsync: updateProfile } =
+    api.profile.updateProfile.useMutation({
+      onSuccess: () => {
+        toast.success("Profile updated", {
+          // description: "Sunday, December 03, 2023 at 9:00 AM",
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+    });
 
   const form = useForm<ProfileSchemaType>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      fullName:user?.profile.fullName,
-      city:user?.profile.city as string
+      fullName: user?.profile.fullName,
+      city: user?.profile.city as string,
     },
   });
-
 
   async function onSubmit(values: ProfileSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    await updateProfile.mutateAsync(values)
+    if (file) {
+      const res = await edgestore.publicFiles.upload({
+        file,
+        // onProgressChange: (progress) => {
+        //   // you can use this to show a progress bar
+        //   console.log(progress);
+        // },
+      });
+      const data = {
+        ...values,
+        profilePicture:res.url
+      }
+
+      await updateProfile(data);
+
+    } else {
+      await updateProfile(values);
+    }
   }
   return (
     <div>
-      <ProfileAvatar name={user?.profile.fullName as string} />
+      <ProfileAvatar
+        profile={user?.profile as Profile}
+        preview={preview as string}
+        setFile={setFile}
+      />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
-          defaultValue={user?.profile.fullName}
+            defaultValue={user?.profile.fullName}
             control={form.control}
             name="fullName"
             render={({ field }) => (
@@ -70,8 +121,7 @@ const ProfileForm = ({ user }: Props) => {
           />
           <FormField
             control={form.control}
-          defaultValue={user?.profile.city as string}
-
+            defaultValue={user?.profile.city as string}
             name="city"
             render={({ field }) => (
               <FormItem>
@@ -86,8 +136,7 @@ const ProfileForm = ({ user }: Props) => {
           />
           <FormField
             control={form.control}
-          defaultValue={user?.profile.dob as Date}
-
+            defaultValue={user?.profile.dob as Date}
             name="dob"
             render={({ field }) => (
               <FormItem className="flex flex-col">
@@ -123,8 +172,8 @@ const ProfileForm = ({ user }: Props) => {
                       }}
                       mode="single"
                       captionLayout="dropdown-buttons"
-                      fromYear={2015}
-                      toYear={2025}
+                      fromYear={1950}
+                      toYear={new Date().getFullYear()}
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
@@ -134,15 +183,16 @@ const ProfileForm = ({ user }: Props) => {
                     />
                   </PopoverContent>
                 </Popover>
-                <FormDescription>
-                  Your date of birth is used to calculate your age.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="text-white">
-            Update Profile
+          <Button type="submit" className="text-white" disabled={isLoading}>
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            {isLoading ? "Updating" : "Update Profile"}
           </Button>
         </form>
       </Form>
