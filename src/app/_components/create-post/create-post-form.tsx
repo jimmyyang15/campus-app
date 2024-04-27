@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { slateToHtml,htmlToSlate } from '@slate-serializers/html'
+import moment from 'moment'
 import {
   Form,
   FormControl,
@@ -17,6 +19,9 @@ import { PostSchema } from "@/lib/schemas/post";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { PlateEditor } from "./editor";
+import { api } from "@/trpc/react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const CreatePostForm = () => {
   const form = useForm<z.infer<typeof PostSchema>>({
@@ -26,13 +31,28 @@ const CreatePostForm = () => {
       // desc: "",
     },
   });
-  const [content,setContent] = useState<any>();
-  console.log(content)
 
-  function onSubmit(values: z.infer<typeof PostSchema>) {
+  const { mutateAsync:createPost,isLoading } = api.post.createPost.useMutation({
+    onSuccess: () => {
+      toast.success("Post created", {
+        description: moment().format('LLLL'),
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
+    },
+  })
+  const [content, setContent] = useState<any>();
+
+  async function onSubmit(values: z.infer<typeof PostSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    await createPost({
+      ...values,
+      desc:slateToHtml(content)
+    })
   }
   return (
     <Form {...form}>
@@ -57,15 +77,17 @@ const CreatePostForm = () => {
           )}
         />
 
-       
-              <FormLabel>Description</FormLabel>
-                {/* <Input placeholder="Hello..." {...field} /> */}
-                <PlateEditor setContent={setContent}  />
-              
-              <FormMessage />
-        <Button type="submit" className="self-end text-white">
-          Submit
-        </Button>
+        <FormLabel>Description</FormLabel>
+        {/* <Input placeholder="Hello..." {...field} /> */}
+        <PlateEditor setContent={setContent} />
+
+        <FormMessage />
+        <Button type="submit" className="text-white" disabled={isLoading}>
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            {isLoading ? "Creating a post..." : "Create"}
+          </Button>
       </form>
     </Form>
   );

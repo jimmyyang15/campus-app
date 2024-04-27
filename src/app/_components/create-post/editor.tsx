@@ -1,6 +1,7 @@
 "use client";
 
 import { withProps } from "@udecode/cn";
+import { Node } from 'slate'
 import {
   createPlugins,
   Plate,
@@ -370,6 +371,8 @@ const initialValue = [
     children: [{ text: "Hello, World!" }],
   },
 ];
+
+
 
 export function PlateEditor({
   setContent,

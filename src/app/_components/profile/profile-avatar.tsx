@@ -30,7 +30,7 @@ const ProfileAvatar = ({ profile, setFile, preview }: Props) => {
           width={0}
           height={0}
           sizes="100vw"
-          className="object-fit rounded-full h-[100px] w-[100px]"
+          className="object-cover rounded-full h-[100px] w-[100px]"
         />
         <div className="absolute bottom-0 left-0 right-0 top-0  rounded-full bg-[#00000071]"></div>
         <Camera

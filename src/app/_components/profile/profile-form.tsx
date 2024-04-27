@@ -28,6 +28,7 @@ import { User } from "lucia";
 import { toast } from "sonner";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Profile } from "@prisma/client";
+import moment from "moment";
 
 type Props = {
   user: User | null;
@@ -55,7 +56,8 @@ const ProfileForm = ({ user }: Props) => {
     api.profile.updateProfile.useMutation({
       onSuccess: () => {
         toast.success("Profile updated", {
-          // description: "Sunday, December 03, 2023 at 9:00 AM",
+          description: moment().format('LLLL'),
+
           // action: {
           //   label: "Dismiss",
           //   onClick: () => toast.dismiss(),

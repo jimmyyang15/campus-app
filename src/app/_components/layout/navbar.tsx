@@ -14,6 +14,7 @@ import React from "react";
 import { ModeToggle } from "@/app/_components/mode-toggle";
 import AvatarDropdown from "../avatar-dropdown";
 import { api } from "@/trpc/react";
+import { Profile } from "@prisma/client";
 
 interface Props {
   user: User | null;
@@ -52,7 +53,7 @@ const Navbar = ({ user }: Props) => {
       </ul>
       <div className="ml-auto flex items-center gap-x-4">
         <ModeToggle />
-        <AvatarDropdown name={user?.profile.fullName as string} />
+        <AvatarDropdown profile={user?.profile as Profile} />
       </div>
     </nav>
   );
