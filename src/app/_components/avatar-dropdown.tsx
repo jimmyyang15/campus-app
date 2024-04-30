@@ -12,20 +12,14 @@ import { signOut } from "../_actions/signout";
 import { LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { Profile } from "@prisma/client";
-
+import AvatarProfile from "./avatar-profile";
 
 const AvatarDropdown = ({ profile }: { profile: Profile }) => {
-
-  const { fullName,profilePicture } = profile;
+  const { fullName } = profile;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage alt="@shadcn" src={profilePicture ? profilePicture : `https://ui-avatars.com/api/?background=random&name=${profile.fullName}`} className="object-cover" />
-          <AvatarFallback>
-            <div className="h-10 w-10 animate-pulse rounded-full bg-slate-200"></div>
-          </AvatarFallback>
-        </Avatar>
+        <AvatarProfile profile={profile} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="truncate text-center">
@@ -36,13 +30,11 @@ const AvatarDropdown = ({ profile }: { profile: Profile }) => {
           <User size={16} />
           <Link href="/profile">Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem >
+        <DropdownMenuItem>
           <form action={signOut} className="flex items-center gap-x-2">
-          <LogOut size={16} />
+            <LogOut size={16} />
 
-            <button>
-                Sign Out
-            </button>
+            <button>Sign Out</button>
           </form>
         </DropdownMenuItem>
       </DropdownMenuContent>

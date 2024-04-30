@@ -76,6 +76,7 @@ specifiers:
   '@udecode/plate-selection': ^31.0.0
   '@udecode/plate-serializer-csv': ^31.4.1
   '@udecode/plate-serializer-docx': ^31.4.1
+  '@udecode/plate-serializer-html': ^31.4.4
   '@udecode/plate-serializer-md': ^31.4.0
   '@udecode/plate-tabbable': ^31.0.0
   '@udecode/plate-table': ^31.4.1
@@ -124,6 +125,7 @@ specifiers:
   tailwindcss: ^3.4.1
   tailwindcss-animate: ^1.0.7
   typescript: ^5.3.3
+  use-debounce: ^10.0.0
   zod: ^3.22.4
 
 dependencies:
@@ -195,6 +197,7 @@ dependencies:
   '@udecode/plate-selection': 31.0.0_myv3os3v5gs6bdkz5a4mkrvt7e
   '@udecode/plate-serializer-csv': 31.4.1_myv3os3v5gs6bdkz5a4mkrvt7e
   '@udecode/plate-serializer-docx': 31.4.1_myv3os3v5gs6bdkz5a4mkrvt7e
+  '@udecode/plate-serializer-html': 31.4.4_myv3os3v5gs6bdkz5a4mkrvt7e
   '@udecode/plate-serializer-md': 31.4.0_myv3os3v5gs6bdkz5a4mkrvt7e
   '@udecode/plate-tabbable': 31.0.0_myv3os3v5gs6bdkz5a4mkrvt7e
   '@udecode/plate-table': 31.4.1_myv3os3v5gs6bdkz5a4mkrvt7e
@@ -235,6 +238,7 @@ dependencies:
   superjson: 2.2.1
   tailwind-merge: 2.2.1
   tailwindcss-animate: 1.0.7_tailwindcss@3.4.1
+  use-debounce: 10.0.0_react@18.2.0
   zod: 3.22.4
 
 devDependencies:
@@ -4905,6 +4909,27 @@ packages:
       validator: 13.11.0
     dev: false
 
+  /@udecode/plate-serializer-html/31.4.4_myv3os3v5gs6bdkz5a4mkrvt7e:
+    resolution: {integrity: sha512-6pwyHJuhQIXFPHrxaezlFr0RNNQGxBtEXJmkriLMYyMtg86yf7d1euHzsypqN9QIrk0I2KRFib/kH1o1E8YyYw==}
+    peerDependencies:
+      '@udecode/plate-common': '>=31.3.2'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+      slate: '>=0.94.0'
+      slate-history: '>=0.93.0'
+      slate-hyperscript: '>=0.66.0'
+      slate-react: '>=0.99.0'
+    dependencies:
+      '@udecode/plate-common': 31.3.2_wysby7wdixwegj5orrdex7feci
+      html-entities: 2.5.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      slate: 0.103.0
+      slate-history: 0.100.0_slate@0.103.0
+      slate-hyperscript: 0.100.0_slate@0.103.0
+      slate-react: 0.102.0_eo3nrcd5ix4c3jpqiag4wqwbje
+    dev: false
+
   /@udecode/plate-serializer-md/31.4.0_myv3os3v5gs6bdkz5a4mkrvt7e:
     resolution: {integrity: sha512-fzhzNtUlKFdLPpjpvBhi1Z2jBJV5toM+JuDkipoCz6pOOFAJAWtRuU/OkMGkNuG+7EAqOQ7+HDpIhcVrX7FuQA==}
     peerDependencies:
@@ -8869,6 +8894,15 @@ packages:
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /use-debounce/10.0.0_react@18.2.0:
+    resolution: {integrity: sha512-XRjvlvCB46bah9IBXVnq/ACP2lxqXyZj0D9hj4K5OzNroMDpTEBg8Anuh1/UfRTRs7pLhQ+RiNxxwZu9+MVl1A==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /use-deep-compare/1.2.1_react@18.2.0:

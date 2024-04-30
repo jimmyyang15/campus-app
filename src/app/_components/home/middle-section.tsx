@@ -1,12 +1,15 @@
 import React from "react";
 import CreatePostSection from "./create-post-section";
 import PostItem from "./post-item";
-import { posts } from "@/data";
+import { Post } from "@prisma/client";
+import { PostsWithUser } from "@/types";
+// import { posts } from "@/data";
 
 type Props = {
-  isAdmin:boolean
+  isAdmin:boolean;
+  posts:PostsWithUser[]
 }
-const MiddleSection = ({isAdmin}:Props) => {
+const MiddleSection = ({isAdmin,posts}:Props) => {
   return (
     <section className="flex-[.70] border-x">
       {isAdmin ? <CreatePostSection /> :null}

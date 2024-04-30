@@ -1,12 +1,14 @@
 "use client";
 
 import { withProps } from "@udecode/cn";
-import { Node } from 'slate'
+import { Node } from "slate";
+import { serializeHtml } from "@udecode/plate-serializer-html";
 import {
   createPlugins,
   Plate,
   RenderAfterEditable,
   PlateLeaf,
+  createPlateEditor,
 } from "@udecode/plate-common";
 import {
   createParagraphPlugin,
@@ -159,6 +161,7 @@ import { FloatingToolbar } from "@/app/_components/plate-ui/floating-toolbar";
 import { FloatingToolbarButtons } from "@/app/_components/plate-ui/floating-toolbar-buttons";
 import { withPlaceholders } from "@/app/_components/plate-ui/placeholder";
 import { withDraggables } from "@/app/_components/plate-ui/with-draggables";
+import React, { useState } from "react";
 // import { EmojiCombobox } from '@/app/_components/plate-ui/emoji-combobox';
 
 const plugins = createPlugins(
@@ -364,28 +367,26 @@ const plugins = createPlugins(
   },
 );
 
-const initialValue = [
-  {
-    id: "1",
-    type: "p",
-    children: [{ text: "Hello, World!" }],
-  },
-];
+const editor = createPlateEditor({ plugins });
 
+console.log(editor);
 
+function PlateEditor() {
+  const [content, setContent] = useState<any>();
+  const html = serializeHtml(editor, {
+    nodes: editor.children,
+    // if you use @udecode/plate-dnd
+  });
+  console.log(content, editor);
 
-export function PlateEditor({
-  setContent,
-}: {
-  setContent: React.Dispatch<any>;
-}) {
   return (
     <DndProvider backend={HTML5Backend}>
       <CommentsProvider users={{}} myUserId="1">
         <Plate
           plugins={plugins}
           onChange={(e) => setContent(e)}
-          initialValue={initialValue}
+
+          // initialValue={initialValue}
         >
           <FixedToolbar>
             <FixedToolbarButtons />
@@ -403,3 +404,5 @@ export function PlateEditor({
     </DndProvider>
   );
 }
+
+export default React.memo(PlateEditor);
