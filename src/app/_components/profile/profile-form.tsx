@@ -164,6 +164,7 @@ const ProfileForm = ({ user }: Props) => {
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
+                    
                       classNames={{
                         caption_label: "flex items-center text-sm font-medium",
                         dropdown: "rdp-dropdown bg-card",
@@ -172,6 +173,7 @@ const ProfileForm = ({ user }: Props) => {
                         button: "",
                         button_reset: "",
                       }}
+                      
                       mode="single"
                       captionLayout="dropdown-buttons"
                       fromYear={1950}

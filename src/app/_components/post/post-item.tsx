@@ -2,6 +2,7 @@ import React from "react";
 import { PostsWithUser } from "@/types";
 import AvatarProfile from "../avatar-profile";
 import { Profile } from "@prisma/client";
+import PostActions from "./post-actions";
 interface Props {
   item: PostsWithUser;
 }
@@ -15,6 +16,7 @@ const PostItem = ({ item }: Props) => {
       </div>
       <p className="text-lg font-bold ">{item.title}</p>
       <div dangerouslySetInnerHTML={{ __html: item.content as string }} />
+      <PostActions />
       {/* <Image src={item.picture} className="object-cover w-full h-96" sizes="100vw" width={0} height={0} alt="post-media" /> */}
     </div>
   );

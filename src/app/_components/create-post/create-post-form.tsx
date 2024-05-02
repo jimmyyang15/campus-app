@@ -27,6 +27,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import QuillToolbar, { modules, formats } from "./editor-toolbar";
+import PostActions from "../post/post-actions";
 
 const CreatePostForm = () => {
   const form = useForm<z.infer<typeof PostSchema>>({
@@ -95,6 +96,8 @@ const CreatePostForm = () => {
                 <QuillToolbar />
                 <ReactQuill
                   // id="content"
+                  
+                  className=" border-border"
                   modules={modules}
                   formats={formats}
                   placeholder="Text(optional)"

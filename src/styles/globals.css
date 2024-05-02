@@ -93,4 +93,12 @@
   .rdp-vhidden {
     @apply hidden;
   }
+
+  .ql-toolbar  {
+    @apply border border-border rounded-lg
+  }
+
+  .ql-container {
+    @apply border-border rounded-lg
+  }
 }

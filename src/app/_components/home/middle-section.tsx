@@ -1,6 +1,6 @@
 import React from "react";
 import CreatePostSection from "./create-post-section";
-import PostItem from "./post-item";
+import PostItem from "../post/post-item";
 import { Post } from "@prisma/client";
 import { PostsWithUser } from "@/types";
 // import { posts } from "@/data";
