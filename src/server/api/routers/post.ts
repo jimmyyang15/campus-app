@@ -19,7 +19,7 @@ export const postRouter = createTRPCRouter({
     }),
     createPost:protectedProcedure.input(z.object({
       title:z.string(),
-      desc:z.string()
+      content:z.string()
     })).mutation(async({ ctx,input })=>{
 
     
@@ -29,12 +29,11 @@ export const postRouter = createTRPCRouter({
           code:"FORBIDDEN",
           message:"You're not supposed to create post on homepage!"
         })
-      }
+      };
 
       return await db.post.create({
         data:{
           ...input,
-        
           user:{
             connect:{
               id:user.id

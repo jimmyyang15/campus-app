@@ -14,7 +14,7 @@ const PostItem = ({ item }: Props) => {
         <p>{item.user.profile?.fullName}</p>
       </div>
       <p className="text-lg font-bold ">{item.title}</p>
-      <div dangerouslySetInnerHTML={{ __html: item.desc as string }} />
+      <div dangerouslySetInnerHTML={{ __html: item.content as string }} />
       {/* <Image src={item.picture} className="object-cover w-full h-96" sizes="100vw" width={0} height={0} alt="post-media" /> */}
     </div>
   );

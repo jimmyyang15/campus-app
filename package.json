@@ -111,6 +111,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.50.1",
     "react-lite-youtube-embed": "^2.4.0",
+    "react-quill": "^2.0.0",
     "react-tweet": "^3.2.1",
     "resend": "^3.2.0",
     "server-only": "^0.0.1",

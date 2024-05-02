@@ -1,7 +1,6 @@
 "use client";
 
 import { withProps } from "@udecode/cn";
-import { Node } from "slate";
 import { serializeHtml } from "@udecode/plate-serializer-html";
 import {
   createPlugins,
@@ -9,6 +8,7 @@ import {
   RenderAfterEditable,
   PlateLeaf,
   createPlateEditor,
+  TElement,
 } from "@udecode/plate-common";
 import {
   createParagraphPlugin,
@@ -161,11 +161,14 @@ import { FloatingToolbar } from "@/app/_components/plate-ui/floating-toolbar";
 import { FloatingToolbarButtons } from "@/app/_components/plate-ui/floating-toolbar-buttons";
 import { withPlaceholders } from "@/app/_components/plate-ui/placeholder";
 import { withDraggables } from "@/app/_components/plate-ui/with-draggables";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import { useDebounce } from "use-debounce";
+import { createPlateUI } from "@/lib/create-plate-ui";
 // import { EmojiCombobox } from '@/app/_components/plate-ui/emoji-combobox';
 
 const plugins = createPlugins(
   [
+    
     createParagraphPlugin(),
     createHeadingPlugin(),
     createBlockquotePlugin(),
@@ -324,70 +327,37 @@ const plugins = createPlugins(
     createJuicePlugin(),
   ],
   {
-    components: withDraggables(
-      withPlaceholders({
-        [ELEMENT_BLOCKQUOTE]: BlockquoteElement,
-        [ELEMENT_CODE_BLOCK]: CodeBlockElement,
-        [ELEMENT_CODE_LINE]: CodeLineElement,
-        [ELEMENT_CODE_SYNTAX]: CodeSyntaxLeaf,
-        [ELEMENT_EXCALIDRAW]: ExcalidrawElement,
-        [ELEMENT_HR]: HrElement,
-        [ELEMENT_IMAGE]: ImageElement,
-        [ELEMENT_LINK]: LinkElement,
-        [ELEMENT_TOGGLE]: ToggleElement,
-        [ELEMENT_COLUMN_GROUP]: ColumnGroupElement,
-        [ELEMENT_COLUMN]: ColumnElement,
-        [ELEMENT_H1]: withProps(HeadingElement, { variant: "h1" }),
-        [ELEMENT_H2]: withProps(HeadingElement, { variant: "h2" }),
-        [ELEMENT_H3]: withProps(HeadingElement, { variant: "h3" }),
-        [ELEMENT_H4]: withProps(HeadingElement, { variant: "h4" }),
-        [ELEMENT_H5]: withProps(HeadingElement, { variant: "h5" }),
-        [ELEMENT_H6]: withProps(HeadingElement, { variant: "h6" }),
-        [ELEMENT_MEDIA_EMBED]: MediaEmbedElement,
-        [ELEMENT_MENTION]: MentionElement,
-        [ELEMENT_MENTION_INPUT]: MentionInputElement,
-        [ELEMENT_PARAGRAPH]: ParagraphElement,
-        [ELEMENT_TABLE]: TableElement,
-        [ELEMENT_TR]: TableRowElement,
-        [ELEMENT_TD]: TableCellElement,
-        [ELEMENT_TH]: TableCellHeaderElement,
-        [ELEMENT_TODO_LI]: TodoListElement,
-        [MARK_BOLD]: withProps(PlateLeaf, { as: "strong" }),
-        [MARK_CODE]: CodeLeaf,
-        [MARK_COMMENT]: CommentLeaf,
-        [MARK_HIGHLIGHT]: HighlightLeaf,
-        [MARK_ITALIC]: withProps(PlateLeaf, { as: "em" }),
-        [MARK_KBD]: KbdLeaf,
-        [MARK_STRIKETHROUGH]: withProps(PlateLeaf, { as: "s" }),
-        [MARK_SUBSCRIPT]: withProps(PlateLeaf, { as: "sub" }),
-        [MARK_SUPERSCRIPT]: withProps(PlateLeaf, { as: "sup" }),
-        [MARK_UNDERLINE]: withProps(PlateLeaf, { as: "u" }),
-      }),
-    ),
+    components:createPlateUI()
   },
 );
 
-const editor = createPlateEditor({ plugins });
 
-console.log(editor);
+
 
 function PlateEditor() {
-  const [content, setContent] = useState<any>();
-  const html = serializeHtml(editor, {
-    nodes: editor.children,
-    // if you use @udecode/plate-dnd
-  });
-  console.log(content, editor);
+  const editor = createPlateEditor({ plugins });
+console.log(editor)
+
+    const html = serializeHtml(editor, {
+      nodes:editor.children,
+      dndWrapper: (props) => <DndProvider backend={HTML5Backend} {...props} />,
+    });
+  const [content, setContent] = useState<TElement[]>();
+  const [value] = useDebounce(content, 1000);
 
   return (
     <DndProvider backend={HTML5Backend}>
       <CommentsProvider users={{}} myUserId="1">
         <Plate
           plugins={plugins}
-          onChange={(e) => setContent(e)}
-
+          editor={editor}
+          onChange={(e) => {
+            setContent(e)
+          }}
+          value={value}
           // initialValue={initialValue}
         >
+          <button type='button' >fdsfdsds</button>
           <FixedToolbar>
             <FixedToolbarButtons />
           </FixedToolbar>

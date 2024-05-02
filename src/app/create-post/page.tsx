@@ -15,7 +15,7 @@ const CreatePostPage = async () => {
   }
 
   return (
-    <main className="mx-auto max-w-5xl border-x p-4 ">
+    <main className="mx-auto max-w-5xl border-x p-4 min-h-screen">
       <p className="text-xl font-semibold">Create a post</p>
       <CreatePostForm />
     </main>

@@ -2,6 +2,9 @@
 
 import React, { useCallback, useState } from "react";
 import { slateToHtml, htmlToSlate } from "@slate-serializers/html";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 import moment from "moment";
 import {
   Form,
@@ -18,18 +21,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PostSchema } from "@/lib/schemas/post";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import  PlateEditor  from "./editor";
+import PlateEditor from "./editor";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from "use-debounce";
+import QuillToolbar, { modules, formats } from "./editor-toolbar";
 
 const CreatePostForm = () => {
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
       title: "",
-      // desc: "",
+      content: "",
     },
   });
 
@@ -45,26 +49,18 @@ const CreatePostForm = () => {
           closeButton: true,
         });
 
-        setContent("");
       },
     });
-  const [content, setContent] = useState<any>();
-    const [value] = useDebounce(content, 1000);
-  const handleContentChange = useCallback((e: any) => {
-    console.log(e)
-    setContent(e);
-  },[value]);
-  console.log(slateToHtml(value))
+
+
+
   async function onSubmit(values: z.infer<typeof PostSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     await createPost({
       ...values,
-      desc: slateToHtml(content),
     });
   }
-
-  
 
   return (
     <Form {...form}>
@@ -88,12 +84,35 @@ const CreatePostForm = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Content</FormLabel>
+              <FormControl>
+                <>
+                <QuillToolbar />
+                <ReactQuill
+                  // id="content"
+                  modules={modules}
+                  formats={formats}
+                  placeholder="Text(optional)"
+                  theme="snow"
+                  style={{}}
+                  {...field}
+                ></ReactQuill>
+                </>
+                
+              </FormControl>
 
-        <FormLabel>Description</FormLabel>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* <Input placeholder="Hello..." {...field} /> */}
-        <PlateEditor  />
-
-        <FormMessage />
+        {/* <PlateEditor  /> */}
         <Button
           type="submit"
           className="self-end text-white"
