@@ -1,10 +1,13 @@
 import React from 'react'
 import ReactionPopover from './reaction-popover'
 
-const PostActions = () => {
+type Props = {
+  postId:string;
+}
+const PostActions = ({ postId }:Props) => {
   return (
     <div className='flex gap-x-4 items-center'>
-        <ReactionPopover />
+        <ReactionPopover postId={postId} />
     </div>
   )
 }

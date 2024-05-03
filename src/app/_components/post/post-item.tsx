@@ -3,10 +3,23 @@ import { PostsWithUser } from "@/types";
 import AvatarProfile from "../avatar-profile";
 import { Profile } from "@prisma/client";
 import PostActions from "./post-actions";
+import ReactionsList from "./reactions-list";
+import { db } from "@/server/db";
 interface Props {
   item: PostsWithUser;
 }
-const PostItem = ({ item }: Props) => {
+
+const fetchPostReactions = async(postId:string) => {
+  const reactions = await db.reaction.findMany({
+      where:{
+          postId
+      }
+  });
+  return reactions
+}
+const PostItem = async({ item }: Props) => {
+  const reactions = await fetchPostReactions(item.id);
+
   return (
     <div className="space-y-4 border-b p-4">
       
@@ -16,7 +29,8 @@ const PostItem = ({ item }: Props) => {
       </div>
       <p className="text-lg font-bold ">{item.title}</p>
       <div dangerouslySetInnerHTML={{ __html: item.content as string }} />
-      <PostActions />
+      <PostActions postId={item.id} />
+      <ReactionsList postId={item.id} reactions={reactions} />
       {/* <Image src={item.picture} className="object-cover w-full h-96" sizes="100vw" width={0} height={0} alt="post-media" /> */}
     </div>
   );
