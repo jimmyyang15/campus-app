@@ -9,6 +9,36 @@ import { TRPCError } from "@trpc/server";
 import { db } from "@/server/db";
 
 export const postRouter = createTRPCRouter({
+    singlePost:protectedProcedure.input(z.object({
+      postId:z.string()
+    })).query(async({ input })=>{
+      return await db.post.findUnique({
+        where:{
+          id:input.postId
+        }
+      })
+    }),
+
+    getPosts:protectedProcedure.query(async()=>{
+      const posts = await db.post.findMany({
+        include:{
+          user:{
+            include:{
+              profile:true
+            }
+          },
+          reactions:{
+            include:{
+              user:true
+            }
+          }
+        },
+        orderBy:{
+          createdAt:'desc'
+        }
+      });
+      return posts;
+    }),
 
     createPost:protectedProcedure.input(z.object({
       title:z.string(),

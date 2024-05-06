@@ -10,7 +10,15 @@ import { db } from "@/server/db";
 
 const ReactionTypeSchema = z.enum(["THUMBS-UP", "HEART", "HAPPY", "FUNNY", "FIRE"]);
 export const reactionRouter = createTRPCRouter({
- 
+    postReactions:protectedProcedure.input(z.object({
+        postId:z.string()
+      })).query(async({ input })=>{
+        return await db.reaction.findMany({
+          where:{
+            id:input.postId
+          }
+        })
+      }),
     
     giveReaction:protectedProcedure.input(z.object({
       type:ReactionTypeSchema,

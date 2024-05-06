@@ -6,7 +6,18 @@ export type PostsWithUser = Prisma.PostGetPayload<{
             include:{
                 profile:true
             }
+        },
+        reactions:{
+            include:{
+                user:true
+            }
         }
+    }
+}>
+
+export type ReactionWithUser = Prisma.ReactionGetPayload<{
+    include:{
+        user:true
     }
 }>
 

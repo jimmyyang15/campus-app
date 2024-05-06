@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import { PostsWithUser } from "@/types";
 import AvatarProfile from "../avatar-profile";
@@ -9,16 +11,15 @@ interface Props {
   item: PostsWithUser;
 }
 
-const fetchPostReactions = async(postId:string) => {
-  const reactions = await db.reaction.findMany({
-      where:{
-          postId
-      }
-  });
-  return reactions
-}
-const PostItem = async({ item }: Props) => {
-  const reactions = await fetchPostReactions(item.id);
+// const fetchPostReactions = async(postId:string) => {
+//   const reactions = await db.reaction.findMany({
+//       where:{
+//           postId
+//       }
+//   });
+//   return reactions
+// }
+const PostItem = ({ item }: Props) => {
 
   return (
     <div className="space-y-4 border-b p-4">
@@ -30,7 +31,7 @@ const PostItem = async({ item }: Props) => {
       <p className="text-lg font-bold ">{item.title}</p>
       <div dangerouslySetInnerHTML={{ __html: item.content as string }} />
       <PostActions postId={item.id} />
-      <ReactionsList postId={item.id} reactions={reactions} />
+      <ReactionsList postId={item.id} reactions={item.reactions} />
       {/* <Image src={item.picture} className="object-cover w-full h-96" sizes="100vw" width={0} height={0} alt="post-media" /> */}
     </div>
   );

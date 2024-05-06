@@ -10,6 +10,8 @@ import { validateRequest } from "@/server/auth";
 import { ThemeProvider } from "./_components/theme-provider";
 import { TooltipProvider } from "./_components/plate-ui/tooltip";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import SessionProvider from "./_components/session-provider";
+import { Session, User } from "lucia";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +29,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = await validateRequest();
+  const sessionData = await validateRequest();
 
   return (
     <html lang="en">
@@ -41,22 +43,31 @@ export default async function RootLayout({
           }}
         />
         <TRPCReactProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+          <SessionProvider
+            value={
+              sessionData as {
+                user: User;
+                session: Session;
+              }
+            }
           >
-            <AuthWrapper user={user}>
-              <EdgeStoreProvider>
-                <TooltipProvider>
-                  <Navbar user={user} />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <AuthWrapper user={sessionData.user}>
+                <EdgeStoreProvider>
+                  <TooltipProvider>
+                    <Navbar user={sessionData.user} />
 
-                  {children}
-                </TooltipProvider>
-              </EdgeStoreProvider>
-            </AuthWrapper>
-          </ThemeProvider>
+                    {children}
+                  </TooltipProvider>
+                </EdgeStoreProvider>
+              </AuthWrapper>
+            </ThemeProvider>
+          </SessionProvider>
         </TRPCReactProvider>
       </body>
     </html>
