@@ -39,6 +39,14 @@ export const reactionRouter = createTRPCRouter({
             }
         });
 
+        if(existingReaction?.type === type) {
+            return await db.reaction.delete({
+                where:{
+                    id:existingReaction.id
+                }
+            })
+        }
+
         if(existingReaction) {
             return await db.reaction.update({
                 where:{
@@ -49,6 +57,7 @@ export const reactionRouter = createTRPCRouter({
             })
        
         }
+
 
         return await db.reaction.create({
             data:{

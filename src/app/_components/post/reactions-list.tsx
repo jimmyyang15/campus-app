@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { Button } from "@/app/_components/ui/button";
 import ReactionButton from "./reaction-button";
 import { ReactionWithUser } from "@/types";
+import { useReaction } from "@/hooks/use-reaction";
 
 type Props = {
   postId: string;
@@ -28,13 +29,14 @@ const ReactionsList = ({ postId, reactions }: Props) => {
   }, [reactions]);
 
   console.log(thumbsUp, heartReactions);
+  const { handleReaction } = useReaction(postId)
   return (
     <div className="flex items-center gap-x-4  text-gray-500">
-      <ReactionButton icon={"👍"} count={thumbsUp?.length} items={thumbsUp as ReactionWithUser[]} />
-      <ReactionButton icon={"❤️"} count={heartReactions?.length} items={heartReactions as ReactionWithUser[]} />
-      <ReactionButton icon={"😀"} count={happyReactions?.length} items={happyReactions as ReactionWithUser[]} />
-      <ReactionButton icon={"🤣"} count={funnyReactions?.length} items={funnyReactions as ReactionWithUser[]} />
-      <ReactionButton icon={"🔥"} count={fireReactions?.length} items={fireReactions as ReactionWithUser[]} />
+      <ReactionButton icon={"👍"} count={thumbsUp?.length} items={thumbsUp as ReactionWithUser[]} handleReact={()=>handleReaction("THUMBS-UP")} />
+      <ReactionButton icon={"❤️"} count={heartReactions?.length} items={heartReactions as ReactionWithUser[]} handleReact={()=>handleReaction("HEART")} />
+      <ReactionButton icon={"😀"} count={happyReactions?.length} items={happyReactions as ReactionWithUser[]} handleReact={()=>handleReaction("HAPPY")} />
+      <ReactionButton icon={"🤣"} count={funnyReactions?.length} items={funnyReactions as ReactionWithUser[]} handleReact={()=>handleReaction("FUNNY")} />
+      <ReactionButton icon={"🔥"} count={fireReactions?.length} items={fireReactions as ReactionWithUser[]} handleReact={()=>handleReaction("FIRE")} />
     </div>
   );
 };

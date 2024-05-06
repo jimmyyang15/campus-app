@@ -3,14 +3,16 @@ import { Button } from "@/app/_components/ui/button";
 import { ReactionWithUser } from "@/types";
 import { useSession } from "@/app/_components/session-provider";
 import { cn } from "@/lib/utils";
+import { useReaction } from "@/hooks/use-reaction";
 type Props = {
   count: number;
   icon:string;
-  items:ReactionWithUser[]
+  items:ReactionWithUser[];
+  handleReact:()=>void
 };
-const ReactionButton = ({ count,icon,items }: Props) => {
+const ReactionButton = ({ count,icon,items,handleReact }: Props) => {
   const { user } = useSession();
-  const userReacted = items.find((item)=>item.userId === user.id)
+  const userReacted = items.find((item)=>item.userId === user.id);
   if (count <= 0) return null;
   return (
     <Button
@@ -19,6 +21,8 @@ const ReactionButton = ({ count,icon,items }: Props) => {
       })}
       variant="outline"
       size="icon"
+      type="button"
+      onClick={handleReact}
     >
       <span>{icon}</span>
       <span>{count}</span>
