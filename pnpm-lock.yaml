@@ -127,6 +127,7 @@ specifiers:
   tailwindcss-animate: ^1.0.7
   typescript: ^5.3.3
   use-debounce: ^10.0.0
+  vaul: ^0.9.0
   zod: ^3.22.4
   zustand: ^4.5.2
 
@@ -242,6 +243,7 @@ dependencies:
   tailwind-merge: 2.2.1
   tailwindcss-animate: 1.0.7_tailwindcss@3.4.1
   use-debounce: 10.0.0_react@18.2.0
+  vaul: 0.9.0_i2ukt4wkn6mz5ewylxc6owsgcu
   zod: 3.22.4
   zustand: 4.5.2_n4e27ilpizrbhh7xplgxuiicwe
 
@@ -9051,6 +9053,20 @@ packages:
   /validator/13.11.0:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
     engines: {node: '>= 0.10'}
+    dev: false
+
+  /vaul/0.9.0_i2ukt4wkn6mz5ewylxc6owsgcu:
+    resolution: {integrity: sha512-bZSySGbAHiTXmZychprnX/dE0EsSige88xtyyL3/MCRbrFotRPQZo7UdydGXZWw+CKbNOw5Ow8gwAo93/nB/Cg==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@radix-ui/react-dialog': 1.0.5_i2ukt4wkn6mz5ewylxc6owsgcu
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
     dev: false
 
   /vfile-message/2.0.4:

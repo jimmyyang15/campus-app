@@ -41,15 +41,25 @@ const Navbar = ({ user }: Props) => {
         <li className="link">
           <Link href="/">Home</Link>
         </li>
-        <li className="link">
-          <Link href="/">Your Club</Link>
-        </li>
-        <li className="link">
-          <Link href="/">Invitations</Link>
-        </li>
-        <li className="link">
-          <Link href="/">Rewards</Link>
-        </li>
+        {user?.role === "ADMIN" ? (
+          <li className="link">
+            <Link href="/clubs">Clubs</Link>
+          </li>
+        ) : (
+          <li className="link">
+            <Link href="/clubs">Your Club</Link>
+          </li>
+        )}
+        {user?.role === "USER" ? (
+          <>
+            <li className="link">
+              <Link href="/">Invitations</Link>
+            </li>
+            <li className="link">
+              <Link href="/">Rewards</Link>
+            </li>
+          </>
+        ) : null}
       </ul>
       <div className="ml-auto flex items-center gap-x-4">
         <ModeToggle />
