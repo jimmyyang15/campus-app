@@ -7,7 +7,14 @@ import {
 import { TRPCError } from "@trpc/server";
 
 export const clubRouter = createTRPCRouter({
-    
+    getClubs:protectedProcedure.query(async({ctx})=>{
+        const clubs = await ctx.db.club.findMany({
+          orderBy:{
+            createdAt:'desc'
+          }
+        });
+        return clubs;
+      }),
     createClub: protectedProcedure.input(z.object({
         name: z.string(),
         desc: z.string().optional(),

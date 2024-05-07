@@ -1,9 +1,10 @@
+import { Club } from '@prisma/client'
 import React from 'react'
 
-const ClubItem = () => {
+const ClubItem = ({club}:{club:Club}) => {
   return (
     <div>
-        
+        {club.name}
     </div>
   )
 }

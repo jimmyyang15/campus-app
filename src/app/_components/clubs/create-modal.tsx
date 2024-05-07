@@ -34,11 +34,33 @@ import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { api } from "@/trpc/react";
 import { UserWithProfile } from "@/types";
 import { useEdgeStore } from "@/lib/edgestore";
+import moment from "moment";
+import { toast } from "sonner";
 const CreateModal = () => {
   const [file, setFile] = useState<File>();
+  const utils = api.useUtils()
+
+  const [open, setOpen] = useState(false)
   const { edgestore } = useEdgeStore();
   const { data: mentors } = api.user.getMentors.useQuery();
-  const { mutateAsync: createClub } = api.club.createClub.useMutation();
+  const { mutateAsync: createClub } = api.club.createClub.useMutation({
+    onSuccess: () => {
+      setOpen(false)
+      toast.success("Club created created", {
+        description: moment().format("LLLL"),
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
+
+    },
+    onSettled:()=>{
+      utils.club.getClubs.invalidate()
+
+    }
+  });
   const form = useForm<ClubSchemaType>({
     resolver: zodResolver(ClubSchema),
     defaultValues: {
@@ -70,7 +92,7 @@ const CreateModal = () => {
     }
   }
   return (
-    <Credenza>
+    <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
         <Button variant={"outline"}>
           <Plus className="mr-2 h-4 w-4" />
