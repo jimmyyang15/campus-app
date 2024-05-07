@@ -6,14 +6,13 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { db } from "@/server/db";
 
 const ReactionTypeSchema = z.enum(["THUMBS-UP", "HEART", "HAPPY", "FUNNY", "FIRE"]);
 export const reactionRouter = createTRPCRouter({
     postReactions:protectedProcedure.input(z.object({
         postId:z.string()
-      })).query(async({ input })=>{
-        return await db.reaction.findMany({
+      })).query(async({ input,ctx })=>{
+        return await ctx.db.reaction.findMany({
           where:{
             id:input.postId
           }
@@ -26,7 +25,7 @@ export const reactionRouter = createTRPCRouter({
     })).mutation(async({ ctx,input })=>{
         const user = await ctx.session.user;
         const { postId,type } = input;
-        const existingReaction = await db.reaction.findFirst({
+        const existingReaction = await ctx.db.reaction.findFirst({
             where:{
                 AND:[
                     {
@@ -40,7 +39,7 @@ export const reactionRouter = createTRPCRouter({
         });
 
         if(existingReaction?.type === type) {
-            return await db.reaction.delete({
+            return await ctx.db.reaction.delete({
                 where:{
                     id:existingReaction.id
                 }
@@ -48,7 +47,7 @@ export const reactionRouter = createTRPCRouter({
         }
 
         if(existingReaction) {
-            return await db.reaction.update({
+            return await ctx.db.reaction.update({
                 where:{
                     id:existingReaction.id
                 }, data:{
@@ -59,7 +58,7 @@ export const reactionRouter = createTRPCRouter({
         }
 
 
-        return await db.reaction.create({
+        return await ctx.db.reaction.create({
             data:{
                 ...input,
                 userId:user.id

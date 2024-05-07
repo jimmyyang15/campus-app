@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Credenza,
   CredenzaBody,
@@ -28,18 +28,46 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClubSchema, ClubSchemaType } from "@/lib/schemas/club";
 import { Plus } from "lucide-react";
+import { SingleImageDropzone } from "@/app/_components/single-dropzone-image";
+import SelectMentors from "./select-mentors";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import { api } from "@/trpc/react";
+import { UserWithProfile } from "@/types";
+import { useEdgeStore } from "@/lib/edgestore";
 const CreateModal = () => {
+  const [file, setFile] = useState<File>();
+  const { edgestore } = useEdgeStore();
+  const { data: mentors } = api.user.getMentors.useQuery();
+  const { mutateAsync: createClub } = api.club.createClub.useMutation();
   const form = useForm<ClubSchemaType>({
     resolver: zodResolver(ClubSchema),
     defaultValues: {
       name: "",
-      description: "",
+      desc: "",
     },
   });
-  function onSubmit(values: ClubSchemaType) {
+  async function onSubmit(values: ClubSchemaType) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    if (file) {
+      const res = await edgestore.publicFiles.upload({
+        file,
+        onProgressChange: (progress) => {
+          // you can use this to show a progress bar
+          console.log(progress);
+        },
+      });
+      await createClub({
+        ...values,
+        desc: values?.desc as string,
+        clubImage: res.url as string,
+      });
+    } else {
+      await createClub({
+        ...values,
+        desc: values?.desc as string,
+      });
+    }
   }
   return (
     <Credenza>
@@ -50,46 +78,63 @@ const CreateModal = () => {
         </Button>
       </CredenzaTrigger>
       <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle className="text-center">Create a club</CredenzaTitle>
-        </CredenzaHeader>
-        <CredenzaBody className="space-y-4 pb-4 text-center text-sm sm:pb-0 sm:text-left">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormDescription>This is the club's name</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is the club's description
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" variant={'outline'}>Create club</Button>
-            </form>
-          </Form>
-        </CredenzaBody>
+        <ScrollArea className="h-[500px]">
+          <CredenzaHeader>
+            <CredenzaTitle className="text-center">Create a club</CredenzaTitle>
+          </CredenzaHeader>
+          <CredenzaBody className="space-y-4 pb-4 text-center text-sm sm:pb-0 sm:text-left">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Type here..." {...field} />
+                      </FormControl>
+                      <FormDescription>This is the club's name</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="desc"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Type here..." {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        This is the club's description
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <SelectMentors mentors={mentors as UserWithProfile[]} />
+                <SingleImageDropzone
+                  className="w-full"
+                  width={0}
+                  height={200}
+                  value={file}
+                  onChange={(file) => {
+                    setFile(file);
+                  }}
+                />
+                <Button type="submit" variant={"outline"}>
+                  Create club
+                </Button>
+              </form>
+            </Form>
+          </CredenzaBody>
+        </ScrollArea>
       </CredenzaContent>
     </Credenza>
   );

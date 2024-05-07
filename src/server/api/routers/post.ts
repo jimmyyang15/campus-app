@@ -6,21 +6,20 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
-import { db } from "@/server/db";
 
 export const postRouter = createTRPCRouter({
     singlePost:protectedProcedure.input(z.object({
       postId:z.string()
-    })).query(async({ input })=>{
-      return await db.post.findUnique({
+    })).query(async({ input,ctx })=>{
+      return await ctx.db.post.findUnique({
         where:{
           id:input.postId
         }
       })
     }),
 
-    getPosts:protectedProcedure.query(async()=>{
-      const posts = await db.post.findMany({
+    getPosts:protectedProcedure.query(async({ctx})=>{
+      const posts = await ctx.db.post.findMany({
         include:{
           user:{
             include:{
@@ -54,7 +53,7 @@ export const postRouter = createTRPCRouter({
         })
       };
 
-      return await db.post.create({
+      return await ctx.db.post.create({
         data:{
           ...input,
           user:{
