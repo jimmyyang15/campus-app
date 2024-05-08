@@ -47,17 +47,20 @@ const Navbar = ({ user }: Props) => {
           </li>
         ) : (
           <li className="link">
-            <Link href="/clubs">Your Club</Link>
+            <Link href="/clubs">Your Clubs</Link>
           </li>
         )}
         {user?.role === "USER" ? (
           <>
-            <li className="link">
-              <Link href="/">Invitations</Link>
-            </li>
-            <li className="link">
+            {!user.isMentor ? (
+              <li className="link">
+                <Link href="/">Invitations</Link>
+              </li>
+            ) : null}
+
+            {/* <li className="link">
               <Link href="/">Rewards</Link>
-            </li>
+            </li> */}
           </>
         ) : null}
       </ul>

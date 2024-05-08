@@ -27,7 +27,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClubSchema, ClubSchemaType } from "@/lib/schemas/club";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { SingleImageDropzone } from "@/app/_components/single-dropzone-image";
 import SelectMentors from "./select-mentors";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
@@ -38,29 +38,28 @@ import moment from "moment";
 import { toast } from "sonner";
 const CreateModal = () => {
   const [file, setFile] = useState<File>();
-  const utils = api.useUtils()
+  const utils = api.useUtils();
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const { edgestore } = useEdgeStore();
   const { data: mentors } = api.user.getMentors.useQuery();
-  const { mutateAsync: createClub } = api.club.createClub.useMutation({
-    onSuccess: () => {
-      setOpen(false)
-      toast.success("Club created created", {
-        description: moment().format("LLLL"),
-        // action: {
-        //   label: "Dismiss",
-        //   onClick: () => toast.dismiss(),
-        // },
-        closeButton: true,
-      });
-
-    },
-    onSettled:()=>{
-      utils.club.getClubs.invalidate()
-
-    }
-  });
+  const { mutateAsync: createClub, isLoading } =
+    api.club.createClub.useMutation({
+      onSuccess: () => {
+        setOpen(false);
+        toast.success("Club created created", {
+          description: moment().format("LLLL"),
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled: () => {
+        utils.club.getClubs.invalidate();
+      },
+    });
   const form = useForm<ClubSchemaType>({
     resolver: zodResolver(ClubSchema),
     defaultValues: {
@@ -150,8 +149,11 @@ const CreateModal = () => {
                     setFile(file);
                   }}
                 />
-                <Button type="submit" variant={"outline"}>
-                  Create club
+                <Button type="submit" variant={"outline"} disabled={isLoading}>
+                  {isLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : null}
+                  {isLoading ? "Creating a club..." : "Create club"}
                 </Button>
               </form>
             </Form>

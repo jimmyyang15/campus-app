@@ -74,7 +74,7 @@
 import {  Lucia, Session, User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
-import {  Profile } from "@prisma/client";
+import {  Club, Profile } from "@prisma/client";
 import { adapter } from "./adapter";
 
 declare module "lucia" {
@@ -87,6 +87,8 @@ declare module "lucia" {
       googleId: string;
       username: string;
       role: string;
+      isMentor:boolean;
+      clubs:Club[];
     };
   }
 }
@@ -99,12 +101,13 @@ export const lucia = new Lucia(adapter, {
   },
   getUserAttributes: (attributes) => {
     return {
-      // role: attributes.role,
       googleId: attributes.googleId,
       username: attributes.username,
       profile: attributes.profile,
+      clubs: attributes.clubs,
       email: attributes.email,
-      role: attributes.role
+      role: attributes.role,
+      isMentor: attributes.isMentor,
     }
   }
 });
