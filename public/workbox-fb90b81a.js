@@ -1,7 +1,10 @@
+// @ts-nocheck
+// @ts-ignore
 define(['exports'], (function (exports) { 'use strict';
 
     // @ts-ignore
     try {
+      // @ts-ignore
       self['workbox:core:7.0.0'] && _();
     } catch (e) {}
 
@@ -15,6 +18,7 @@ define(['exports'], (function (exports) { 'use strict';
       // Don't overwrite this value if it's already set.
       // See https://github.com/GoogleChrome/workbox/pull/2284#issuecomment-560470923
       if (!('__WB_DISABLE_DEV_LOGS' in globalThis)) {
+        // @ts-ignore
         self.__WB_DISABLE_DEV_LOGS = false;
       }
       let inGroup = false;
@@ -26,7 +30,9 @@ define(['exports'], (function (exports) { 'use strict';
         groupCollapsed: `#3498db`,
         groupEnd: null // No colored prefix on groupEnd
       };
+      // @ts-ignore
       const print = function (method, args) {
+        // @ts-ignore
         if (self.__WB_DISABLE_DEV_LOGS) {
           return;
         }
@@ -34,13 +40,16 @@ define(['exports'], (function (exports) { 'use strict';
           // Safari doesn't print all console.groupCollapsed() arguments:
           // https://bugs.webkit.org/show_bug.cgi?id=182754
           if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+            // @ts-ignore
             console[method](...args);
             return;
           }
         }
+        // @ts-ignore
         const styles = [`background: ${methodToColorMap[method]}`, `border-radius: 0.5em`, `color: white`, `font-weight: bold`, `padding: 2px 0.5em`];
         // When in a group, the workbox prefix is not displayed.
         const logPrefix = inGroup ? [] : ['%cworkbox', styles.join(';')];
+        // @ts-ignore
         console[method](...logPrefix, ...args);
         if (method === 'groupCollapsed') {
           inGroup = true;
@@ -54,6 +63,7 @@ define(['exports'], (function (exports) { 'use strict';
       const loggerMethods = Object.keys(methodToColorMap);
       for (const key of loggerMethods) {
         const method = key;
+        // @ts-ignore
         api[method] = (...args) => {
           print(method, args);
         };
@@ -70,8 +80,11 @@ define(['exports'], (function (exports) { 'use strict';
     */
     const messages$1 = {
       'invalid-value': ({
+        // @ts-ignore
         paramName,
+        // @ts-ignore
         validValueDescription,
+        // @ts-ignore
         value
       }) => {
         if (!paramName || !validValueDescription) {
@@ -80,9 +93,13 @@ define(['exports'], (function (exports) { 'use strict';
         return `The '${paramName}' parameter was given a value with an ` + `unexpected value. ${validValueDescription} Received a value of ` + `${JSON.stringify(value)}.`;
       },
       'not-an-array': ({
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName,
+        // @ts-ignore
         paramName
       }) => {
         if (!moduleName || !className || !funcName || !paramName) {
@@ -91,10 +108,15 @@ define(['exports'], (function (exports) { 'use strict';
         return `The parameter '${paramName}' passed into ` + `'${moduleName}.${className}.${funcName}()' must be an array.`;
       },
       'incorrect-type': ({
+        // @ts-ignore
         expectedType,
+        // @ts-ignore
         paramName,
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName
       }) => {
         if (!expectedType || !paramName || !moduleName || !funcName) {
@@ -104,11 +126,17 @@ define(['exports'], (function (exports) { 'use strict';
         return `The parameter '${paramName}' passed into ` + `'${moduleName}.${classNameStr}` + `${funcName}()' must be of type ${expectedType}.`;
       },
       'incorrect-class': ({
+        // @ts-ignore
         expectedClassName,
+        // @ts-ignore
         paramName,
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName,
+        // @ts-ignore
         isReturnValueProblem
       }) => {
         if (!expectedClassName || !moduleName || !funcName) {
@@ -121,10 +149,15 @@ define(['exports'], (function (exports) { 'use strict';
         return `The parameter '${paramName}' passed into ` + `'${moduleName}.${classNameStr}${funcName}()' ` + `must be an instance of class ${expectedClassName}.`;
       },
       'missing-a-method': ({
+        // @ts-ignore
         expectedMethod,
+        // @ts-ignore
         paramName,
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName
       }) => {
         if (!expectedMethod || !paramName || !moduleName || !className || !funcName) {
@@ -133,12 +166,15 @@ define(['exports'], (function (exports) { 'use strict';
         return `${moduleName}.${className}.${funcName}() expected the ` + `'${paramName}' parameter to expose a '${expectedMethod}' method.`;
       },
       'add-to-cache-list-unexpected-type': ({
+        // @ts-ignore
         entry
       }) => {
         return `An unexpected entry was passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' The entry ` + `'${JSON.stringify(entry)}' isn't supported. You must supply an array of ` + `strings with one or more characters, objects with a url property or ` + `Request objects.`;
       },
       'add-to-cache-list-conflicting-entries': ({
+        // @ts-ignore
         firstEntry,
+        // @ts-ignore
         secondEntry
       }) => {
         if (!firstEntry || !secondEntry) {
@@ -147,6 +183,7 @@ define(['exports'], (function (exports) { 'use strict';
         return `Two of the entries passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' had the URL ` + `${firstEntry} but different revision details. Workbox is ` + `unable to cache and version the asset correctly. Please remove one ` + `of the entries.`;
       },
       'plugin-error-request-will-fetch': ({
+        // @ts-ignore
         thrownErrorMessage
       }) => {
         if (!thrownErrorMessage) {
@@ -155,7 +192,9 @@ define(['exports'], (function (exports) { 'use strict';
         return `An error was thrown by a plugins 'requestWillFetch()' method. ` + `The thrown error message was: '${thrownErrorMessage}'.`;
       },
       'invalid-cache-name': ({
+        // @ts-ignore
         cacheNameId,
+        // @ts-ignore
         value
       }) => {
         if (!cacheNameId) {
@@ -164,6 +203,7 @@ define(['exports'], (function (exports) { 'use strict';
         return `You must provide a name containing at least one character for ` + `setCacheDetails({${cacheNameId}: '...'}). Received a value of ` + `'${JSON.stringify(value)}'`;
       },
       'unregister-route-but-not-found-with-method': ({
+        // @ts-ignore
         method
       }) => {
         if (!method) {
@@ -175,56 +215,79 @@ define(['exports'], (function (exports) { 'use strict';
         return `The route you're trying to unregister was not previously ` + `registered.`;
       },
       'queue-replay-failed': ({
+        // @ts-ignore
         name
       }) => {
         return `Replaying the background sync queue '${name}' failed.`;
       },
       'duplicate-queue-name': ({
+        // @ts-ignore
         name
       }) => {
         return `The Queue name '${name}' is already being used. ` + `All instances of backgroundSync.Queue must be given unique names.`;
       },
       'expired-test-without-max-age': ({
+        // @ts-ignore
         methodName,
+        // @ts-ignore
         paramName
       }) => {
         return `The '${methodName}()' method can only be used when the ` + `'${paramName}' is used in the constructor.`;
       },
       'unsupported-route-type': ({
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName,
+        // @ts-ignore
         paramName
       }) => {
         return `The supplied '${paramName}' parameter was an unsupported type. ` + `Please check the docs for ${moduleName}.${className}.${funcName} for ` + `valid input types.`;
       },
       'not-array-of-class': ({
+        // @ts-ignore
         value,
+        // @ts-ignore
         expectedClass,
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName,
+        // @ts-ignore
         paramName
       }) => {
         return `The supplied '${paramName}' parameter must be an array of ` + `'${expectedClass}' objects. Received '${JSON.stringify(value)},'. ` + `Please check the call to ${moduleName}.${className}.${funcName}() ` + `to fix the issue.`;
       },
       'max-entries-or-age-required': ({
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName
       }) => {
         return `You must define either config.maxEntries or config.maxAgeSeconds` + `in ${moduleName}.${className}.${funcName}`;
       },
       'statuses-or-headers-required': ({
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         className,
+        // @ts-ignore
         funcName
       }) => {
         return `You must define either config.statuses or config.headers` + `in ${moduleName}.${className}.${funcName}`;
       },
       'invalid-string': ({
+        // @ts-ignore
         moduleName,
+        // @ts-ignore
         funcName,
+        // @ts-ignore
         paramName
       }) => {
         if (!paramName || !moduleName || !funcName) {
@@ -242,6 +305,7 @@ define(['exports'], (function (exports) { 'use strict';
         return `You must provide a 'cacheName' property when using the ` + `expiration plugin with a runtime caching strategy.`;
       },
       'unit-must-be-bytes': ({
+        // @ts-ignore
         normalizedRangeHeader
       }) => {
         if (!normalizedRangeHeader) {
@@ -250,6 +314,7 @@ define(['exports'], (function (exports) { 'use strict';
         return `The 'unit' portion of the Range header must be set to 'bytes'. ` + `The Range header provided was "${normalizedRangeHeader}"`;
       },
       'single-range-only': ({
+        // @ts-ignore
         normalizedRangeHeader
       }) => {
         if (!normalizedRangeHeader) {
@@ -258,6 +323,7 @@ define(['exports'], (function (exports) { 'use strict';
         return `Multiple ranges are not supported. Please use a  single start ` + `value, and optional end value. The Range header provided was ` + `"${normalizedRangeHeader}"`;
       },
       'invalid-range-values': ({
+        // @ts-ignore
         normalizedRangeHeader
       }) => {
         if (!normalizedRangeHeader) {
@@ -269,25 +335,33 @@ define(['exports'], (function (exports) { 'use strict';
         return `No Range header was found in the Request provided.`;
       },
       'range-not-satisfiable': ({
+        // @ts-ignore
         size,
+        // @ts-ignore
         start,
+        // @ts-ignore
         end
       }) => {
         return `The start (${start}) and end (${end}) values in the Range are ` + `not satisfiable by the cached response, which is ${size} bytes.`;
       },
       'attempt-to-cache-non-get-request': ({
+        // @ts-ignore
         url,
+        // @ts-ignore
         method
       }) => {
         return `Unable to cache '${url}' because it is a '${method}' request and ` + `only 'GET' requests can be cached.`;
       },
       'cache-put-with-no-response': ({
+        // @ts-ignore
         url
       }) => {
         return `There was an attempt to cache '${url}' but the response was not ` + `defined.`;
       },
       'no-response': ({
+        // @ts-ignore
         url,
+        // @ts-ignore
         error
       }) => {
         let message = `The strategy could not generate a response for '${url}'.`;
@@ -297,33 +371,41 @@ define(['exports'], (function (exports) { 'use strict';
         return message;
       },
       'bad-precaching-response': ({
+        // @ts-ignore
         url,
+        // @ts-ignore
         status
       }) => {
         return `The precaching request for '${url}' failed` + (status ? ` with an HTTP status of ${status}.` : `.`);
       },
       'non-precached-url': ({
+        // @ts-ignore
         url
       }) => {
         return `createHandlerBoundToURL('${url}') was called, but that URL is ` + `not precached. Please pass in a URL that is precached instead.`;
       },
       'add-to-cache-list-conflicting-integrities': ({
+        // @ts-ignore
         url
       }) => {
         return `Two of the entries passed to ` + `'workbox-precaching.PrecacheController.addToCacheList()' had the URL ` + `${url} with different integrity values. Please remove one of them.`;
       },
       'missing-precache-entry': ({
+        // @ts-ignore
         cacheName,
+        // @ts-ignore
         url
       }) => {
         return `Unable to find a precached response in ${cacheName} for ${url}.`;
       },
       'cross-origin-copy-response': ({
+        // @ts-ignore
         origin
       }) => {
         return `workbox-core.copyResponse() can only be used with same-origin ` + `responses. It was passed a response with origin ${origin}.`;
       },
       'opaque-streams-source': ({
+        // @ts-ignore
         type
       }) => {
         const message = `One of the workbox-streams sources resulted in an ` + `'${type}' response.`;
@@ -341,7 +423,9 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
+    // @ts-ignore
     const generatorFunction = (code, details = {}) => {
+      // @ts-ignore
       const message = messages$1[code];
       if (!message) {
         throw new Error(`Unable to find message for code '${code}'.`);
@@ -396,11 +480,13 @@ define(['exports'], (function (exports) { 'use strict';
      * The destructed and restructured object is so it's clear what is
      * needed.
      */
+    // @ts-ignore
     const isArray = (value, details) => {
       if (!Array.isArray(value)) {
         throw new WorkboxError('not-an-array', details);
       }
     };
+    // @ts-ignore
     const hasMethod = (object, expectedMethod, details) => {
       const type = typeof object[expectedMethod];
       if (type !== 'function') {
@@ -408,31 +494,38 @@ define(['exports'], (function (exports) { 'use strict';
         throw new WorkboxError('missing-a-method', details);
       }
     };
+    // @ts-ignore
     const isType = (object, expectedType, details) => {
       if (typeof object !== expectedType) {
         details['expectedType'] = expectedType;
         throw new WorkboxError('incorrect-type', details);
       }
     };
+    // @ts-ignore
     const isInstance = (object,
     // Need the general type to do the check later.
     // eslint-disable-next-line @typescript-eslint/ban-types
+    // @ts-ignore
     expectedClass, details) => {
       if (!(object instanceof expectedClass)) {
         details['expectedClassName'] = expectedClass.name;
         throw new WorkboxError('incorrect-class', details);
       }
     };
+    // @ts-ignore
     const isOneOf = (value, validValues, details) => {
       if (!validValues.includes(value)) {
         details['validValueDescription'] = `Valid values are ${JSON.stringify(validValues)}.`;
         throw new WorkboxError('invalid-value', details);
       }
     };
+    // @ts-ignore
     const isArrayOfClass = (value,
     // Need general type to do check later.
+    // @ts-ignore
     expectedClass,
     // eslint-disable-line
+    // @ts-ignore
     details) => {
       const error = new WorkboxError('not-array-of-class', details);
       if (!Array.isArray(value)) {
@@ -455,6 +548,7 @@ define(['exports'], (function (exports) { 'use strict';
 
     // @ts-ignore
     try {
+      // @ts-ignore
       self['workbox:routing:7.0.0'] && _();
     } catch (e) {}
 
@@ -551,6 +645,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {string} [method='GET'] The HTTP method to match the Route
        * against.
        */
+      // @ts-ignore
       constructor(match, handler, method = defaultMethod) {
         {
           finalAssertExports.isType(match, 'function', {
@@ -576,6 +671,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {workbox-routing-handlerCallback} handler A callback
        * function that returns a Promise resolving to a Response
        */
+      // @ts-ignore
       setCatchHandler(handler) {
         this.catchHandler = normalizeHandler(handler);
       }
@@ -613,6 +709,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {string} [method='GET'] The HTTP method to match the Route
        * against.
        */
+      // @ts-ignore
       constructor(regExp, handler, method) {
         {
           finalAssertExports.isInstance(regExp, RegExp, {
@@ -623,6 +720,7 @@ define(['exports'], (function (exports) { 'use strict';
           });
         }
         const match = ({
+          // @ts-ignore
           url
         }) => {
           const result = regExp.exec(url.href);
@@ -636,6 +734,7 @@ define(['exports'], (function (exports) { 'use strict';
           // behind this behavior.
           if (url.origin !== location.origin && result.index !== 0) {
             {
+              // @ts-ignore
               logger.debug(`The regular expression '${regExp.toString()}' only partially matched ` + `against the cross-origin URL '${url.toString()}'. RegExpRoute's will only ` + `handle cross-origin requests if they match the entire URL.`);
             }
             return;
@@ -657,6 +756,7 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
+    // @ts-ignore
     const getFriendlyURL = url => {
       const urlObj = new URL(String(url), location.href);
       // See https://github.com/GoogleChrome/workbox/issues/2323
@@ -712,6 +812,7 @@ define(['exports'], (function (exports) { 'use strict';
         // See https://github.com/Microsoft/TypeScript/issues/28357#issuecomment-436484705
         self.addEventListener('fetch', event => {
           const {
+            // @ts-ignore
             request
           } = event;
           const responsePromise = this.handleRequest({
@@ -719,6 +820,7 @@ define(['exports'], (function (exports) { 'use strict';
             event
           });
           if (responsePromise) {
+            // @ts-ignore
             event.respondWith(responsePromise);
           }
         });
@@ -756,12 +858,15 @@ define(['exports'], (function (exports) { 'use strict';
               payload
             } = event.data;
             {
+              // @ts-ignore
               logger.debug(`Caching URLs from the window`, payload.urlsToCache);
             }
+            // @ts-ignore
             const requestPromises = Promise.all(payload.urlsToCache.map(entry => {
               if (typeof entry === 'string') {
                 entry = [entry];
               }
+              // @ts-ignore
               const request = new Request(...entry);
               return this.handleRequest({
                 request,
@@ -771,9 +876,11 @@ define(['exports'], (function (exports) { 'use strict';
               // some reason (probably a bug). The real type here should work but
               // doesn't: `Array<Promise<Response> | undefined>`.
             })); // TypeScript
+            // @ts-ignore
             event.waitUntil(requestPromises);
             // If a MessageChannel was used, reply to the message on success.
             if (event.ports && event.ports[0]) {
+              // @ts-ignore
               void requestPromises.then(() => event.ports[0].postMessage(true));
             }
           }
@@ -806,13 +913,16 @@ define(['exports'], (function (exports) { 'use strict';
         const url = new URL(request.url, location.href);
         if (!url.protocol.startsWith('http')) {
           {
+            // @ts-ignore
             logger.debug(`Workbox Router only supports URLs that start with 'http'.`);
           }
           return;
         }
         const sameOrigin = url.origin === location.origin;
         const {
+          // @ts-ignore
           params,
+          // @ts-ignore
           route
         } = this.findMatchingRoute({
           event,
@@ -843,6 +953,7 @@ define(['exports'], (function (exports) { 'use strict';
           {
             // No handler so Workbox will do nothing. If logs is set of debug
             // i.e. verbose, we should print out this information.
+            // @ts-ignore
             logger.debug(`No route found for: ${getFriendlyURL(url)}`);
           }
           return;
@@ -850,14 +961,18 @@ define(['exports'], (function (exports) { 'use strict';
         {
           // We have a handler, meaning Workbox is going to handle the route.
           // print the routing details to the console.
+          // @ts-ignore
           logger.groupCollapsed(`Router is responding to: ${getFriendlyURL(url)}`);
           debugMessages.forEach(msg => {
             if (Array.isArray(msg)) {
+              // @ts-ignore
               logger.log(...msg);
             } else {
+              // @ts-ignore
               logger.log(msg);
             }
           });
+          // @ts-ignore
           logger.groupEnd();
         }
         // Wrap in try and catch in case the handle method throws a synchronous
@@ -882,9 +997,13 @@ define(['exports'], (function (exports) { 'use strict';
               {
                 // Still include URL here as it will be async from the console group
                 // and may not make sense without the URL
+                // @ts-ignore
                 logger.groupCollapsed(`Error thrown when responding to: ` + ` ${getFriendlyURL(url)}. Falling back to route's Catch Handler.`);
+                // @ts-ignore
                 logger.error(`Error thrown by:`, route);
+                // @ts-ignore
                 logger.error(err);
+                // @ts-ignore
                 logger.groupEnd();
               }
               try {
@@ -904,11 +1023,16 @@ define(['exports'], (function (exports) { 'use strict';
               {
                 // Still include URL here as it will be async from the console group
                 // and may not make sense without the URL
+                // @ts-ignore
                 logger.groupCollapsed(`Error thrown when responding to: ` + ` ${getFriendlyURL(url)}. Falling back to global Catch Handler.`);
+                // @ts-ignore
                 logger.error(`Error thrown by:`, route);
+                // @ts-ignore
                 logger.error(err);
+                // @ts-ignore
                 logger.groupEnd();
               }
+              // @ts-ignore
               return this._catchHandler.handle({
                 url,
                 request,
@@ -957,6 +1081,7 @@ define(['exports'], (function (exports) { 'use strict';
               // Warn developers that using an async matchCallback is almost always
               // not the right thing to do.
               if (matchResult instanceof Promise) {
+                // @ts-ignore
                 logger.warn(`While routing ${getFriendlyURL(url)}, an async ` + `matchCallback function was used. Please convert the ` + `following route to use a synchronous matchCallback function:`, route);
               }
             }
@@ -1001,6 +1126,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {string} [method='GET'] The HTTP method to associate with this
        * default handler. Each method has its own default.
        */
+      // @ts-ignore
       setDefaultHandler(handler, method = defaultMethod) {
         this._defaultHandlerMap.set(method, normalizeHandler(handler));
       }
@@ -1011,6 +1137,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {workbox-routing~handlerCallback} handler A callback
        * function that returns a Promise resulting in a Response.
        */
+      // @ts-ignore
       setCatchHandler(handler) {
         this._catchHandler = normalizeHandler(handler);
       }
@@ -1019,6 +1146,7 @@ define(['exports'], (function (exports) { 'use strict';
        *
        * @param {workbox-routing.Route} route The route to register.
        */
+      // @ts-ignore
       registerRoute(route) {
         {
           finalAssertExports.isType(route, 'object', {
@@ -1064,6 +1192,7 @@ define(['exports'], (function (exports) { 'use strict';
        *
        * @param {workbox-routing.Route} route The route to unregister.
        */
+      // @ts-ignore
       unregisterRoute(route) {
         if (!this._routes.has(route.method)) {
           throw new WorkboxError('unregister-route-but-not-found-with-method', {
@@ -1086,6 +1215,7 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
+    // @ts-ignore
     let defaultRouter;
     /**
      * Creates a new, singleton Router instance if one does not exist. If one
@@ -1095,6 +1225,7 @@ define(['exports'], (function (exports) { 'use strict';
      * @return {Router}
      */
     const getOrCreateDefaultRouter = () => {
+      // @ts-ignore
       if (!defaultRouter) {
         defaultRouter = new Router();
         // The helpers that use the default Router assume these listeners exist.
@@ -1129,6 +1260,7 @@ define(['exports'], (function (exports) { 'use strict';
      *
      * @memberof workbox-routing
      */
+    // @ts-ignore
     function registerRoute(capture, handler, method) {
       let route;
       if (typeof capture === 'string') {
@@ -1147,14 +1279,17 @@ define(['exports'], (function (exports) { 'use strict';
           // See https://github.com/pillarjs/path-to-regexp#parameters
           const wildcards = '[*:?+]';
           if (new RegExp(`${wildcards}`).exec(valueToCheck)) {
+            // @ts-ignore
             logger.debug(`The '$capture' parameter contains an Express-style wildcard ` + `character (${wildcards}). Strings are now always interpreted as ` + `exact matches; use a RegExp for partial or wildcard matches.`);
           }
         }
         const matchCallback = ({
+          // @ts-ignore
           url
         }) => {
           {
             if (url.pathname === captureUrl.pathname && url.origin !== captureUrl.origin) {
+              // @ts-ignore
               logger.debug(`${capture} only partially matches the cross-origin URL ` + `${url.toString()}. This route will only handle cross-origin requests ` + `if they match the entire URL.`);
             }
           }
@@ -1184,6 +1319,7 @@ define(['exports'], (function (exports) { 'use strict';
 
     // @ts-ignore
     try {
+      // @ts-ignore
       self['workbox:strategies:7.0.0'] && _();
     } catch (e) {}
 
@@ -1227,33 +1363,42 @@ define(['exports'], (function (exports) { 'use strict';
       precache: 'precache-v2',
       prefix: 'workbox',
       runtime: 'runtime',
+      // @ts-ignore
       suffix: typeof registration !== 'undefined' ? registration.scope : ''
     };
+    // @ts-ignore
     const _createCacheName = cacheName => {
       return [_cacheNameDetails.prefix, cacheName, _cacheNameDetails.suffix].filter(value => value && value.length > 0).join('-');
     };
+    // @ts-ignore
     const eachCacheNameDetail = fn => {
       for (const key of Object.keys(_cacheNameDetails)) {
         fn(key);
       }
     };
     const cacheNames = {
+      // @ts-ignore
       updateDetails: details => {
+        // @ts-ignore
         eachCacheNameDetail(key => {
           if (typeof details[key] === 'string') {
+            // @ts-ignore
             _cacheNameDetails[key] = details[key];
           }
         });
       },
+      // @ts-ignore
       getGoogleAnalyticsName: userCacheName => {
         return userCacheName || _createCacheName(_cacheNameDetails.googleAnalytics);
       },
+      // @ts-ignore
       getPrecacheName: userCacheName => {
         return userCacheName || _createCacheName(_cacheNameDetails.precache);
       },
       getPrefix: () => {
         return _cacheNameDetails.prefix;
       },
+      // @ts-ignore
       getRuntimeName: userCacheName => {
         return userCacheName || _createCacheName(_cacheNameDetails.runtime);
       },
@@ -1268,6 +1413,7 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
+    // @ts-ignore
     function stripParams(fullURL, ignoreParams) {
       const strippedURL = new URL(fullURL);
       for (const param of ignoreParams) {
@@ -1362,15 +1508,18 @@ define(['exports'], (function (exports) { 'use strict';
      */
     async function executeQuotaErrorCallbacks() {
       {
+        // @ts-ignore
         logger.log(`About to run ${quotaErrorCallbacks.size} ` + `callbacks to clean up caches.`);
       }
       for (const callback of quotaErrorCallbacks) {
         await callback();
         {
+          // @ts-ignore
           logger.log(callback, 'is complete.');
         }
       }
       {
+        // @ts-ignore
         logger.log('Finished running callbacks.');
       }
     }
@@ -1400,6 +1549,7 @@ define(['exports'], (function (exports) { 'use strict';
       license that can be found in the LICENSE file or at
       https://opensource.org/licenses/MIT.
     */
+    // @ts-ignore
     function toRequest(input) {
       return typeof input === 'string' ? new Request(input) : input;
     }
@@ -1429,6 +1579,7 @@ define(['exports'], (function (exports) { 'use strict';
        * @param {*} [options.params] The return value from the
        *     {@link workbox-routing~matchCallback} (if applicable).
        */
+      // @ts-ignore
       constructor(strategy, options) {
         this._cacheKeys = {};
         /**
@@ -1469,6 +1620,7 @@ define(['exports'], (function (exports) { 'use strict';
          * @memberof workbox-strategies.StrategyHandler
          */
         {
+          // @ts-ignore
           finalAssertExports.isInstance(options.event, ExtendableEvent, {
             moduleName: 'workbox-strategies',
             className: 'StrategyHandler',
@@ -1480,6 +1632,7 @@ define(['exports'], (function (exports) { 'use strict';
         this.event = options.event;
         this._strategy = strategy;
         this._handlerDeferred = new Deferred();
+        // @ts-ignore
         this._extendLifetimePromises = [];
         // Copy the plugins list (since it's mutable on the strategy),
         // so any mutations don't affect this handler instance.
@@ -1508,10 +1661,12 @@ define(['exports'], (function (exports) { 'use strict';
           event
         } = this;
         let request = toRequest(input);
+        // @ts-ignore
         if (request.mode === 'navigate' && event instanceof FetchEvent && event.preloadResponse) {
           const possiblePreloadResponse = await event.preloadResponse;
           if (possiblePreloadResponse) {
             {
+              // @ts-ignore
               logger.log(`Using a preloaded navigation response for ` + `'${getFriendlyURL(request.url)}'`);
             }
             return possiblePreloadResponse;
@@ -1543,7 +1698,9 @@ define(['exports'], (function (exports) { 'use strict';
           let fetchResponse;
           // See https://github.com/GoogleChrome/workbox/issues/1796
           fetchResponse = await fetch(request, request.mode === 'navigate' ? undefined : this._strategy.fetchOptions);
+          // @ts-ignore
           if ("development" !== 'production') {
+            // @ts-ignore
             logger.debug(`Network request for ` + `'${getFriendlyURL(request.url)}' returned a response with ` + `status '${fetchResponse.status}'.`);
           }
           for (const callback of this.iterateCallbacks('fetchDidSucceed')) {
@@ -1556,6 +1713,7 @@ define(['exports'], (function (exports) { 'use strict';
           return fetchResponse;
         } catch (error) {
           {
+            // @ts-ignore
             logger.log(`Network request for ` + `'${getFriendlyURL(request.url)}' threw an error.`, error);
           }
           // `originalRequest` will only exist if a `fetchDidFail` callback
@@ -1613,8 +1771,10 @@ define(['exports'], (function (exports) { 'use strict';
         cachedResponse = await caches.match(effectiveRequest, multiMatchOptions);
         {
           if (cachedResponse) {
+            // @ts-ignore
             logger.debug(`Found a cached response in '${cacheName}'.`);
           } else {
+            // @ts-ignore
             logger.debug(`No cached response found in '${cacheName}'.`);
           }
         }
@@ -1660,11 +1820,13 @@ define(['exports'], (function (exports) { 'use strict';
           // See https://github.com/GoogleChrome/workbox/issues/2818
           const vary = response.headers.get('Vary');
           if (vary) {
+            // @ts-ignore
             logger.debug(`The response for ${getFriendlyURL(effectiveRequest.url)} ` + `has a 'Vary: ${vary}' header. ` + `Consider setting the {ignoreVary: true} option on your strategy ` + `to ensure cache matching and deletion works as expected.`);
           }
         }
         if (!response) {
           {
+            // @ts-ignore
             logger.error(`Cannot cache non-existent response for ` + `'${getFriendlyURL(effectiveRequest.url)}'.`);
           }
           throw new WorkboxError('cache-put-with-no-response', {
@@ -1674,6 +1836,7 @@ define(['exports'], (function (exports) { 'use strict';
         const responseToCache = await this._ensureResponseSafeToCache(response);
         if (!responseToCache) {
           {
+            // @ts-ignore
             logger.debug(`Response '${getFriendlyURL(effectiveRequest.url)}' ` + `will not be cached.`, responseToCache);
           }
           return false;
@@ -1690,6 +1853,7 @@ define(['exports'], (function (exports) { 'use strict';
         // precaching.
         cache, effectiveRequest.clone(), ['__WB_REVISION__'], matchOptions) : null;
         {
+          // @ts-ignore
           logger.debug(`Updating the '${cacheName}' cache with a new Response ` + `for ${getFriendlyURL(effectiveRequest.url)}.`);
         }
         try {
@@ -1727,6 +1891,7 @@ define(['exports'], (function (exports) { 'use strict';
        */
       async getCacheKey(request, mode) {
         const key = `${request.url} | ${mode}`;
+        // @ts-ignore
         if (!this._cacheKeys[key]) {
           let effectiveRequest = request;
           for (const callback of this.iterateCallbacks('cacheKeyWillBeUsed')) {
@@ -1735,11 +1900,14 @@ define(['exports'], (function (exports) { 'use strict';
               request: effectiveRequest,
               event: this.event,
               // params has a type any can't change right now.
+              // @ts-ignore
               params: this.params // eslint-disable-line
             }));
           }
+          // @ts-ignore
           this._cacheKeys[key] = effectiveRequest;
         }
+        // @ts-ignore
         return this._cacheKeys[key];
       }
       /**
@@ -1793,6 +1961,7 @@ define(['exports'], (function (exports) { 'use strict';
         for (const plugin of this._strategy.plugins) {
           if (typeof plugin[name] === 'function') {
             const state = this._pluginStateMap.get(plugin);
+            // @ts-ignore
             const statefulCallback = param => {
               const statefulParam = Object.assign(Object.assign({}, param), {
                 state
@@ -1855,11 +2024,13 @@ define(['exports'], (function (exports) { 'use strict';
        *
        * @private
        */
+      // @ts-ignore
       async _ensureResponseSafeToCache(response) {
         let responseToCache = response;
         let pluginsUsed = false;
         for (const callback of this.iterateCallbacks('cacheWillUpdate')) {
           responseToCache = (await callback({
+            // @ts-ignore
             request: this.request,
             response: responseToCache,
             event: this.event
@@ -1877,8 +2048,10 @@ define(['exports'], (function (exports) { 'use strict';
             if (responseToCache) {
               if (responseToCache.status !== 200) {
                 if (responseToCache.status === 0) {
+                  // @ts-ignore
                   logger.warn(`The response for '${this.request.url}' ` + `is an opaque response. The caching strategy that you're ` + `using will not cache opaque responses by default.`);
                 } else {
+                  // @ts-ignore
                   logger.debug(`The response for '${this.request.url}' ` + `returned a status code of '${response.status}' and won't ` + `be cached as a result.`);
                 }
               }
@@ -1948,6 +2121,7 @@ define(['exports'], (function (exports) { 'use strict';
          *
          * @type {Object}
          */
+        // @ts-ignore
         this.fetchOptions = options.fetchOptions;
         /**
          * The
@@ -1956,6 +2130,7 @@ define(['exports'], (function (exports) { 'use strict';
          *
          * @type {Object}
          */
+        // @ts-ignore
         this.matchOptions = options.matchOptions;
       }
       /**
@@ -2005,6 +2180,7 @@ define(['exports'], (function (exports) { 'use strict';
        */
       handleAll(options) {
         // Allow for flexible options to be passed.
+        // @ts-ignore
         if (options instanceof FetchEvent) {
           options = {
             event: options,
@@ -2024,6 +2200,7 @@ define(['exports'], (function (exports) { 'use strict';
         // Return an array of promises, suitable for use with Promise.all().
         return [responseDone, handlerDone];
       }
+      // @ts-ignore
       async _getResponse(handler, request, event) {
         await handler.runCallbacks('handlerWillStart', {
           event,
@@ -2031,6 +2208,7 @@ define(['exports'], (function (exports) { 'use strict';
         });
         let response = undefined;
         try {
+          // @ts-ignore
           response = await this._handle(request, handler);
           // The "official" Strategy subclasses all throw this error automatically,
           // but in case a third-party Strategy doesn't, ensure that we have a
@@ -2056,6 +2234,7 @@ define(['exports'], (function (exports) { 'use strict';
           if (!response) {
             throw error;
           } else {
+            // @ts-ignore
             logger.log(`While responding to '${getFriendlyURL(request.url)}', ` + `an ${error instanceof Error ? error.toString() : ''} error occurred. Using a fallback response provided by ` + `a handlerDidError plugin.`);
           }
         }
@@ -2068,6 +2247,7 @@ define(['exports'], (function (exports) { 'use strict';
         }
         return response;
       }
+      // @ts-ignore
       async _awaitComplete(responseDone, handler, request, event) {
         let response;
         let error;
@@ -2128,11 +2308,16 @@ define(['exports'], (function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
     const messages = {
+      // @ts-ignore
       strategyStart: (strategyName, request) => `Using ${strategyName} to respond to '${getFriendlyURL(request.url)}'`,
+      // @ts-ignore
       printFinalResponse: response => {
         if (response) {
+          // @ts-ignore
           logger.groupCollapsed(`View the final response here.`);
+          // @ts-ignore
           logger.log(response || '[No response returned]');
+          // @ts-ignore
           logger.groupEnd();
         }
       }
@@ -2185,7 +2370,9 @@ define(['exports'], (function (exports) { 'use strict';
         super(options);
         // If this instance contains no plugins with a 'cacheWillUpdate' callback,
         // prepend the `cacheOkAndOpaquePlugin` plugin to the plugins list.
+        // @ts-ignore
         if (!this.plugins.some(p => 'cacheWillUpdate' in p)) {
+          // @ts-ignore
           this.plugins.unshift(cacheOkAndOpaquePlugin);
         }
         this._networkTimeoutSeconds = options.networkTimeoutSeconds || 0;
@@ -2207,7 +2394,9 @@ define(['exports'], (function (exports) { 'use strict';
        *     triggered the request.
        * @return {Promise<Response>}
        */
+      // @ts-ignore
       async _handle(request, handler) {
+        // @ts-ignore
         const logs = [];
         {
           finalAssertExports.isInstance(request, Request, {
@@ -2221,10 +2410,14 @@ define(['exports'], (function (exports) { 'use strict';
         let timeoutId;
         if (this._networkTimeoutSeconds) {
           const {
+            // @ts-ignore
             id,
+            // @ts-ignore
             promise
           } = this._getTimeoutPromise({
+            // @ts-ignore
             request,
+            // @ts-ignore
             logs,
             handler
           });
@@ -2233,7 +2426,9 @@ define(['exports'], (function (exports) { 'use strict';
         }
         const networkPromise = this._getNetworkPromise({
           timeoutId,
+          // @ts-ignore
           request,
+          // @ts-ignore
           logs,
           handler
         });
@@ -2249,15 +2444,20 @@ define(['exports'], (function (exports) { 'use strict';
           await networkPromise);
         })());
         {
+          // @ts-ignore
           logger.groupCollapsed(messages.strategyStart(this.constructor.name, request));
+          // @ts-ignore
           for (const log of logs) {
+            // @ts-ignore
             logger.log(log);
           }
           messages.printFinalResponse(response);
+          // @ts-ignore
           logger.groupEnd();
         }
         if (!response) {
           throw new WorkboxError('no-response', {
+            // @ts-ignore
             url: request.url
           });
         }
@@ -2275,6 +2475,7 @@ define(['exports'], (function (exports) { 'use strict';
       _getTimeoutPromise({
         request,
         logs,
+        // @ts-ignore
         handler
       }) {
         let timeoutId;
@@ -2288,6 +2489,7 @@ define(['exports'], (function (exports) { 'use strict';
           timeoutId = setTimeout(onNetworkTimeout, this._networkTimeoutSeconds * 1000);
         });
         return {
+          // @ts-ignore
           promise: timeoutPromise,
           id: timeoutId
         };
@@ -2306,6 +2508,7 @@ define(['exports'], (function (exports) { 'use strict';
         timeoutId,
         request,
         logs,
+        // @ts-ignore
         handler
       }) {
         let error;
@@ -2331,8 +2534,10 @@ define(['exports'], (function (exports) { 'use strict';
           response = await handler.cacheMatch(request);
           {
             if (response) {
+              // @ts-ignore
               logs.push(`Found a cached response in the '${this.cacheName}'` + ` cache.`);
             } else {
+              // @ts-ignore
               logs.push(`No response found in the '${this.cacheName}' cache.`);
             }
           }
@@ -2384,6 +2589,7 @@ define(['exports'], (function (exports) { 'use strict';
        *     triggered the request.
        * @return {Promise<Response>}
        */
+      // @ts-ignore
       async _handle(request, handler) {
         {
           finalAssertExports.isInstance(request, Request, {
@@ -2411,17 +2617,22 @@ define(['exports'], (function (exports) { 'use strict';
           }
         }
         {
+          // @ts-ignore
           logger.groupCollapsed(messages.strategyStart(this.constructor.name, request));
           if (response) {
+            // @ts-ignore
             logger.log(`Got response from network.`);
           } else {
+            // @ts-ignore
             logger.log(`Unable to get a response from the network.`);
           }
           messages.printFinalResponse(response);
+          // @ts-ignore
           logger.groupEnd();
         }
         if (!response) {
           throw new WorkboxError('no-response', {
+            // @ts-ignore
             url: request.url,
             error
           });
@@ -2444,6 +2655,7 @@ define(['exports'], (function (exports) { 'use strict';
      * @memberof workbox-core
      */
     function clientsClaim() {
+      // @ts-ignore
       self.addEventListener('activate', () => self.clients.claim());
     }
 

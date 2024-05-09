@@ -12,15 +12,19 @@
  */
 
 // If the loader is already loaded, just stop.
+// @ts-ignore
 if (!self.define) {
   let registry = {};
 
   // Used for `eval` and `importScripts` where we can't get script URL by other means.
   // In both cases, it's safe to use a global var because those functions are synchronous.
+  // @ts-ignore
   let nextDefineUri;
 
+  // @ts-ignore
   const singleRequire = (uri, parentUri) => {
     uri = new URL(uri + ".js", parentUri).href;
+    // @ts-ignore
     return registry[uri] || (
       
         new Promise(resolve => {
@@ -31,12 +35,15 @@ if (!self.define) {
             document.head.appendChild(script);
           } else {
             nextDefineUri = uri;
+            // @ts-ignore
             importScripts(uri);
+            // @ts-ignore
             resolve();
           }
         })
       
       .then(() => {
+        // @ts-ignore
         let promise = registry[uri];
         if (!promise) {
           throw new Error(`Module ${uri} didn’t register its module`);
@@ -46,20 +53,26 @@ if (!self.define) {
     );
   };
 
+  // @ts-ignore
   self.define = (depsNames, factory) => {
+    // @ts-ignore
     const uri = nextDefineUri || ("document" in self ? document.currentScript.src : "") || location.href;
+    // @ts-ignore
     if (registry[uri]) {
       // Module is already loading or loaded.
       return;
     }
     let exports = {};
+    // @ts-ignore
     const require = depUri => singleRequire(depUri, uri);
     const specialDeps = {
       module: { uri },
       exports,
       require
     };
+    // @ts-ignore
     registry[uri] = Promise.all(depsNames.map(
+      // @ts-ignore
       depName => specialDeps[depName] || require(depName)
     )).then(deps => {
       factory(...deps);
@@ -67,15 +80,19 @@ if (!self.define) {
     });
   };
 }
+// @ts-ignore
 define(['./workbox-fb90b81a'], (function (workbox) { 'use strict';
 
+  // @ts-ignore
   importScripts();
+  // @ts-ignore
   self.skipWaiting();
   workbox.clientsClaim();
   workbox.registerRoute("/", new workbox.NetworkFirst({
     "cacheName": "start-url",
     plugins: [{
       cacheWillUpdate: async ({
+        // @ts-ignore
         response: e
       }) => e && "opaqueredirect" === e.type ? new Response(e.body, {
         status: 200,
@@ -88,6 +105,7 @@ define(['./workbox-fb90b81a'], (function (workbox) { 'use strict';
     "cacheName": "dev",
     plugins: []
   }), 'GET');
+  // @ts-ignore
   self.__WB_DISABLE_DEV_LOGS = true;
 
 }));
