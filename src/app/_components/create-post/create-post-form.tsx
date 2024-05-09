@@ -21,7 +21,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PostSchema } from "@/lib/schemas/post";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import PlateEditor from "./editor";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
