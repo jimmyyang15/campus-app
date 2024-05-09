@@ -4,18 +4,18 @@
  * for Docker builds.
  */
 await import("./src/env.js");
-import withPWAInit from "@ducanh2912/next-pwa";
-const withPWA = withPWAInit({
-  dest: "public",
-  cacheOnFrontEndNav:true,
-  aggressiveFrontEndNavCaching:true,
-  reloadOnOnline:true,
-  swcMinify:true,
-  disable:false,
-  workboxOptions:{
-    disableDevLogs:true
-  }
-});
+// import withPWAInit from "@ducanh2912/next-pwa";
+// const withPWA = withPWAInit({
+//   dest: "public",
+//   cacheOnFrontEndNav:true,
+//   aggressiveFrontEndNavCaching:true,
+//   reloadOnOnline:true,
+//   swcMinify:true,
+//   disable:false,
+//   workboxOptions:{
+//     disableDevLogs:true
+//   }
+// });
 
 // const withPWA = require("@ducanh2912/next-pwa").default({
 // 	dest: 'public',
@@ -53,4 +53,4 @@ const config = {
   },
 };
 
-export default withPWA(config)
+export default config
