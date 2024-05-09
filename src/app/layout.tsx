@@ -8,7 +8,6 @@ import Navbar from "@/app/_components/layout/navbar";
 import AuthWrapper from "./_components/auth/auth-wrapper";
 import { validateRequest } from "@/server/auth";
 import { ThemeProvider } from "./_components/theme-provider";
-import { TooltipProvider } from "./_components/plate-ui/tooltip";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import SessionProvider from "./_components/session-provider";
 import { Session, User } from "lucia";
@@ -60,11 +59,9 @@ export default async function RootLayout({
             >
               <AuthWrapper user={sessionData.user}>
                 <EdgeStoreProvider>
-                  <TooltipProvider>
                     <Navbar user={sessionData.user} />
 
                     {children}
-                  </TooltipProvider>
                 </EdgeStoreProvider>
               </AuthWrapper>
             </ThemeProvider>
