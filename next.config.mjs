@@ -3,31 +3,21 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
+// import { createRequire } from "module";
 await import("./src/env.js");
-// import withPWAInit from "@ducanh2912/next-pwa";
-// const withPWA = withPWAInit({
-//   dest: "public",
-//   cacheOnFrontEndNav:true,
-//   aggressiveFrontEndNavCaching:true,
-//   reloadOnOnline:true,
-//   swcMinify:true,
-//   disable:false,
-//   workboxOptions:{
-//     disableDevLogs:true
-//   }
+import withSerwistInit from "@serwist/next";
+// const withPWA = require('next-pwa')({
+//   dest: 'public',
 // });
 
-// const withPWA = require("@ducanh2912/next-pwa").default({
-// 	dest: 'public',
-// 	cacheOnFrontEndNav : true,
-// 	aggresiveFrontEndNavCaching : true,
-// 	reloadOnOnline : true,
-// 	swcMinify : true,
-// 	disable : false,
-// 	workboxOptions: {
-// 	  disableDevLogs: true,
-// 	}
-//   });
+const withSerwist = withSerwistInit({
+  // Note: This is only an example. If you use Pages Router,
+  // use something else that works, such as "service-worker/index.ts".
+  swSrc: "src/app/sw.ts",
+  disable:false,
+  swDest: "public/sw.js",
+  reloadOnOnline: true,
+});
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -58,4 +48,5 @@ const config = {
   },
 };
 
-export default config
+
+export default withSerwist(config);

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     /* Base Options: */
+    
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
@@ -15,7 +16,7 @@
     "checkJs": true,
 
     /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022"],
+    "lib": ["dom", "dom.iterable", "ES2022","webworker"],
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -27,8 +28,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": [
+      // Other types...
+      // This allows Serwist to type `window.serwist`.
+      "@serwist/next/typings"
+    ],
+
   },
+  
   "include": [
     ".eslintrc.cjs",
     "next-env.d.ts",
