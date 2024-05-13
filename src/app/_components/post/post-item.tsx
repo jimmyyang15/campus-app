@@ -7,6 +7,7 @@ import { Profile } from "@prisma/client";
 import PostActions from "./post-actions";
 import ReactionsList from "./reactions-list";
 import { db } from "@/server/db";
+import Link from "next/link";
 interface Props {
   item: PostsWithUser;
 }
@@ -22,7 +23,8 @@ interface Props {
 const PostItem = ({ item }: Props) => {
 
   return (
-    <div className="space-y-4 border-b p-4">
+    <Link href={`/post/${item.id}`}>
+    <div className="space-y-4 border-b p-4 hover:bg-accent/10 cursor-pointer transition-colors">
       
       <div className="flex items-center gap-x-4">
         <AvatarProfile profile={item.user.profile as Profile} />
@@ -33,7 +35,9 @@ const PostItem = ({ item }: Props) => {
       <PostActions postId={item.id} />
       <ReactionsList postId={item.id} reactions={item.reactions} />
       {/* <Image src={item.picture} className="object-cover w-full h-96" sizes="100vw" width={0} height={0} alt="post-media" /> */}
-    </div>
+    </div> 
+    </Link>
+    
   );
 };
 

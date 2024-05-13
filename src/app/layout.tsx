@@ -25,8 +25,8 @@ const APP_DESCRIPTION = "Best PWA app in the world!";
 
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3000/"),
-  title: "title of your app",
-  description: "your app description here",
+  title: "Campus App",
+  description: "This is the campus app",
   category: "website",
   generator: "Next.js", // framework used
 

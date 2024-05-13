@@ -14,6 +14,14 @@ export const postRouter = createTRPCRouter({
       return await ctx.db.post.findUnique({
         where:{
           id:input.postId
+        },
+        include:{
+          user:{
+            include:{
+              profile:true
+            }
+          },
+          reactions:true
         }
       })
     }),
