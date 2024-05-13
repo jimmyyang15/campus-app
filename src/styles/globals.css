@@ -87,7 +87,7 @@
   }
 
   .link {
-    @apply text-neutral-500 dark:text-neutral-400 hover:text-secondary-foreground dark:hover:text-secondary-foreground transition-colors duration-100 ease-in text-sm
+    @apply text-neutral-500 transition-colors dark:text-neutral-400 hover:text-white dark:hover:text-white text-sm
   }
 
   .rdp-vhidden {

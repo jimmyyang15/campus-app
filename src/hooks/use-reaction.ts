@@ -1,7 +1,6 @@
 import { api } from "@/trpc/react";
 import { useState } from "react";
 import { z } from "zod";
-import { useStore } from "zustand";
 
 export const useReaction = (postId:string) => {
     const [reactionOpen, setReactionOpen] = useState(false);
@@ -37,7 +36,10 @@ export const useReaction = (postId:string) => {
         // },
         onSettled() {
           // Sync with server once mutation has settled
-          utils.post.getPosts.invalidate()
+          utils.post.getPosts.invalidate();
+          utils.post.singlePost.invalidate({
+            postId
+          })
         },
       });
   const handleReaction = async (type: ReactionType_Zod) => {

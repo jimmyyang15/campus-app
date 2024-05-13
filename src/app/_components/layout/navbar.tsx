@@ -15,6 +15,7 @@ import { ModeToggle } from "@/app/_components/mode-toggle";
 import AvatarDropdown from "../avatar-dropdown";
 import { api } from "@/trpc/react";
 import { Profile } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 interface Props {
   user: User | null;
@@ -38,15 +39,21 @@ const Navbar = ({ user }: Props) => {
         />
       </Link>
       <ul className="flex items-center gap-x-6 font-semibold ">
-        <li className="link">
+        <li className={cn('link',{
+          "text-white" : pathname==="/"
+        })}>
           <Link href="/">Home</Link>
         </li>
         {user?.role === "ADMIN" ? (
-          <li className="link">
+          <li className={cn('link',{
+            "text-white" : pathname==="/clubs"
+          })}>
             <Link href="/clubs">Clubs</Link>
           </li>
         ) : (
-          <li className="link">
+          <li className={cn('link',{
+            "text-white" : pathname==="/clubs"
+          })}>
             <Link href="/clubs">Your Clubs</Link>
           </li>
         )}

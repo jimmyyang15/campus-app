@@ -22,7 +22,15 @@ export const postRouter = createTRPCRouter({
             }
           },
           reactions:true,
-          comments:true
+          comments:{
+            include:{
+              user:{
+                include:{
+                  profile:true
+                }
+              }
+            }
+          }
         }
       })
     }),

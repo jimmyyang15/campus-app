@@ -3,7 +3,7 @@ import React from "react";
 import PostActions from "./post-actions";
 import ReactionsList from "./reactions-list";
 import { api } from "@/trpc/react";
-import { Profile, Reaction } from "@prisma/client";
+import { Comment, Profile, Reaction } from "@prisma/client";
 import AvatarProfile from "../avatar-profile";
 import Loading from "../loading";
 import { Textarea } from "@/app/_components/ui/textarea";
@@ -17,6 +17,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommentSchema, CommentSchemaType } from "@/lib/schemas/comment";
 import { Button } from "@/app/_components/ui/button";
+import CommentComponent from "./comment";
+import { CommentWithUser } from "@/types";
 
 const PostDetailComponent = ({ id }: { id: string }) => {
   const { data: post, isLoading } = api.post.singlePost.useQuery({
@@ -24,10 +26,11 @@ const PostDetailComponent = ({ id }: { id: string }) => {
   });
   const utils = api.useUtils()
 
-  const { mutateAsync: createComment } =
+  const { mutateAsync: createComment,isLoading:isCreating } =
     api.comment.createComment.useMutation({
       onSettled() {
         // Sync with server once mutation has settled
+        form.reset();
         utils.post.singlePost.invalidate({
           postId:id
         })
@@ -85,14 +88,17 @@ const PostDetailComponent = ({ id }: { id: string }) => {
                 <Button
                   className=""
                   type="submit"
-                  disabled={form.watch("comment").length <= 0}
+                  disabled={form.watch("comment").length <= 0 || isCreating}
                 >
                   Comment
                 </Button>
               </div>
             </form>
           </Form>
-          {post?.comments?.map((item)=><p>{item.text}</p>)}
+          <p className="text-lg font-semibold">
+            {post?.comments?.length} Comments
+          </p>
+          {post?.comments?.map((item)=><CommentComponent key={item.id} comment={item as CommentWithUser} />)}
         </div>
       )}
     </>

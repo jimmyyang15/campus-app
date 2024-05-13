@@ -25,4 +25,14 @@ export type UserWithProfile = Prisma.UserGetPayload<{
     include: {
         profile: true
     }
+}>;
+
+export type CommentWithUser = Prisma.CommentGetPayload<{
+    include:{
+        user:{
+            include:{
+                profile:true
+            }
+        }
+    }
 }>
