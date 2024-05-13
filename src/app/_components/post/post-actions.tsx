@@ -5,15 +5,19 @@ import { MessageSquareText, Share } from "lucide-react";
 
 type Props = {
   postId: string;
+  noComments?: boolean;
 };
-const PostActions = ({ postId }: Props) => {
+const PostActions = ({ postId, noComments }: Props) => {
   return (
     <div className="flex items-center gap-x-4">
       <ReactionPopover postId={postId} />
-      <Button className="bg-transparent text-xs text-gray-500 hover:bg-transparent hover:text-foreground">
-        <MessageSquareText size={13} className="mr-2" />
-        Comments
-      </Button>
+      {noComments ? null : (
+        <Button className="bg-transparent text-xs text-gray-500 hover:bg-transparent hover:text-foreground">
+          <MessageSquareText size={13} className="mr-2" />
+          Comments
+        </Button>
+      )}
+
       <Button className="bg-transparent text-xs text-gray-500 hover:bg-transparent hover:text-foreground">
         <Share size={13} className="mr-2" />
         Share

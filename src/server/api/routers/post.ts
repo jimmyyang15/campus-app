@@ -21,7 +21,8 @@ export const postRouter = createTRPCRouter({
               profile:true
             }
           },
-          reactions:true
+          reactions:true,
+          comments:true
         }
       })
     }),

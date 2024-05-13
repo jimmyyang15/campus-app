@@ -1,9 +1,5 @@
-import { postRouter } from "@/server/api/routers/post";
 import { createTRPCRouter } from "@/server/api/trpc";
-import { profileRouter } from "@/server/api/routers/profile";
-import { reactionRouter } from "@/server/api/routers/reactions";
-import { clubRouter } from "@/server/api/routers/club";
-import { userRouter } from "@/server/api/routers/user";
+import { postRouter,commentRouter,userRouter,clubRouter,reactionRouter,profileRouter } from "./routers";
 
 /**
  * This is the primary router for your server.
@@ -15,7 +11,8 @@ export const appRouter = createTRPCRouter({
   profile:profileRouter,
   reactions:reactionRouter,
   club:clubRouter,
-  user:userRouter
+  user:userRouter,
+  comment:commentRouter
 });
 
 // export type definition of API
