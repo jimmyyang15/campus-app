@@ -2,7 +2,7 @@ import React from 'react'
 
 const ClubPage = () => {
   return (
-    <div>ClubPage</div>
+    <main className='flex-[0.80] p-4 border-x'>ClubPage</main>
   )
 }
 

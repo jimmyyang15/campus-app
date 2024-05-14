@@ -40,19 +40,19 @@ const Navbar = ({ user }: Props) => {
       </Link>
       <ul className="flex items-center gap-x-6 font-semibold ">
         <li className={cn('link',{
-          "text-white" : pathname==="/"
+          "text-foreground" : pathname==="/"
         })}>
           <Link href="/">Home</Link>
         </li>
         {user?.role === "ADMIN" ? (
           <li className={cn('link',{
-            "text-white" : pathname==="/clubs"
+            "text-foreground" : pathname==="/clubs"
           })}>
             <Link href="/clubs">Clubs</Link>
           </li>
         ) : (
           <li className={cn('link',{
-            "text-white" : pathname==="/clubs"
+            "text-foreground" : pathname==="/clubs"
           })}>
             <Link href="/clubs">Your Clubs</Link>
           </li>
