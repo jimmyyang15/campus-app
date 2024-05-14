@@ -46,3 +46,13 @@ export type ClubWithInclude = Prisma.ClubGetPayload<{
         }
     }
 }>
+
+export type RequestWithPayload = Prisma.RequestGetPayload<{
+    include:{
+        user:{
+            include:{
+                profile:true
+            }
+        }
+    }
+}>
