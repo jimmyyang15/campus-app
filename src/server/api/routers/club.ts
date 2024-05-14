@@ -11,6 +11,13 @@ export const clubRouter = createTRPCRouter({
         const clubs = await ctx.db.club.findMany({
           orderBy:{
             createdAt:'desc'
+          },
+          include:{
+            request:{
+                include:{
+                    user:true
+                }
+            }
           }
         });
         return clubs;

@@ -23,6 +23,9 @@ export const postRouter = createTRPCRouter({
           },
           reactions:true,
           comments:{
+            orderBy:{
+              createdAt:"desc"
+            },
             include:{
               user:{
                 include:{

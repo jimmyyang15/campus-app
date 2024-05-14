@@ -31,7 +31,8 @@ model User {
   invitationsReceived Invitation[]        @relation("ReceivedInvitations") // Invitations received by the user
   rewardsSent         Reward[]            @relation("SentRewards")
   rewardsReceived     Reward[]            @relation("ReceivedRewards")
-  Comment             Comment[]
+  comment             Comment[]
+  request             Request[]
 }
 
 model Profile {
@@ -119,6 +120,8 @@ model Club {
   schedules   Schedule[]
   albums      Album[]
   assignments Assignment[]
+  request     Request[]
+  invitation  Invitation[]
 }
 
 model Schedule {
@@ -142,6 +145,8 @@ model Invitation {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  clubId      String
+  club        Club     @relation(fields: [clubId], references: [id])
   sender      User     @relation("SentInvitations", fields: [senderId], references: [id]) // Sender of the invitation
   senderId    String // ID of the sender
   recipient   User     @relation("ReceivedInvitations", fields: [recipientId], references: [id]) // Recipient of the invitation
@@ -175,4 +180,13 @@ model Submission {
   assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId String?
   files        String[]
+}
+
+model Request {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  clubId    String
+  club      Club     @relation(fields: [clubId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
