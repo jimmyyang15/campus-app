@@ -4,12 +4,12 @@ import React from "react";
 import { Button } from "@/app/_components/ui/button";
 import { useSession } from "../session-provider";
 import { api } from "@/trpc/react";
-import { ClubWithInclude } from "@/types";
+import { ClubWithPayload } from "@/types";
 import { toast } from "sonner";
 import moment from "moment";
 import Link from "next/link";
 
-const ClubItem = ({ club }: { club: ClubWithInclude }) => {
+const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const { user } = useSession();
   const alreadyInTheClub = user.clubs.find((item) => item.id === club.id);
   const utils = api.useUtils();

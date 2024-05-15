@@ -13,9 +13,15 @@ const RequestList = ({ clubId }: { clubId: string }) => {
         <Loading />
       ) : (
         <div className="space-y-4">
-          {requests?.map((request) => (
-            <RequestItem key={request.id} request={request} />
-          ))}
+          {requests?.length === 0 ? (
+            <p className="text-gray-500 ">No requests here</p>
+          ) : (
+            <>
+              {requests?.map((request) => (
+                <RequestItem key={request.id} request={request} />
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>

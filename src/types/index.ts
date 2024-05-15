@@ -37,11 +37,16 @@ export type CommentWithUser = Prisma.CommentGetPayload<{
     }
 }>
 
-export type ClubWithInclude = Prisma.ClubGetPayload<{
+export type ClubWithPayload = Prisma.ClubGetPayload<{
     include:{
         request:{
             include:{
                 user:true
+            }
+        },
+        members:{
+            include:{
+                profile:true
             }
         }
     }

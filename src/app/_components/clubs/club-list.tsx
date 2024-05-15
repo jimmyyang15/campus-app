@@ -7,7 +7,7 @@ import { api } from "@/trpc/react";
 import CreateModal from "./create-modal";
 import Loading from "../loading";
 import { useSession } from "../session-provider";
-import { ClubWithInclude } from "@/types";
+import { ClubWithPayload } from "@/types";
 
 const ClubList = () => {
   const { data: clubs } = api.club.getClubs.useQuery();
@@ -26,7 +26,7 @@ const ClubList = () => {
           {clubs ? (
             <div className="mb-4 grid grid-cols-2 gap-4">
               {clubs?.map((club, i) => (
-                <ClubItem key={i} club={club as ClubWithInclude} />
+                <ClubItem key={i} club={club as ClubWithPayload} />
               ))}
               {user.role === "ADMIN" ? <CreateModal /> : null}
             </div>
@@ -40,7 +40,7 @@ const ClubList = () => {
             {user.isMentor ? (
               <>
                 {user?.clubs?.map((club, i) => (
-                  <ClubItem key={i} club={club as ClubWithInclude} />
+                  <ClubItem key={i} club={club as ClubWithPayload} />
                 ))}
               </>
             ) : null}

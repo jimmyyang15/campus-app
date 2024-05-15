@@ -12,9 +12,9 @@ const ClubSidebar = () => {
   return (
     <aside className="h-screen  flex-[.10] space-y-8 p-4">
       <Link
-        href="/"
+        href={`/club/${id}/settings`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
-          "text-white": pathname.includes("/settings"),
+          "text-foreground": pathname.includes("/settings"),
         })}
       >
         <Settings />
@@ -23,7 +23,7 @@ const ClubSidebar = () => {
       <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
-          "text-white": pathname.includes("/upload"),
+          "text-foreground": pathname.includes("/upload"),
         })}
       >
         <FileUp />
@@ -32,7 +32,7 @@ const ClubSidebar = () => {
       <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
-          "text-white" : pathname.includes("/submissions")
+          "text-foreground" : pathname.includes("/submissions")
         })}
       >
         <ClipboardMinus />
@@ -41,7 +41,7 @@ const ClubSidebar = () => {
       <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
-          "text-white" : pathname.includes("/certificate")
+          "text-foreground" : pathname.includes("/certificate")
         })}
       >
         <TbCertificate size={24} />
@@ -50,7 +50,7 @@ const ClubSidebar = () => {
       <Link
         href={`/club/${id}/requests`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
-          "text-white" : pathname.includes("/requests")
+          "text-foreground" : pathname.includes("/requests")
         })}
       >
         <Settings />
