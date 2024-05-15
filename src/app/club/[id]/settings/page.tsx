@@ -16,6 +16,8 @@ const SettingsClubPage = () => {
     id:id as string
   })
 
+  console.log(club)
+
   return (
     <main>
       <Button variant="ghost" onClick={() => router.back()}>

@@ -12,7 +12,7 @@ const ClubSettings = ({ club }:{club:ClubWithPayload}) => {
       <Image src={club.clubImage} alt="club profile image" width={150} height={150} sizes='100vw' className='rounded-full' />
       <p className='text-gray-500'>{club.members.length} members</p>
       <ul className='text-gray-500 space-y-4 self-start'>
-        <InviteModal />
+        <InviteModal  />
         <MembersModal members={club.members as UserWithProfile[]} />
       </ul>
     </div>

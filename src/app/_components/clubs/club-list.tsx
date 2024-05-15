@@ -12,7 +12,7 @@ import { ClubWithPayload } from "@/types";
 const ClubList = () => {
   const { data: clubs } = api.club.getClubs.useQuery();
   const { user } = useSession();
-  console.log(user);
+  console.log(clubs);
   return (
     <>
       {!user.isMentor && user.role === "USER" && user.clubs.length === 0 ? (

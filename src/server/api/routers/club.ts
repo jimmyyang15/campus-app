@@ -85,5 +85,34 @@ export const clubRouter = createTRPCRouter({
         });
         return clubs;
     }),
+    getInviteMembers:protectedProcedure.input(z.object({
+        clubId:z.string()
+    })).query(async({ctx,input })=>{
+        const clubMembers = await ctx.db.club.findFirst({
+            where:{
+                id:input.clubId
+            },
+            select:{
+                members:true
+            }
+        });
+        const idMembers = clubMembers?.members.map((item)=>item.id);
+
+        return await ctx.db.user.findMany({
+            where:{
+                NOT:{
+                    id:{
+                        in:idMembers
+                    }
+                }
+            }
+        })
+    }),
+
+    inviteMember:protectedProcedure.input(z.object({
+        username:z.string()
+    })).mutation(async({ctx,input })=>{
+
+    })
 
 });
