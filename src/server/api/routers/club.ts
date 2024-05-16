@@ -32,8 +32,8 @@ export const clubRouter = createTRPCRouter({
             },
             include: {
                 members: {
-                    include:{
-                        profile:true
+                    include: {
+                        profile: true
                     }
                 }
             }
@@ -70,7 +70,7 @@ export const clubRouter = createTRPCRouter({
 
     }),
 
-    getMembers:protectedProcedure.query(async ({ ctx }) => {
+    getMembers: protectedProcedure.query(async ({ ctx }) => {
         const clubs = await ctx.db.club.findMany({
             orderBy: {
                 createdAt: 'desc'
@@ -85,34 +85,68 @@ export const clubRouter = createTRPCRouter({
         });
         return clubs;
     }),
-    getInviteMembers:protectedProcedure.input(z.object({
-        clubId:z.string()
-    })).query(async({ctx,input })=>{
+    getInviteMembers: protectedProcedure.input(z.object({
+        clubId: z.string()
+    })).query(async ({ ctx, input }) => {
         const clubMembers = await ctx.db.club.findFirst({
-            where:{
-                id:input.clubId
+            where: {
+                id: input.clubId
             },
-            select:{
-                members:true
+            select: {
+                members: true
             }
         });
-        const idMembers = clubMembers?.members.map((item)=>item.id);
+        const idMembers = clubMembers?.members.map((item) => item.id);
 
         return await ctx.db.user.findMany({
-            where:{
-                NOT:{
-                    id:{
-                        in:idMembers
+            where: {
+                AND: [
+                    {
+                        NOT: {
+                            id: {
+                                in: idMembers
+                            }
+                        }
+
+                    }, {
+                        NOT: {
+                            isMentor: true
+                        }
+                    }, {
+                        NOT: {
+                            role: "ADMIN"
+                        }
+                    },{
+                        NOT:{
+                            invitationsReceived:{
+                                some:{
+                                    clubId:input.clubId
+                                }
+                            }
+                        }
                     }
-                }
+                ]
+
+            },
+            include:{
+                profile:true
             }
         })
     }),
 
-    inviteMember:protectedProcedure.input(z.object({
-        username:z.string()
-    })).mutation(async({ctx,input })=>{
-
+    inviteMember: protectedProcedure.input(z.object({
+        recipientId: z.string(),
+        clubId:z.string()
+    })).mutation(async ({ ctx, input }) => {
+        const { recipientId,clubId } = input;
+        const user = await ctx.session.user
+        return await ctx.db.invitation.create({
+            data:{
+                recipientId,
+                clubId,
+                senderId:user.id
+            }
+        })
     })
 
 });

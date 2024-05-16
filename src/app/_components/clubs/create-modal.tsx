@@ -47,7 +47,7 @@ const CreateModal = () => {
     api.club.createClub.useMutation({
       onSuccess: () => {
         setOpen(false);
-        toast.success("Club created created", {
+        toast.success("Club created ", {
           description: moment().format("LLLL"),
           // action: {
           //   label: "Dismiss",
