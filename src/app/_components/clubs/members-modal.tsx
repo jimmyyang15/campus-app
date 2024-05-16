@@ -32,7 +32,7 @@ console.log(members)
           <CredenzaTitle className="text-center">Members</CredenzaTitle>
         </CredenzaHeader>
         <CredenzaBody className="space-y-4 pb-4 mt-4 text-center text-sm sm:pb-0 sm:text-left">
-          {members.map((member)=>(
+          {members?.map((member)=>(
             <MemberItem key={member.id} member={member as UserWithProfile} />
           ))}
         </CredenzaBody>

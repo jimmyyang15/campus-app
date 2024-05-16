@@ -2,6 +2,7 @@ import React from "react";
 import ClubSidebar from "@/app/_components/clubs/club-sidebar";
 
 const ClubLayout = ({ children }: { children: React.ReactNode }) => {
+
   return (
     <div className=" flex">
       <ClubSidebar />

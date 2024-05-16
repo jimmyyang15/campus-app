@@ -11,10 +11,19 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
         <AvatarProfile profile={member.profile as Profile} />
         <p>{member.profile?.fullName}</p>
       </div>
-      <div className="flex items-center gap-x-2">
-        <Button className="border-destructive h-8 text-xs" variant={'outline'}>KICK</Button>
-        <Button variant={'outline'} className="h-8 text-xs">Appoint is Admin</Button>
-      </div>
+      {!member.isMentor ? (
+        <div className="flex items-center gap-x-2">
+          <Button
+            className="h-8 border-destructive text-xs"
+            variant={"outline"}
+          >
+            KICK
+          </Button>
+          <Button variant={"outline"} className="h-8 text-xs">
+            Appoint as Admin
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 };

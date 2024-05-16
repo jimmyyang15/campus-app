@@ -60,8 +60,10 @@ const Navbar = ({ user }: Props) => {
         {user?.role === "USER" ? (
           <>
             {!user.isMentor ? (
-              <li className="link">
-                <Link href="/">Invitations</Link>
+              <li className={cn('link',{
+                "text-foreground" : pathname==="/invitations"
+              })}>
+                <Link href="/invitations">Invitations</Link>
               </li>
             ) : null}
 

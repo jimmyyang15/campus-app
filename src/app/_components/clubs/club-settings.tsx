@@ -1,22 +1,55 @@
-import { ClubWithPayload, UserWithProfile } from '@/types'
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
-import InviteModal from './invite-modal'
-import MembersModal from './members-modal'
+"use client";
 
-const ClubSettings = ({ club }:{club:ClubWithPayload}) => {
+import { ClubWithPayload, UserWithProfile } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import InviteModal from "./invite-modal";
+import MembersModal from "./members-modal";
+import { useParams, useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
+import Loading from "../loading";
+import { Button } from "@/app/_components/ui/button";
+import { ChevronLeft } from "lucide-react";
+
+const ClubSettings = () => {
+  const { id } = useParams();
+  const router = useRouter();
+  const { data: club, isLoading } = api.club.singleClub.useQuery({
+    id: id as string,
+  });
+
+  console.log(club);
   return (
-    <div className='flex flex-col gap-y-2 items-center'>
-      <p className="text-center text-xl font-bold ">{club?.name}</p>
-      <Image src={club.clubImage} alt="club profile image" width={150} height={150} sizes='100vw' className='rounded-full' />
-      <p className='text-gray-500'>{club.members.length} members</p>
-      <ul className='text-gray-500 space-y-4 self-start'>
-        <InviteModal  />
-        <MembersModal members={club.members as UserWithProfile[]} />
-      </ul>
-    </div>
-  )
-}
+    <>
+      <Button variant="ghost" onClick={() => router.back()}>
+        <ChevronLeft size={18} className="mr-2" />
+        Back
+      </Button>
+      <div className="flex flex-col items-center gap-y-2">
+        {isLoading && club ? (
+          <Loading />
+        ) : (
+          <>
+            <p className="text-center text-xl font-bold ">{club?.name}</p>
+            <Image
+              src={club?.clubImage as string}
+              alt="club profile image"
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-[100px] w-[100px] rounded-full"
+            />
+            <p className="text-gray-500">{club?.members.length} members</p>
+            <ul className="space-y-4 self-start text-gray-500">
+              <InviteModal />
+              <MembersModal members={club?.members as UserWithProfile[]} />
+            </ul>
+          </>
+        )}
+      </div>
+    </>
+  );
+};
 
-export default ClubSettings
+export default ClubSettings;
