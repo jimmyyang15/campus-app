@@ -74,7 +74,7 @@
 import {  Lucia, Session, User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
-import {  Club, Profile } from "@prisma/client";
+import {  Club, Profile, Request } from "@prisma/client";
 import { adapter } from "./adapter";
 
 declare module "lucia" {
@@ -89,6 +89,7 @@ declare module "lucia" {
       role: string;
       isMentor:boolean;
       club:Club;
+      request:Request
     };
   }
 }
@@ -102,6 +103,7 @@ export const lucia = new Lucia(adapter, {
   getUserAttributes: (attributes) => {
     return {
       googleId: attributes.googleId,
+      request:attributes.request,
       username: attributes.username,
       profile: attributes.profile,
       club: attributes.club,

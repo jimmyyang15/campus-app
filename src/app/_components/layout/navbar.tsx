@@ -54,7 +54,7 @@ const Navbar = ({ user }: Props) => {
           <li className={cn('link',{
             "text-foreground" : pathname==="/clubs"
           })}>
-            <Link href="/clubs">Your Clubs</Link>
+            <Link href="/clubs">Your Club</Link>
           </li>
         )}
         {user?.role === "USER" ? (

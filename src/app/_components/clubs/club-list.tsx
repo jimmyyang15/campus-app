@@ -10,9 +10,9 @@ import { useSession } from "../session-provider";
 import { ClubWithPayload } from "@/types";
 
 const ClubList = () => {
-  const { data: clubs,isLoading } = api.club.getClubs.useQuery();
+  const { data: clubs, isLoading } = api.club.getClubs.useQuery();
   const { user } = useSession();
-  console.log(clubs);
+  console.log(user);
   return (
     <>
       {!user.isMentor && user.role === "USER" && !user.club ? (
@@ -23,7 +23,7 @@ const ClubList = () => {
 
       {!user.club ? (
         <>
-          {(clubs && !isLoading) ? (
+          {clubs && !isLoading ? (
             <div className="mb-4 grid grid-cols-2 gap-4">
               {clubs?.map((club, i) => (
                 <ClubItem key={i} club={club as ClubWithPayload} />
@@ -37,7 +37,7 @@ const ClubList = () => {
       ) : (
         <>
           <div className="mb-4 grid grid-cols-2 gap-4">
-                  <ClubItem  club={user.club as ClubWithPayload} />
+            <ClubItem club={user.club as ClubWithPayload} />
 
             {user.role === "ADMIN" ? <CreateModal /> : null}
           </div>

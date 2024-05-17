@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const { user } = useSession();
-  const alreadyInTheClub = user.club.id === club.id;
+  const alreadyInTheClub = user?.club?.id === club.id;
   const utils = api.useUtils();
   const requestSent = club?.request?.find((item) => item.userId === user.id);
   const { mutateAsync: requestJoin, isLoading: isRequesting } =
@@ -31,12 +31,37 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
         utils.club.getClubs.invalidate();
       },
     });
+    const { mutateAsync: cancelRequest, isLoading: isCancelling } =
+    api.request.cancelRequest.useMutation({
+      onSuccess: () => {
+        toast.success("Request Cancelled", {
+          description: moment().format("LLLL"),
+
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled: () => {
+        utils.club.getClubs.invalidate();
+      },
+    });
 
   const handleRequest = async () => {
     await requestJoin({
       clubId: club.id,
     });
   };
+
+  const handleCancel = async () => {
+    await cancelRequest({
+      clubId:club.id
+    });
+  };
+
+console.log(!!user.request)
   return (
     <div className="space-y-2 overflow-hidden rounded-lg border">
       <Image
@@ -53,15 +78,15 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
         <p className="text-sm text-gray-500">{club.desc}</p>
         {user.role === "USER" && !user.isMentor && !alreadyInTheClub ? (
           <Button
-            onClick={handleRequest}
+            onClick={()=>requestSent ? handleCancel() : handleRequest()}
             className=""
             variant={"outline"}
-            disabled={isRequesting || !!requestSent}
+            disabled={isRequesting || isCancelling || requestSent ? false : user.request ? true : false}
           >
             {isRequesting
               ? "Sending Request"
               : requestSent
-                ? "Request Sent"
+                ? isCancelling ? "Cancelling Request" : "Cancel Request"
                 : "Send Request"}
           </Button>
         ) : null}
