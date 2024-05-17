@@ -26,9 +26,29 @@ const InvitationsList = () => {
         utils.invitation.getInvitations.invalidate()
       }
     });
+    const { mutateAsync: declineInvitation,isLoading:isDeclining } = api.invitation.rejectInvitation.useMutation({
+      onSuccess: () => {
+        toast.success("Invitation declined", {
+          description: moment().format("LLLL"),
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled:()=>{
+        utils.invitation.getInvitations.invalidate()
+      }
+    });
     const handleAccept = async(clubId:string,invitationId:string)=>{
       await acceptInvitation({
         clubId,
+        invitationId
+      })
+    }
+    const handleDecline = async(invitationId:string)=>{
+      await declineInvitation({
         invitationId
       })
     }
@@ -52,8 +72,8 @@ const InvitationsList = () => {
                 <Button className="h-8 text-sm" variant={"outline"} disabled={isJoining} onClick={()=>handleAccept(invitation.clubId,invitation.id)}>
                   {isJoining ? "Processing..." : "Join" }
                 </Button>
-                <Button className="h-8 text-sm" variant={"outline"}>
-                  Dismiss
+                <Button className="h-8 text-sm" variant={"outline"} disabled={isDeclining} onClick={()=>handleDecline(invitation.id)}>
+                  {isDeclining ? "Processing..." : "Decline" } 
                 </Button>
               </div>
             </div>

@@ -85,6 +85,24 @@ export const clubRouter = createTRPCRouter({
         });
         return clubs;
     }),
+    kickMember:protectedProcedure.input(z.object({
+        clubId:z.string(),
+        memberId:z.string()
+    })).mutation(async({ctx,input})=>{
+        const {clubId,memberId} = input
+        return await ctx.db.club.update({
+            where:{
+                id:clubId
+            },
+            data:{
+                members:{
+                    disconnect:{
+                        id:memberId
+                    }
+                }
+            }
+        })
+    }),
     getInviteMembers: protectedProcedure.input(z.object({
         clubId: z.string()
     })).query(async ({ ctx, input }) => {

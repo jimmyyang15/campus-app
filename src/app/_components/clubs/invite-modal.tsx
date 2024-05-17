@@ -95,7 +95,7 @@ const InviteModal = () => {
         </li>
       </CredenzaTrigger>
       <CredenzaContent>
-        {isLoading ? <Loading /> : <>
+        {isLoading && !data ? <Loading /> : <>
         <CredenzaHeader>
           <CredenzaTitle className="text-center">Invite members</CredenzaTitle>
         </CredenzaHeader>

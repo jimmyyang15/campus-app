@@ -45,7 +45,18 @@ export const invitationRouter = createTRPCRouter({
                     }
                 }
             })
-        })
+        }),
+        rejectInvitation:protectedProcedure.input(z.object({
+            invitationId:z.string()
+        })).mutation(async({ctx,input})=>{
+            const { invitationId } = input;
+            return await ctx.db.invitation.delete({
+                where:{
+                    id:invitationId
+                }
+            })
+            
+        }),
 
 
 
