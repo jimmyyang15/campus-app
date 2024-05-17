@@ -81,7 +81,7 @@ const InviteModal = () => {
   const memberOptions = data?.map((member)=>{
     return {
       value:member.id,
-      label:member.profile?.fullName
+      label:member?.profile?.fullName
     }
   })
 

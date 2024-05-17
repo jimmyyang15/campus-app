@@ -13,26 +13,27 @@ enum Role {
 }
 
 model User {
-  id                  String              @id @default(uuid())
-  role                Role                @default(USER)
-  email               String              @unique
-  hashedPassword      String?
-  isMentor            Boolean             @default(false)
-  username            String              @unique
-  sessions            Session[]
-  profile             Profile?
-  emailVerified       Boolean             @default(false)
-  emailVerification   EmailVerification?
-  passwordResetToken  PasswordResetToken?
-  posts               Post[]
-  reactions           Reaction[]
-  clubs               Club[]
-  invitationsSent     Invitation[]        @relation("SentInvitations") // Invitations sent by the user
-  invitationsReceived Invitation[]        @relation("ReceivedInvitations") // Invitations received by the user
-  rewardsSent         Reward[]            @relation("SentRewards")
-  rewardsReceived     Reward[]            @relation("ReceivedRewards")
-  comment             Comment[]
-  request             Request[]
+  id                 String              @id @default(uuid())
+  role               Role                @default(USER)
+  email              String              @unique
+  hashedPassword     String?
+  isMentor           Boolean             @default(false)
+  username           String              @unique
+  sessions           Session[]
+  profile            Profile?
+  emailVerified      Boolean             @default(false)
+  emailVerification  EmailVerification?
+  passwordResetToken PasswordResetToken?
+  posts              Post[]
+  reactions          Reaction[]
+  club               Club?               @relation(fields: [clubId], references: [id])
+  invitationsSent    Invitation[]        @relation("SentInvitations") // Invitations sent by the user
+  invitationReceived Invitation?         @relation("ReceivedInvitations") // Invitations received by the user
+  rewardsSent        Reward[]            @relation("SentRewards")
+  rewardsReceived    Reward[]            @relation("ReceivedRewards")
+  comment            Comment[]
+  request            Request?
+  clubId             String?
 }
 
 model Profile {
@@ -150,7 +151,7 @@ model Invitation {
   sender      User     @relation("SentInvitations", fields: [senderId], references: [id]) // Sender of the invitation
   senderId    String // ID of the sender
   recipient   User     @relation("ReceivedInvitations", fields: [recipientId], references: [id]) // Recipient of the invitation
-  recipientId String // ID of the recipient
+  recipientId String   @unique // ID of the recipient
 }
 
 model Reward {
@@ -187,6 +188,6 @@ model Request {
   createdAt DateTime @default(now())
   clubId    String
   club      Club     @relation(fields: [clubId], references: [id])
-  userId    String
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
 }

@@ -136,12 +136,12 @@ export const clubRouter = createTRPCRouter({
                         }
                     },{
                         NOT:{
-                            invitationsReceived:{
-                                some:{
-                                    clubId:input.clubId
-                                }
+                            invitationReceived:{
+                                clubId:input.clubId
                             }
                         }
+                    },{
+                        club:null
                     }
                 ]
 

@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const { user } = useSession();
-  const alreadyInTheClub = user.clubs.find((item) => item.id === club.id);
+  const alreadyInTheClub = user.club.id === club.id;
   const utils = api.useUtils();
   const requestSent = club?.request?.find((item) => item.userId === user.id);
   const { mutateAsync: requestJoin, isLoading: isRequesting } =

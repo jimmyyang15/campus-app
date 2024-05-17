@@ -42,7 +42,7 @@ class CustomAdapter extends PrismaAdapter<PrismaClient> {
           user:{
             include:{
               profile:true,
-              clubs:true,
+              club:true,
             }
           }
         }

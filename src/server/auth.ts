@@ -88,7 +88,7 @@ declare module "lucia" {
       username: string;
       role: string;
       isMentor:boolean;
-      clubs:Club[];
+      club:Club;
     };
   }
 }
@@ -104,7 +104,7 @@ export const lucia = new Lucia(adapter, {
       googleId: attributes.googleId,
       username: attributes.username,
       profile: attributes.profile,
-      clubs: attributes.clubs,
+      club: attributes.club,
       email: attributes.email,
       role: attributes.role,
       isMentor: attributes.isMentor,

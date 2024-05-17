@@ -10,20 +10,20 @@ import { useSession } from "../session-provider";
 import { ClubWithPayload } from "@/types";
 
 const ClubList = () => {
-  const { data: clubs } = api.club.getClubs.useQuery();
+  const { data: clubs,isLoading } = api.club.getClubs.useQuery();
   const { user } = useSession();
   console.log(clubs);
   return (
     <>
-      {!user.isMentor && user.role === "USER" && user.clubs.length === 0 ? (
+      {!user.isMentor && user.role === "USER" && !user.club ? (
         <p className="mb-4 text-center text-xl font-semibold">
           Seems like you're not in a club yet. Try finding one!
         </p>
       ) : null}
 
-      {user.clubs.length === 0 ? (
+      {!user.club ? (
         <>
-          {clubs ? (
+          {(clubs && !isLoading) ? (
             <div className="mb-4 grid grid-cols-2 gap-4">
               {clubs?.map((club, i) => (
                 <ClubItem key={i} club={club as ClubWithPayload} />
@@ -37,13 +37,7 @@ const ClubList = () => {
       ) : (
         <>
           <div className="mb-4 grid grid-cols-2 gap-4">
-            {user.isMentor ? (
-              <>
-                {user?.clubs?.map((club, i) => (
-                  <ClubItem key={i} club={club as ClubWithPayload} />
-                ))}
-              </>
-            ) : null}
+                  <ClubItem  club={user.club as ClubWithPayload} />
 
             {user.role === "ADMIN" ? <CreateModal /> : null}
           </div>
