@@ -6,9 +6,12 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import React from "react";
 import { TbCertificate } from "react-icons/tb";
+import UploadAssignmentModal from "./upload-assignment-modal";
+import { useSession } from "../session-provider";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
+  const { user } = useSession()
   return (
     <aside className="h-screen  flex-[.10] space-y-8 p-4">
       <Link
@@ -20,16 +23,19 @@ const ClubSidebar = () => {
         <Settings />
         <p className="text-sm ">Settings</p>
       </Link>
-      <Link
-        href="/"
+      {!user.isMentor ?       <Link
+        href={`/club/${id}/assignments`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
-          "text-foreground": pathname.includes("/upload"),
+          "text-foreground": pathname.includes("/assignments"),
         })}
       >
-        <FileUp />
-        <p className="text-center text-sm">Upload Assignment</p>
-      </Link>
-      <Link
+        <Settings />
+        <p className="text-sm ">Assignments</p>
+      </Link>:null}
+ 
+
+        {user.isMentor ?<UploadAssignmentModal />:null }
+      {user.isMentor ?   <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
           "text-foreground" : pathname.includes("/submissions")
@@ -37,8 +43,8 @@ const ClubSidebar = () => {
       >
         <ClipboardMinus />
         <p className="text-sm ">Submissions</p>
-      </Link>
-      <Link
+      </Link>:null}
+      {user.isMentor ?  <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
           "text-foreground" : pathname.includes("/certificate")
@@ -46,8 +52,9 @@ const ClubSidebar = () => {
       >
         <TbCertificate size={24} />
         <p className="text-sm ">Certificate</p>
-      </Link>
-      <Link
+      </Link>:null}
+        
+        {user.isMentor ?    <Link
         href={`/club/${id}/requests`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
           "text-foreground" : pathname.includes("/requests")
@@ -55,7 +62,9 @@ const ClubSidebar = () => {
       >
         <Settings />
         <p className="text-sm ">Requests</p>
-      </Link>
+      </Link>:null}
+     
+   
     </aside>
   );
 };
