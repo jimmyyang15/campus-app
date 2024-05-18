@@ -1,21 +1,29 @@
-"use client";
 
 import RequestList from "@/app/_components/request/request-list";
-import { Button } from "@/app/_components/ui/button";
-import { ChevronLeft } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { validateRequest } from "@/server/auth";
+import { db } from "@/server/db";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const RequestsPage = () => {
-    const router = useRouter()
-    const { id } = useParams();
+const RequestsPage = async({ params }:{params:{id:string}}) => {
+    const { user } = await validateRequest();
+    const { id } = params
+    const clubMembers = await db.club.findFirst({
+      where:{
+        id:params.id
+      },
+      select:{
+        members:true
+      }
+    });
+    const memberOfClub = clubMembers?.members.find((member)=>member.id === user?.id);
+  
+    if(!memberOfClub) {
+      return redirect("/");
+    }
   return (
     <main>
-      <Button variant="ghost" onClick={()=>router.back()}>
-        <ChevronLeft size={18} className="mr-2" />
-        Back
-      </Button>
-      <p className="text-center text-lg font-bold">Requests</p>
+  
       <RequestList  clubId={id as string}/>
     </main>
   );

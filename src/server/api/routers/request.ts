@@ -12,6 +12,7 @@ export const requestRouter = createTRPCRouter({
 
         })).mutation(async ({ input, ctx }) => {
             const userId = await ctx.session.user.id;
+            
             return await ctx.db.request.create({
                 data: {
                     clubId: input.clubId,
@@ -100,6 +101,15 @@ export const requestRouter = createTRPCRouter({
 
 
     }),
+
+    userRequest:protectedProcedure.query(async({ctx})=>{
+        const userId = await ctx.session.user.id;
+        return await ctx.db.request.findFirst({
+            where:{
+                userId
+            }
+        })
+    })
 
 
 

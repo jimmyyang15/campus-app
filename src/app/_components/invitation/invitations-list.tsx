@@ -58,6 +58,7 @@ const InvitationsList = () => {
         <Loading />
       ) : (
         <>
+        {invitations?.length !== 0 ?<>
           {invitations?.map((invitation) => (
             <div
               key={invitation.id}
@@ -78,6 +79,8 @@ const InvitationsList = () => {
               </div>
             </div>
           ))}
+        </>:<p className="text-gray-500">Nothing here</p>}
+          
         </>
       )}
     </div>

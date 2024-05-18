@@ -11,6 +11,7 @@ import Link from "next/link";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const { user } = useSession();
+  const { data:userRequest } = api.request.userRequest.useQuery();
   const alreadyInTheClub = user?.club?.id === club.id;
   const utils = api.useUtils();
   const requestSent = club?.request?.find((item) => item.userId === user.id);
@@ -29,6 +30,8 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
       },
       onSettled: () => {
         utils.club.getClubs.invalidate();
+        utils.request.userRequest.invalidate();
+
       },
     });
     const { mutateAsync: cancelRequest, isLoading: isCancelling } =
@@ -46,6 +49,7 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
       },
       onSettled: () => {
         utils.club.getClubs.invalidate();
+        utils.request.userRequest.invalidate();
       },
     });
 
@@ -81,7 +85,7 @@ console.log(!!user.request)
             onClick={()=>requestSent ? handleCancel() : handleRequest()}
             className=""
             variant={"outline"}
-            disabled={isRequesting || isCancelling || requestSent ? false : user.request ? true : false}
+            disabled={isRequesting || isCancelling || requestSent ? false : userRequest ? true : false}
           >
             {isRequesting
               ? "Sending Request"

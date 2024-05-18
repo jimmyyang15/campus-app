@@ -11,7 +11,20 @@ const SettingsClubPage = async ({
 }: {
   params: { id:string };
 }) => {
+  const { user } = await validateRequest();
+  const clubMembers = await db.club.findFirst({
+    where:{
+      id:params.id
+    },
+    select:{
+      members:true
+    }
+  });
+  const memberOfClub = clubMembers?.members.find((member)=>member.id === user?.id);
 
+  if(!memberOfClub) {
+    return redirect("/");
+  }
 
   return (
     <main>
