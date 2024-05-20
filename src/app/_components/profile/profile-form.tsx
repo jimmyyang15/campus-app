@@ -85,6 +85,10 @@ const ProfileForm = ({ user }: Props) => {
         //   // you can use this to show a progress bar
         //   console.log(progress);
         // },
+        
+        options: {
+          replaceTargetUrl: user?.profile.profilePicture as string,
+        },
       });
       const data = {
         ...values,

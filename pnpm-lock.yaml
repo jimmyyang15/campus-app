@@ -37,6 +37,7 @@ specifiers:
   '@trpc/server': ^10.45.1
   '@types/eslint': ^8.56.2
   '@types/jsonwebtoken': ^9.0.6
+  '@types/lodash': ^4.17.4
   '@types/node': ^20.11.20
   '@types/react': ^18.2.57
   '@types/react-dom': ^18.2.19
@@ -98,6 +99,7 @@ specifiers:
   jsonwebtoken: ^9.0.2
   lucia: ^3.0.1
   lucide-react: ^0.341.0
+  mime: ^4.0.3
   mini-svg-data-uri: ^1.4.4
   moment: ^2.30.1
   next: ^14.1.0
@@ -229,6 +231,7 @@ dependencies:
   jsonwebtoken: 9.0.2
   lucia: 3.0.1
   lucide-react: 0.341.0_react@18.2.0
+  mime: 4.0.3
   mini-svg-data-uri: 1.4.4
   moment: 2.30.1
   next: 14.1.0_biqbaboplfbrettd7655fr4n2y
@@ -266,6 +269,7 @@ dependencies:
 devDependencies:
   '@types/eslint': 8.56.3
   '@types/jsonwebtoken': 9.0.6
+  '@types/lodash': 4.17.4
   '@types/node': 20.11.20
   '@types/react': 18.2.60
   '@types/react-dom': 18.2.19
@@ -5391,9 +5395,8 @@ packages:
       '@types/node': 20.11.20
     dev: true
 
-  /@types/lodash/4.17.0:
-    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
-    dev: false
+  /@types/lodash/4.17.4:
+    resolution: {integrity: sha512-wYCP26ZLxaT3R39kiN2+HcJ4kTd3U1waI/cY7ivWYqFP6pW3ZNpvi6Wd6PHZx7T/t8z0vlkXMg3QYLa7DZ/IJQ==}
 
   /@types/mdast/3.0.15:
     resolution: {integrity: sha512-LnwD+mUEfxWMa1QpDraczIn6k0Ee3SMicuYSSzS6ZYl2gKS09EClnJYGd8Du6rfc5r/GZEk5o1mRb8TaTj03sQ==}
@@ -9467,6 +9470,12 @@ packages:
     hasBin: true
     dev: false
 
+  /mime/4.0.3:
+    resolution: {integrity: sha512-KgUb15Oorc0NEKPbvfa0wRU+PItIEZmiv+pyAO2i0oTIVTJhlzMclU7w4RXWQrSOVH5ax/p/CkIO7KI4OyFJTQ==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dev: false
+
   /mini-svg-data-uri/1.4.4:
     resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
     hasBin: true
@@ -10915,7 +10924,7 @@ packages:
     dependencies:
       '@juggle/resize-observer': 3.4.0
       '@types/is-hotkey': 0.1.10
-      '@types/lodash': 4.17.0
+      '@types/lodash': 4.17.4
       direction: 1.0.4
       is-hotkey: 0.2.0
       is-plain-object: 5.0.0
