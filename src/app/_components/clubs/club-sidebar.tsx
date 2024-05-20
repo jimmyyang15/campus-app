@@ -8,6 +8,7 @@ import React from "react";
 import { TbCertificate } from "react-icons/tb";
 import UploadAssignmentModal from "./upload-assignment-modal";
 import { useSession } from "../session-provider";
+import { MdAssignment } from "react-icons/md";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
@@ -29,7 +30,7 @@ const ClubSidebar = () => {
           "text-foreground": pathname.includes("/assignments"),
         })}
       >
-        <Settings />
+        <MdAssignment size={24} />
         <p className="text-sm ">Assignments</p>
       </Link>:null}
  

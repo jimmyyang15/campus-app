@@ -4,22 +4,28 @@ import {
     createTRPCRouter,
     protectedProcedure,
 } from "@/server/api/trpc";
-import { join } from "path";
-import { mkdir, stat, writeFile } from "fs/promises";
-import mime from 'mime'
+
 export const assignmentRouter = createTRPCRouter({
     createAssignment: protectedProcedure.input(z.object({
         name: z.string(),
         desc: z.string().optional(),
         dueDate: z.date(),
-        file: z.string()
+        file: z.string(),
+        clubId:z.string(),
     })).mutation(async ({ input, ctx }) => {
 
         return await ctx.db.assignment.create({
-            data:input
+            data: input
         })
-
-
-
+    }),
+    getAssignments:protectedProcedure.input(z.object({
+        clubId:z.string()
+    })).query(async({input,ctx})=>{
+        const { clubId } = input
+        return await ctx.db.assignment.findMany({
+            where:{
+                clubId
+            }
+        })
     })
 });

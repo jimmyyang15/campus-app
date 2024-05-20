@@ -38,17 +38,18 @@ import { format } from "date-fns";
 import { Calendar } from "@/app/_components/ui/calendar";
 import { api } from "@/trpc/react";
 import { useEdgeStore } from "@/lib/edgestore";
+import { useParams } from "next/navigation";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = React.useState<File>();
+  const { id } = useParams()
   const { edgestore } = useEdgeStore();
   // const [file,setFile] = useState<File | undefined>(undefined)
   const form = useForm<AssignmentSchemaType>({
     resolver: zodResolver(AssignmentSchema),
     defaultValues: {
       name: "",
-      desc: "",
     },
   });
   const { mutateAsync: createAssignment,isLoading:isUploading } =
@@ -78,6 +79,7 @@ const UploadAssignmentModal = () => {
     await createAssignment({
       ...values,
       file: res?.url as string,
+      clubId:id as string
     });
   }
   return (
