@@ -23,8 +23,11 @@ const ClubSidebar = () => {
       >
         <Settings />
         <p className="text-sm ">Settings</p>
+        
       </Link>
-      {!user.isMentor ?       <Link
+      {user.isMentor ?<UploadAssignmentModal />:null }
+
+           <Link
         href={`/club/${id}/assignments`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
           "text-foreground": pathname.includes("/assignments"),
@@ -32,11 +35,10 @@ const ClubSidebar = () => {
       >
         <MdAssignment size={24} />
         <p className="text-sm ">Assignments</p>
-      </Link>:null}
+      </Link>
  
 
-        {user.isMentor ?<UploadAssignmentModal />:null }
-      {user.isMentor ?   <Link
+      {/* {user.isMentor ?   <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{
           "text-foreground" : pathname.includes("/submissions")
@@ -44,7 +46,7 @@ const ClubSidebar = () => {
       >
         <ClipboardMinus />
         <p className="text-sm ">Submissions</p>
-      </Link>:null}
+      </Link>:null} */}
       {user.isMentor ?  <Link
         href="/"
         className={cn("flex flex-col items-center gap-y-1 text-gray-500",{

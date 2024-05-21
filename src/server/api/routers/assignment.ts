@@ -27,5 +27,15 @@ export const assignmentRouter = createTRPCRouter({
                 clubId
             }
         })
+    }),
+    getAssignment:protectedProcedure.input(z.object({
+        assignmentId:z.string()
+    })).query(async({input,ctx})=>{
+        const { assignmentId } = input
+        return await ctx.db.assignment.findUnique({
+            where:{
+                id:assignmentId
+            }
+        })
     })
 });

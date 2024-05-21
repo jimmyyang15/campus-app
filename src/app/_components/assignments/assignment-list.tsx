@@ -7,21 +7,34 @@ import { Button } from "@/app/_components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Loading from "../loading";
 import moment from "moment";
-import { getDownloadUrl } from '@edgestore/react/utils';
+import { useSession } from "../session-provider";
 const AssignmentList = () => {
   const { id } = useParams();
+  const { user } = useSession()
   const router = useRouter();
   const { data: assignments, isLoading } =
     api.assignment.getAssignments.useQuery({
       clubId: id as string,
     });
-    const handleDownload = (url:string) => {
-      console.log('we')
-      getDownloadUrl(
-        url, // the url of the file to download
-        url.split("/").pop() // optional, the name of the file to download
-      );
-    }
+    const handleDownload = (url:string,fileName:string) => {
+      fetch(url)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const url = window.URL.createObjectURL(new Blob([blob]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = fileName || "downloaded-file";
+          document.body.appendChild(link);
+  
+          link.click();
+  
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch((error) => {
+          console.error("Error fetching the file:", error);
+        });
+    };
   return (
     <div>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -34,7 +47,11 @@ const AssignmentList = () => {
               <p>{assignment.name}</p>
               {/* <p className="text-gray-500 text-sm">{assignment.file.split("/").pop()}</p> */}
               <p className="text-gray-500 text-xs">Due in {moment(assignment.dueDate).format('lll')}</p>
-              <Button onClick={()=>handleDownload(assignment.file)}  className="">Download file</Button>
+              <div className="flex items-center gap-x-2">
+              <Button onClick={()=>handleDownload(assignment.file,assignment.file.split("/").pop() as string)}  className="">Download file</Button>
+              <Button onClick={()=>router.push(`/club/${id}/assignments/${assignment.id}/submission`)} className="">{user.isMentor ? 'Submissions' : "Submit"}</Button>
+
+              </div>
             </div>
           ))}
         </div>}

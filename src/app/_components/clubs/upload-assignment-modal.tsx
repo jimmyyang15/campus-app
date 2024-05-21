@@ -39,6 +39,7 @@ import { Calendar } from "@/app/_components/ui/calendar";
 import { api } from "@/trpc/react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useParams } from "next/navigation";
+import { DateTimePicker } from "../date-time-picker";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
@@ -50,6 +51,7 @@ const UploadAssignmentModal = () => {
     resolver: zodResolver(AssignmentSchema),
     defaultValues: {
       name: "",
+      
     },
   });
   const { mutateAsync: createAssignment,isLoading:isUploading } =
@@ -156,47 +158,8 @@ const UploadAssignmentModal = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Due date</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-[240px] pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          classNames={{
-                            caption_label:
-                              "flex items-center text-sm font-medium",
-                            dropdown: "rdp-dropdown bg-card",
-                            dropdown_icon: "ml-2",
-                            dropdown_year: "rdp-dropdown_year ml-3",
-                            button: "",
-                            button_reset: "",
-                          }}
-                          mode="single"
-                          captionLayout="dropdown-buttons"
-                          fromYear={1950}
-                          toYear={new Date().getFullYear()}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+              <DateTimePicker date={field.value} setDate={field.onChange} />
+                
 
                     <FormMessage />
                   </FormItem>
