@@ -29,12 +29,22 @@ export const assignmentRouter = createTRPCRouter({
         })
     }),
     getAssignment:protectedProcedure.input(z.object({
-        assignmentId:z.string()
+        assignmentId:z.string(),
     })).query(async({input,ctx})=>{
         const { assignmentId } = input
         return await ctx.db.assignment.findUnique({
             where:{
                 id:assignmentId
+            },include:{
+                submissions:{
+                    include:{
+                        user:{
+                            include:{
+                                profile:true
+                            }
+                        }
+                    }
+                }
             }
         })
     })
