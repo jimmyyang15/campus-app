@@ -34,7 +34,7 @@ model User {
   comment            Comment[]
   request            Request?
   clubId             String?
-  submissions         Submission[]
+  submissions        Submission[]
 }
 
 model Profile {
@@ -179,11 +179,12 @@ model Assignment {
 model Submission {
   id           String      @id @default(uuid())
   createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
   assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   assignmentId String?
   user         User        @relation(fields: [userId], references: [id])
   userId       String
-  files        String[]
+  files        String
 }
 
 model Request {

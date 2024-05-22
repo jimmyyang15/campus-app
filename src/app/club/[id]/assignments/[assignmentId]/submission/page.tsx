@@ -12,23 +12,29 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
+import { useEdgeStore } from "@/lib/edgestore";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft } from "lucide-react";
 import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SubmissionSchema = z.object({
-  attachment: z.instanceof(File),
+  attachment: z.instanceof(File,{
+    message:"Required"
+  }),
 });
 type SubmissionSchemaType = z.infer<typeof SubmissionSchema>;
 
 const SubmissionPage = () => {
   const { assignmentId } = useParams();
+  const [isSubmitting,setIsSubmitting] = useState<boolean>(false);
   const { user } = useSession();
+  const { edgestore } = useEdgeStore();
+  const utils = api.useUtils();
   const router = useRouter();
   const form = useForm<SubmissionSchemaType>({
     resolver: zodResolver(SubmissionSchema),
@@ -41,6 +47,46 @@ const SubmissionPage = () => {
   const submission = assignment?.submissions.find(
     (item) => item.userId === user.id,
   );
+  const { mutateAsync:submitAssignment } = api.assignment.submitAssignment.useMutation({
+    onSuccess:()=>{
+      form.reset()
+    },
+    onSettled:()=>{
+      utils.assignment.getAssignment.invalidate({
+        assignmentId:assignmentId as string
+      })
+    }
+  })
+
+  const onSubmit = async(values:SubmissionSchemaType) => {
+    const { attachment } = values;
+    try {
+      setIsSubmitting(true)
+      const res = await edgestore.publicFiles.upload({
+        file:attachment,
+        options:{
+          manualFileName:attachment.name as string
+        }
+        // input:{
+        //   name:file.name
+        // }
+        // onProgressChange: (progress) => {
+        //   // you can use this to show a progress bar
+        //   console.log(progress);
+        // },
+      });
+      await submitAssignment({
+        assignmentId:assignmentId as string,
+        file:res.url
+      })
+    } catch(err) {
+      console.log(err)
+    } finally {
+      setIsSubmitting(false)
+    }
+
+    
+  }
   return (
     <div>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -78,7 +124,8 @@ const SubmissionPage = () => {
             <p className="p-4">-</p>
           </div>
           <Form {...form}>
-            <form className="p-2">
+                
+                {submission ? null : <form className="p-2" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="attachment"
@@ -102,11 +149,12 @@ const SubmissionPage = () => {
                 )}
               />
               <div className="flex justify-end">
-                <Button type="submit" className="mt-4 ">
-                  Submit
+                <Button type="submit" className="mt-4 " disabled={isSubmitting}>
+                  {isSubmitting ? "Processing...":"Submit"}
                 </Button>
               </div>
-            </form>
+            </form>}
+            
           </Form>
         </div>
       )}

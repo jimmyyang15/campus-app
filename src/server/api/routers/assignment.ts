@@ -47,5 +47,19 @@ export const assignmentRouter = createTRPCRouter({
                 }
             }
         })
+    }),
+    submitAssignment:protectedProcedure.input(z.object({
+        assignmentId:z.string(),
+        file:z.string()
+    })).mutation(async({ctx,input})=>{
+        const { assignmentId,file } = input;
+        const userId = await ctx.session.user.id;
+        return await ctx.db.submission.create({
+            data:{
+                assignmentId,
+                files:file,
+                userId,
+            }
+        })
     })
 });
