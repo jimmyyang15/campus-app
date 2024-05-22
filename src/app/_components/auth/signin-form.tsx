@@ -17,7 +17,6 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
@@ -121,16 +120,7 @@ const SigninForm = () => {
               <span>or</span>
               <Separator className="flex-[0.5]" />
             </div>
-            <Button
-              onClick={() => {
-                router.push("/auth/signin/google");
-              }}
-              type="button"
-              variant={"outline"}
-              className="w-full"
-            >
-              Sign in with Google
-            </Button>
+  
 
             <p className="text-sm">
               Don't have an account yet?{" "}

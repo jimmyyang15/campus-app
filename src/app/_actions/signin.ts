@@ -1,9 +1,8 @@
 "use server";
-import { Argon2id } from "oslo/password";
+import * as argon2 from "argon2"
 import { cookies } from "next/headers";
 import { lucia } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { db } from "@/server/db";
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas/auth";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
@@ -39,7 +38,7 @@ export async function signin(values: LoginSchemaType) {
 
 
 
-    const validPassword = await new Argon2id().verify(existingUser.hashedPassword as string, password);
+    const validPassword = await argon2.verify(existingUser.hashedPassword as string, password);
     if (!validPassword) {
         return {
             error: "Incorrect username or password"

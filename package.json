@@ -93,6 +93,7 @@
     "@udecode/plate-toggle": "^31.4.0",
     "@udecode/plate-trailing-block": "^31.0.0",
     "arctic": "^1.2.1",
+    "argon2": "^0.40.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
