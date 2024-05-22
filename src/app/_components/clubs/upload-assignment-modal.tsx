@@ -43,19 +43,30 @@ import { DateTimePicker } from "../date-time-picker";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = React.useState<File>();
-  const { id } = useParams()
+  const utils=api.useUtils()
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const { id } = useParams();
   const { edgestore } = useEdgeStore();
   // const [file,setFile] = useState<File | undefined>(undefined)
   const form = useForm<AssignmentSchemaType>({
     resolver: zodResolver(AssignmentSchema),
     defaultValues: {
       name: "",
-      
     },
   });
-  const { mutateAsync: createAssignment,isLoading:isUploading } =
-    api.assignment.createAssignment.useMutation();
+  const { mutateAsync: createAssignment } =
+    api.assignment.createAssignment.useMutation({
+      onSuccess:()=>{
+        setOpen(false)
+        form.reset();
+
+      },
+      onSettled:()=>{
+        utils.assignment.getAssignments.invalidate({
+          clubId:id as string
+        })
+      }
+    });
 
   // 2. Define a submit handler.
   async function onSubmit(values: AssignmentSchemaType) {
@@ -63,27 +74,35 @@ const UploadAssignmentModal = () => {
     // ✅ This will be type-safe and validated.
     console.log(values);
     const { file } = values;
-    const res = await edgestore.publicFiles.upload({
-      file,
-      options:{
-        manualFileName:file.name as string
-      }
-      // input:{
-      //   name:file.name
-      // }
-      // onProgressChange: (progress) => {
-      //   // you can use this to show a progress bar
-      //   console.log(progress);
-      // },
-    });
-    console.log(res);
+    try {
+      setIsUploading(true);
+      const res = await edgestore.publicFiles.upload({
+        file,
+        options: {
+          manualFileName: file.name as string,
+        },
+        // input:{
+        //   name:file.name
+        // }
+        // onProgressChange: (progress) => {
+        //   // you can use this to show a progress bar
+        //   console.log(progress);
+        // },
+      });
 
-    await createAssignment({
-      ...values,
-      file: res?.url as string,
-      clubId:id as string
-    });
+      await createAssignment({
+        ...values,
+        file: res?.url as string,
+        clubId: id as string,
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsUploading(false);
+    }
   }
+
+  console.log(form.watch("dueDate"));
   return (
     <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
@@ -158,15 +177,19 @@ const UploadAssignmentModal = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Due date</FormLabel>
-              <DateTimePicker date={field.value} setDate={field.onChange} />
-                
+                    <DateTimePicker
+                      
+                      granularity="second"
+                      jsDate={field.value}
+                      onJsDateChange={field.onChange}
+                    />
 
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={isUploading}>
-                {isUploading ? "Uploading...":"Upload"}
+                {isUploading ? "Uploading..." : "Upload"}
               </Button>
             </form>
           </Form>

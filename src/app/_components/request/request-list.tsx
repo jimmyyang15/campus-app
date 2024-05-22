@@ -1,3 +1,5 @@
+"use client"
+
 import { api } from "@/trpc/react";
 import React from "react";
 import RequestItem from "./request-item";

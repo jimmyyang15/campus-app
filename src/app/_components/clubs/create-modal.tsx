@@ -43,7 +43,8 @@ const CreateModal = () => {
   const [open, setOpen] = useState(false);
   const { edgestore } = useEdgeStore();
   const { data: mentors } = api.user.getMentors.useQuery();
-  const { mutateAsync: createClub, isLoading } =
+  const [isLoading,setIsLoading] = useState<boolean>(false)
+  const { mutateAsync: createClub } =
     api.club.createClub.useMutation({
       onSuccess: () => {
         setOpen(false);
@@ -69,26 +70,34 @@ const CreateModal = () => {
   });
   async function onSubmit(values: ClubSchemaType) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    if (file) {
-      const res = await edgestore.publicFiles.upload({
-        file,
-        onProgressChange: (progress) => {
-          // you can use this to show a progress bar
-          console.log(progress);
-        },
-      });
-      await createClub({
-        ...values,
-        desc: values?.desc as string,
-        clubImage: res.url as string,
-      });
-    } else {
-      await createClub({
-        ...values,
-        desc: values?.desc as string,
-      });
+    // ✅ This will be type-safe and validated. 
+    try {
+      setIsLoading(true)
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+          onProgressChange: (progress) => {
+            // you can use this to show a progress bar
+            console.log(progress);
+          },
+        });
+        await createClub({
+          ...values,
+          desc: values?.desc as string,
+          clubImage: res.url as string,
+        });
+      } else {
+        await createClub({
+          ...values,
+          desc: values?.desc as string,
+        });
+      }
+    }catch(err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
     }
+    
   }
   return (
     <Credenza onOpenChange={setOpen} open={open}>
