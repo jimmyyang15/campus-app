@@ -68,10 +68,10 @@ const ForgetPasswordForm = () => {
   return (
     <BackgroundDot>
       <BackgroundGradient
-        containerClassName="w-1/3"
-        className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
+        containerClassName="w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3"
+        className=" w-full rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="mb-8 text-center text-xl font-semibold">Reset Password</p>
+        <p className="mb-8 text-center text-base font-semibold md:text-lg lg:text-xl">Reset Password</p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -79,9 +79,9 @@ const ForgetPasswordForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe@gmail.com" {...field} />
+                    <Input className="text-xs sm:text-sm  h-8 md:h-10" placeholder="johndoe@gmail.com" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -91,7 +91,7 @@ const ForgetPasswordForm = () => {
 
             <FormAlert alert={success || error} />
 
-            <Button type="submit" className="w-full " disabled={isPending}>
+            <Button type="submit" className="p-0 text-xs sm:text-sm w-full h-8 md:h-10" disabled={isPending}>
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}

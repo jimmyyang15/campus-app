@@ -13,11 +13,9 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import { Separator } from "@/app/_components/ui/separator";
 import { BackgroundGradient } from "@/app/_components/ui/background-gradient";
 import BackgroundDot from "@/app/_components/ui/background-dot";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
-import Link from "next/link";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
 import { useRouter } from "next/navigation";
@@ -32,7 +30,8 @@ const SignupForm = () => {
   const [error, setError] = useState<AlertType | null>(null);
   const [success, setSuccess] = useState<AlertType | null>(null);
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const [passwordConfirmVisible, setPasswordConfirmVisible] = useState<boolean>(false);
+  const [passwordConfirmVisible, setPasswordConfirmVisible] =
+    useState<boolean>(false);
 
   const router = useRouter();
 
@@ -72,22 +71,32 @@ const SignupForm = () => {
   return (
     <BackgroundDot>
       <BackgroundGradient
-        containerClassName="w-1/3 my-4"
-        className="max-w-xl  rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
+        containerClassName="w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3"
+        className=" w-full rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="mb-8 text-center text-xl font-semibold">
+        <p className="mb-8 text-center text-base font-semibold md:text-lg lg:text-xl">
           Create an account!
         </p>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-2 md:space-y-4"
+          >
             <FormField
               control={form.control}
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm">
+                    Full Name
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} required />
+                    <Input
+                      className="h-8 text-xs sm:text-sm md:h-10 "
+                      placeholder="John Doe"
+                      {...field}
+                      required
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -99,9 +108,16 @@ const SignupForm = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Username
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe12" {...field} required />
+                    <Input
+                      className="h-8 text-xs sm:text-sm md:h-10 "
+                      placeholder="johndoe12"
+                      {...field}
+                      required
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -113,9 +129,16 @@ const SignupForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Email
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe@mail.com" {...field} required />
+                    <Input
+                      className="h-8 text-xs sm:text-sm md:h-10 "
+                      placeholder="johndoe@mail.com"
+                      {...field}
+                      required
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -127,17 +150,19 @@ const SignupForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
+                        className="h-8 text-xs sm:text-sm md:h-10 "
                         type={passwordVisible ? "text" : "password"}
                         placeholder="******"
                         {...field}
                       />
                       <Button
                         onClick={() => setPasswordVisible((prev) => !prev)}
-
                         type="button"
                         variant={"outline"}
                         className="absolute  bottom-0 right-0 cursor-pointer text-input "
@@ -156,16 +181,21 @@ const SignupForm = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Confirm Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
+                        className="h-8 text-xs sm:text-sm md:h-10 "
                         type={passwordConfirmVisible ? "text" : "password"}
                         placeholder="******"
                         {...field}
                       />
                       <Button
-                        onClick={() => setPasswordConfirmVisible((prev) => !prev)}
+                        onClick={() =>
+                          setPasswordConfirmVisible((prev) => !prev)
+                        }
                         type="button"
                         variant={"outline"}
                         className="absolute  bottom-0 right-0 cursor-pointer text-input "
@@ -184,9 +214,16 @@ const SignupForm = () => {
               name="city"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    City
+                  </FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Medan" {...field} />
+                    <Input
+                      className="h-8 text-xs sm:text-sm md:h-10 "
+                      type="text"
+                      placeholder="Medan"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -194,26 +231,22 @@ const SignupForm = () => {
               )}
             />
             <FormAlert alert={success || error} />
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button
+              type="submit"
+              className="w-full text-xs sm:text-sm h-8 md:h-10"
+              disabled={isPending}
+            >
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
               Sign up
             </Button>
-            <div className="flex w-full items-center gap-x-2">
-              <Separator className="flex-[0.5]" />
-              <span>or</span>
-              <Separator className="flex-[0.5]" />
-            </div>
-            <Button type="button" variant={"outline"} className="w-full">
-              Continue with Google
-            </Button>
 
-            <p className="text-sm">
+            <p className="text-xs sm:text-sm ">
               Already have an account?{" "}
               <Button
                 variant={"link"}
-                className="p-0"
+                className="p-0 text-xs sm:text-sm"
                 type="button"
                 onClick={() => router.push("/auth/signin")}
               >

@@ -31,7 +31,9 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     RESEND_API_KEY:z.string(),
-    JWT_SECRET:z.string()
+    JWT_SECRET:z.string(),
+    WEB_PUSH_PRIVATE_KEY:z.string(),
+    WEB_PUSH_EMAIL:z.string()
   },
 
   /**
@@ -41,6 +43,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
+    NEXT_PUBLIC_VAPID_KEY:z.string()
   },
 
   /**
@@ -56,7 +59,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     RESEND_API_KEY:process.env.RESEND_API_KEY,
     JWT_SECRET:process.env.JWT_SECRET,
-    NEXT_PUBLIC_BASE_URL:process.env.NEXT_PUBLIC_BASE_URL
+    NEXT_PUBLIC_BASE_URL:process.env.NEXT_PUBLIC_BASE_URL,
+    NEXT_PUBLIC_VAPID_KEY:process.env.NEXT_PUBLIC_VAPID_KEY,
+    WEB_PUSH_PRIVATE_KEY:process.env.WEB_PUSH_PRIVATE_KEY,
+    WEB_PUSH_EMAIL:process.env.WEB_PUSH_EMAIL
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

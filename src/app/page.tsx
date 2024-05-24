@@ -5,6 +5,7 @@ import { validateRequest } from "@/server/auth";
 
 import MiddleSection from "@/app/_components/home/middle-section";
 import Guidelines from "@/app/_components/layout/guidelines";
+import SendNotification from "./_components/send-notification";
 
 
 export const metadata = {
@@ -39,7 +40,9 @@ export default async function Home() {
   // const posts = await api.post.getPosts.query();
   return (
     <main className="min-h-screen container flex ">
-      <div className="flex-[.15]"></div>
+      <div className="flex-[.15]">
+        <SendNotification />
+      </div>
       <MiddleSection  isAdmin={user?.role==="ADMIN"} />
       <Guidelines />
 

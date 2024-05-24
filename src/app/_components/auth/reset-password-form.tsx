@@ -69,7 +69,9 @@ const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
         containerClassName="w-1/3"
         className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="mb-8 text-center text-xl font-semibold">Reset Password</p>
+        <p className="mb-8 text-center text-base font-semibold md:text-lg lg:text-xl">
+          Reset Password
+        </p>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -77,10 +79,13 @@ const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
+                        className="h-8 text-xs sm:text-sm md:h-10 "
                         type={passwordVisible ? "text" : "password"}
                         placeholder="******"
                         {...field}
@@ -105,10 +110,13 @@ const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm">
+                    Confirm Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
+                        className="h-8 text-xs sm:text-sm md:h-10 "
                         type={passwordConfirmVisible ? "text" : "password"}
                         placeholder="******"
                         {...field}
@@ -133,7 +141,7 @@ const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
 
             <FormAlert alert={success || error} />
 
-            <Button type="submit" className="w-full " disabled={isPending}>
+            <Button type="submit" className="h-8 w-full text-xs sm:text-sm md:h-10 " disabled={isPending}>
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}

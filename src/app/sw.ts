@@ -1,7 +1,6 @@
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { Serwist } from "serwist";
-
+import { BackgroundSyncQueue, Serwist } from "serwist";
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the
 // actual precache manifest. By default, this string is set to
@@ -13,7 +12,11 @@ declare global {
 }
 
 declare const self: ServiceWorkerGlobalScope;
+self.skipWaiting();
 
+self.addEventListener("activate", () => self.clients.claim());
+
+const queue = new BackgroundSyncQueue("myQueueName");
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
@@ -32,4 +35,11 @@ const serwist = new Serwist({
   },
 });
 
+self.addEventListener("push",()=>{
+  console.log('hihi')
+})
+
+
 serwist.addEventListeners();
+
+

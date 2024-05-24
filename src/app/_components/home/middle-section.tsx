@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import CreatePostSection from "./create-post-section";
 import PostItem from "../post/post-item";
 

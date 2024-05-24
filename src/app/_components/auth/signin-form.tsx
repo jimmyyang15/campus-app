@@ -23,7 +23,7 @@ import { AlertType } from "./signup-form";
 import { signin } from "@/app/_actions/signin";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 const SigninForm = () => {
-  const [passwordVisible,setPasswordVisible] = useState<boolean>(false);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
 
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -57,20 +57,28 @@ const SigninForm = () => {
   return (
     <BackgroundDot>
       <BackgroundGradient
-        containerClassName="w-1/3"
-        className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
+        containerClassName="w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3"
+        className=" w-full rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
-        <p className="mb-8 text-center text-xl font-semibold">Welcome Back!</p>
+        <p className="mb-8 text-center text-base font-semibold md:text-lg lg:text-xl">
+          Welcome Back!
+        </p>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 md:space-y-4">
             <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm">
+                    Username
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe12" {...field} />
+                    <Input
+                      className="h-8 text-xs sm:text-sm md:h-10"
+                      placeholder="johndoe12"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -82,15 +90,24 @@ const SigninForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel className="text-xs sm:text-sm ">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input type={passwordVisible ? "text" : "password"} placeholder="******" {...field} />
-                      <Button onClick={()=>setPasswordVisible((prev)=>!prev)} type="button" variant={'outline'} className="absolute  right-0 bottom-0 cursor-pointer text-input ">
-                        {
-                          passwordVisible ? <EyeOff /> : <Eye />
-                        }
-                        
+                      <Input
+                        className="h-8 text-xs sm:text-sm md:h-10 "
+                        type={passwordVisible ? "text" : "password"}
+                        placeholder="******"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() => setPasswordVisible((prev) => !prev)}
+                        type="button"
+                        variant={"outline"}
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                      >
+                        {passwordVisible ? <EyeOff /> : <Eye />}
                       </Button>
                     </div>
                   </FormControl>
@@ -102,31 +119,29 @@ const SigninForm = () => {
             <Button
               onClick={() => router.push("/auth/forget-password")}
               variant={"link"}
-              className="p-0"
+              className="p-0 text-xs sm:text-sm "
               type="button"
             >
               Forgot password?
             </Button>
             <FormAlert alert={error} />
 
-            <Button type="submit" className="w-full " disabled={isPending}>
+            <Button
+              type="submit"
+              className="h-8 w-full text-xs sm:text-sm md:h-10 "
+              disabled={isPending}
+            >
               {isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
               Sign in
             </Button>
-            <div className="flex w-full items-center gap-x-2">
-              <Separator className="flex-[0.5]" />
-              <span>or</span>
-              <Separator className="flex-[0.5]" />
-            </div>
-  
 
-            <p className="text-sm">
+            <p className="text-xs sm:text-sm ">
               Don't have an account yet?{" "}
               <Button
                 variant={"link"}
-                className="p-0"
+                className="p-0 text-xs sm:text-sm"
                 type="button"
                 onClick={() => router.push("/auth/signup")}
               >
