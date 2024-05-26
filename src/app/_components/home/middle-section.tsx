@@ -17,7 +17,7 @@ const MiddleSection = ({ isAdmin }: Props) => {
   const { data: posts } = api.post.getPosts.useQuery();
 
   return (
-    <section className="flex-[.70] border-x">
+    <section className="flex-1 border-x">
       {isAdmin ? <CreatePostSection /> : null}
       {posts ? (
         <>

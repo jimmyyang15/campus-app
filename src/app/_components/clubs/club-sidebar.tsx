@@ -14,15 +14,15 @@ const ClubSidebar = () => {
   const pathname = usePathname();
   const { user } = useSession()
   return (
-    <aside className="h-screen  flex-[.10] space-y-8 p-4">
+    <aside className="h-screen  flex-[.10] space-y-8 p-4 ">
       <Link
         href={`/club/${id}/settings`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
           "text-foreground": pathname.includes("/settings"),
         })}
       >
-        <Settings />
-        <p className="text-sm ">Settings</p>
+        <Settings size={20}/>
+        <p className="text-xs font-semibold">Settings</p>
         
       </Link>
       {user.isMentor ?<UploadAssignmentModal />:null }
@@ -33,8 +33,8 @@ const ClubSidebar = () => {
           "text-foreground": pathname.includes("/assignments"),
         })}
       >
-        <MdAssignment size={24} />
-        <p className="text-sm ">Assignments</p>
+        <MdAssignment size={20} />
+        <p className="text-xs font-semibold" >Assignments</p>
       </Link>
  
 
@@ -53,8 +53,8 @@ const ClubSidebar = () => {
           "text-foreground" : pathname.includes("/certificate")
         })}
       >
-        <TbCertificate size={24} />
-        <p className="text-sm ">Certificate</p>
+        <TbCertificate size={20} />
+        <p className="text-xs font-semibold">Certificate</p>
       </Link>:null}
         
         {user.isMentor ?    <Link
@@ -63,8 +63,8 @@ const ClubSidebar = () => {
           "text-foreground" : pathname.includes("/requests")
         })}
       >
-        <Settings />
-        <p className="text-sm ">Requests</p>
+        <Settings size={20} />
+        <p className="text-xs font-semibold">Requests</p>
       </Link>:null}
      
    

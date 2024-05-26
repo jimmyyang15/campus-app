@@ -107,8 +107,8 @@ const UploadAssignmentModal = () => {
     <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
         <li className="flex cursor-pointer flex-col items-center gap-y-2 text-sm text-gray-500">
-          <FileUp />
-          <p>Upload assignment</p>
+          <FileUp size={20} />
+          <p className="text-xs font-semibold text-center">Upload assignment</p>
         </li>
       </CredenzaTrigger>
       <CredenzaContent>

@@ -9,7 +9,7 @@ export const metadata = {
 };
 const ClubsPage = () => {
   return (
-    <main className="relative mx-auto min-h-screen max-w-4xl p-4 ">
+    <main className="relative mx-auto min-h-screen max-w-3xl p-4 ">
       <ClubList  />
     </main>
   );

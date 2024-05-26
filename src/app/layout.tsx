@@ -12,13 +12,13 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 import SessionProvider from "./_components/session-provider";
 import { Session, User } from "lucia";
 import { Metadata } from "next";
+import { Sidebar } from "./_components/layout/sidebar";
+import AdminPanelLayout from "./_components/layout/home-layout";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
-
 
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3000/"),
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   category: "website",
   generator: "Next.js", // framework used
 
-// the big is here 
-  manifest: "./manifest.webmanifest", 
+  // the big is here
+  manifest: "./manifest.webmanifest",
 };
 export default async function RootLayout({
   children,
@@ -65,9 +65,11 @@ export default async function RootLayout({
             >
               <AuthWrapper user={sessionData.user}>
                 <EdgeStoreProvider>
+                  <AdminPanelLayout>
                     <Navbar user={sessionData.user} />
 
                     {children}
+                  </AdminPanelLayout>
                 </EdgeStoreProvider>
               </AuthWrapper>
             </ThemeProvider>

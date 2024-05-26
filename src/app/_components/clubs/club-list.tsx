@@ -24,7 +24,7 @@ const ClubList = () => {
       {!user.club ? (
         <>
           {clubs && !isLoading ? (
-            <div className="mb-4 grid grid-cols-2 gap-4">
+            <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               {clubs?.map((club, i) => (
                 <ClubItem key={i} club={club as ClubWithPayload} />
               ))}
@@ -36,7 +36,7 @@ const ClubList = () => {
         </>
       ) : (
         <>
-          <div className="mb-4 grid grid-cols-2 gap-4">
+          <div className="mb-4  gap-4">
             <ClubItem club={user.club as ClubWithPayload} />
 
             {user.role === "ADMIN" ? <CreateModal /> : null}
