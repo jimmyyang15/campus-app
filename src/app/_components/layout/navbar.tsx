@@ -93,6 +93,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { authRoutes } from "@/server/authRoutes";
+import PushSubscriptionToggle from "../push-subscription-toggle";
 
 interface Props {
   user: User | null;
@@ -120,6 +121,7 @@ function Navbar({ user }: Props) {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
+          <PushSubscriptionToggle />
           <ModeToggle />
           <AvatarDropdown profile={user?.profile as Profile} />
         </div>
