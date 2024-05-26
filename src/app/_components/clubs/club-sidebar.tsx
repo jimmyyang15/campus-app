@@ -9,20 +9,22 @@ import { TbCertificate } from "react-icons/tb";
 import UploadAssignmentModal from "./upload-assignment-modal";
 import { useSession } from "../session-provider";
 import { MdAssignment } from "react-icons/md";
+import { useMediaQuery } from "@/hooks/use-media-query";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
-  const { user } = useSession()
+  const { user } = useSession();
+  const mobile = useMediaQuery("(max-width: 640px)")
   return (
-    <aside className="h-screen  flex-[.10] space-y-8 p-4 ">
+    <aside className="h-screen  flex-[.10] space-y-8 p-2 sm:p-4 ">
       <Link
         href={`/club/${id}/settings`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
           "text-foreground": pathname.includes("/settings"),
         })}
       >
-        <Settings size={20}/>
-        <p className="text-xs font-semibold">Settings</p>
+        <Settings size={mobile ? 18 : 20} />
+        <p className="text-xs font-semibold hidden sm:block">Settings</p>
         
       </Link>
       {user.isMentor ?<UploadAssignmentModal />:null }
@@ -33,8 +35,8 @@ const ClubSidebar = () => {
           "text-foreground": pathname.includes("/assignments"),
         })}
       >
-        <MdAssignment size={20} />
-        <p className="text-xs font-semibold" >Assignments</p>
+        <MdAssignment size={mobile ? 18 : 20} />
+        <p className="text-xs font-semibold hidden sm:block" >Assignments</p>
       </Link>
  
 
@@ -53,8 +55,8 @@ const ClubSidebar = () => {
           "text-foreground" : pathname.includes("/certificate")
         })}
       >
-        <TbCertificate size={20} />
-        <p className="text-xs font-semibold">Certificate</p>
+        <TbCertificate size={mobile ? 18 : 20}  />
+        <p className="text-xs font-semibold hidden sm:block">Certificate</p>
       </Link>:null}
         
         {user.isMentor ?    <Link
@@ -63,8 +65,8 @@ const ClubSidebar = () => {
           "text-foreground" : pathname.includes("/requests")
         })}
       >
-        <Settings size={20} />
-        <p className="text-xs font-semibold">Requests</p>
+        <Settings size={mobile ? 18 : 20}  />
+        <p className="text-xs font-semibold hidden sm:block">Requests</p>
       </Link>:null}
      
    

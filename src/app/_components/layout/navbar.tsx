@@ -114,8 +114,8 @@ function Navbar({ user }: Props) {
               className="object-cover"
               src="/assets/logo.png"
               alt="logo"
-              width={80}
-              height={80}
+              width={70}
+              height={70}
             />
           </Link>
         </div>

@@ -40,9 +40,12 @@ import { api } from "@/trpc/react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useParams } from "next/navigation";
 import { DateTimePicker } from "../date-time-picker";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
+  const mobile = useMediaQuery("(max-width: 640px)")
+
   const utils=api.useUtils()
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const { id } = useParams();
@@ -107,8 +110,8 @@ const UploadAssignmentModal = () => {
     <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
         <li className="flex cursor-pointer flex-col items-center gap-y-2 text-sm text-gray-500">
-          <FileUp size={20} />
-          <p className="text-xs font-semibold text-center">Upload assignment</p>
+          <FileUp size={mobile ? 18 : 20} />
+          <p className="text-xs font-semibold text-center hidden sm:block">Upload assignment</p>
         </li>
       </CredenzaTrigger>
       <CredenzaContent>
