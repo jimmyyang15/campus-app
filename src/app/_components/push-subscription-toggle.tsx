@@ -6,9 +6,14 @@ import {
   registerPushNotifications,
   unregisterPushNotifications,
 } from "@/lib/pushService";
+import { Button } from "./ui/button";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from "sonner";
+
 const PushSubscriptionToggle = () => {
   const [hasActivePushSubscription, setHasActivePushSubscription] =
     useState<boolean>();
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     async function getActivePushSubscription() {
       const subscription = await getCurrentPushSubscription();
@@ -19,11 +24,27 @@ const PushSubscriptionToggle = () => {
   }, []);
 
   async function setPushNotificationsEnabled(enabled: boolean) {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       if (enabled) {
         await registerPushNotifications();
+        toast.success("Push subscription enabled", {
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
       } else {
         await unregisterPushNotifications();
+        toast.success("Push subscription disabled", {
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
       }
       setHasActivePushSubscription(enabled);
     } catch (error) {
@@ -33,17 +54,31 @@ const PushSubscriptionToggle = () => {
       } else {
         alert("Something went wrong. Please try again!");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
-  if(hasActivePushSubscription === undefined) return null;
+  if (hasActivePushSubscription === undefined) return null;
   return (
-    <Toggle size="sm" aria-label="">
-      {hasActivePushSubscription ? (
-        <IoMdNotifications size='18' onClick={() => setPushNotificationsEnabled(false)} />
+    <Button variant={"outline"} disabled={isLoading}>
+      {isLoading ? (
+        <AiOutlineLoading3Quarters className="animate-spin" />
       ) : (
-        <IoMdNotificationsOff size='18' onClick={()=>setPushNotificationsEnabled(true)}  />
+        <>
+          {hasActivePushSubscription ? (
+            <IoMdNotifications
+              size="18"
+              onClick={() => setPushNotificationsEnabled(false)}
+            />
+          ) : (
+            <IoMdNotificationsOff
+              size="18"
+              onClick={() => setPushNotificationsEnabled(true)}
+            />
+          )}
+        </>
       )}
-    </Toggle>
+    </Button>
   );
 };
 

@@ -35,6 +35,7 @@ model User {
   request            Request?
   clubId             String?
   submissions        Submission[]
+  subscription       Subscription[]
 }
 
 model Profile {
@@ -194,4 +195,15 @@ model Request {
   club      Club     @relation(fields: [clubId], references: [id])
   userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Subscription {
+  id        String   @id @default(uuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

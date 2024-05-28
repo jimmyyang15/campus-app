@@ -2,6 +2,7 @@ import React from "react";
 import { validateRequest } from "@/server/auth";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";
+import SendNotificationBtn from "@/app/_components/clubs/send-notification";
 
 const ClubPage = async ({ params }: { params: { id: string } }) => {
   const { user } = await validateRequest();
@@ -19,6 +20,7 @@ const ClubPage = async ({ params }: { params: { id: string } }) => {
     return redirect("/");
   }
   return <main className="">
+    <SendNotificationBtn />
     
   </main>;
 };

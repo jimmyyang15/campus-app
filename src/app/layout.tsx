@@ -12,7 +12,6 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 import SessionProvider from "./_components/session-provider";
 import { Session, User } from "lucia";
 import { Metadata } from "next";
-import { Sidebar } from "./_components/layout/sidebar";
 import AdminPanelLayout from "./_components/layout/home-layout";
 
 const inter = Inter({

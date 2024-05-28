@@ -34,6 +34,7 @@ export async function registerPushNotifications() {
       applicationServerKey: env.NEXT_PUBLIC_VAPID_KEY,
     });
   
+    console.log(subscription)
     await sendPushSubscriptionToServer(subscription);
   }
   
