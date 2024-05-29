@@ -1,27 +1,30 @@
-"use client"
+"use client";
 
-import React from 'react'
-import { Button } from '../ui/button'
-import { useSession } from '../session-provider'
-import { api } from '@/trpc/react'
-import { useParams } from 'next/navigation'
+import React from "react";
+import { Button } from "../ui/button";
+import { useSession } from "../session-provider";
+import { api } from "@/trpc/react";
+import { useParams } from "next/navigation";
 
 const SendNotificationBtn = () => {
-        const { id } = useParams()
-    const { mutateAsync:notifyMentor } = api.notification.sendNotificationToMentor.useMutation({
-        
-    })
+  const { id } = useParams();
 
-    const handleNotify = async() => {
-        await notifyMentor({
-            clubId:id as string
-        });
+  const handleNotify = async () => {
+    const response = await fetch("/api/notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        clubId: id,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to send notification");
     }
-  return (
-    <Button onClick={handleNotify}>
-        Notify mentor
-    </Button>
-  )
-}
+  };
+  return <Button onClick={handleNotify}>Notify mentor</Button>;
+};
 
-export default SendNotificationBtn
+export default SendNotificationBtn;

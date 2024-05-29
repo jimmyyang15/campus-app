@@ -34,7 +34,7 @@ export const env = createEnv({
     JWT_SECRET:z.string(),
     WEB_PUSH_PRIVATE_KEY:z.string(),
     WEB_PUSH_EMAIL:z.string(),
-    STREAM_SECRET:z.string()
+    // STREAM_SECRET:z.string()
   },
 
   /**
@@ -45,7 +45,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_BASE_URL: z.string(),
     NEXT_PUBLIC_VAPID_KEY:z.string(),
-    NEXT_PUBLIC_STREAM_KEY:z.string(),
+    // NEXT_PUBLIC_STREAM_KEY:z.string(),
 
   },
 
@@ -66,8 +66,8 @@ export const env = createEnv({
     NEXT_PUBLIC_VAPID_KEY:process.env.NEXT_PUBLIC_VAPID_KEY,
     WEB_PUSH_PRIVATE_KEY:process.env.WEB_PUSH_PRIVATE_KEY,
     WEB_PUSH_EMAIL:process.env.WEB_PUSH_EMAIL,
-    STREAM_SECRET:process.env.STREAM_SECRET,
-    NEXT_PUBLIC_STREAM_KEY:process.env.NEXT_PUBLIC_STREAM_KEY
+    // STREAM_SECRET:process.env.STREAM_SECRET,
+    // NEXT_PUBLIC_STREAM_KEY:process.env.NEXT_PUBLIC_STREAM_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
