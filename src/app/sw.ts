@@ -16,39 +16,6 @@ self.skipWaiting();
 
 self.addEventListener("activate", () => self.clients.claim());
 
-self.addEventListener('push', (event) => {
-  console.log('testt')
-  // const notification = event.data?.json();
-  // const {
-  //   title, body, icon
-  // } = notification;
-
-  // console.log("testt")
-  // async function handlePushEvent() {
-  //   const windowClients = await self.clients.matchAll({
-  //     type:"window"
-  //   });
-
-  //   if(windowClients.length >0) {
-  //     const appInForeground = windowClients.some(client=>client.focused);
-  //     if(appInForeground) {
-  //       console.log("App is in foreground, don't show notification");
-  //       return;
-  //     }
-  //   }
-  //   await self.registration.showNotification(title,{
-  //     body,
-  //     icon,
-  //     renotify:true,
-  //     data:{
-  //       title
-  //     }
-      
-  //   } as NotificationOptions )
-  // }
-
-  // event.waitUntil(handlePushEvent())
-});
 
 const queue = new BackgroundSyncQueue("myQueueName");
 const serwist = new Serwist({
@@ -69,6 +36,40 @@ const serwist = new Serwist({
   },
 });
 
+self.addEventListener('push', (event) => {
+  const notification = event.data?.json();
+  const {
+    title, body, icon
+  } = notification;
+
+
+  async function handlePushEvent() {
+    const windowClients = await self.clients.matchAll({
+      type: "window"
+    });
+    console.log('testtsas')
+
+    if (windowClients.length > 0) {
+      const appInForeground = windowClients.some(client => client.focused);
+      if (appInForeground) {
+        console.log("App is in foreground, don't show notification");
+        return;
+      }
+    }
+    await self.registration.showNotification(title, {
+      body,
+      icon,
+      // tag:,
+      // renotify: true,
+      data: {
+        title
+      }
+
+    } as NotificationOptions)
+  }
+
+  event.waitUntil(handlePushEvent())
+});
 
 serwist.addEventListeners();
 
