@@ -39,7 +39,7 @@ const serwist = new Serwist({
 self.addEventListener('push', (event) => {
   const notification = event.data?.json();
   const {
-    title, body, icon
+    title, body, icon,clubId
   } = notification;
 
 
@@ -47,7 +47,6 @@ self.addEventListener('push', (event) => {
     const windowClients = await self.clients.matchAll({
       type: "window"
     });
-    console.log('testtsas')
 
     if (windowClients.length > 0) {
       const appInForeground = windowClients.some(client => client.focused);
@@ -59,17 +58,38 @@ self.addEventListener('push', (event) => {
     await self.registration.showNotification(title, {
       body,
       icon,
-      // tag:,
-      // renotify: true,
-      data: {
-        title
-      }
+      actions: [{ title: "Open App", action: "open_app" }],
+      tag: clubId,
+      renotify: true,
+      data: { clubId },
 
     } as NotificationOptions)
   }
 
   event.waitUntil(handlePushEvent())
 });
+
+self.addEventListener("notificationclick", (event) => {
+  const notification = event.notification;
+  notification.close();
+
+  async function handleNotificationClick() {
+    const windowClients = await self.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true
+    });
+
+    const clubId = notification.data.clubId;
+    if (windowClients.length > 0) {
+      await windowClients[0]?.focus();
+      windowClients[0]?.postMessage({ clubId })
+    } else {
+      self.clients.openWindow(`/club/${clubId}`)
+    }
+  }
+
+  event.waitUntil(handleNotificationClick())
+})
 
 serwist.addEventListeners();
 

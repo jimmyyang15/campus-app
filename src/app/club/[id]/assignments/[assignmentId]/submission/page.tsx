@@ -12,10 +12,17 @@ import {
   FormMessage,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/app/_components/ui/tooltip";
 import { useEdgeStore } from "@/lib/edgestore";
+import { cn, getDownloadFileName, handleDownload } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Download, SquarePen } from "lucide-react";
 import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -23,15 +30,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SubmissionSchema = z.object({
-  attachment: z.instanceof(File,{
-    message:"Required"
+  attachment: z.instanceof(File, {
+    message: "Required",
   }),
 });
 type SubmissionSchemaType = z.infer<typeof SubmissionSchema>;
 
 const SubmissionPage = () => {
   const { assignmentId } = useParams();
-  const [isSubmitting,setIsSubmitting] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { user } = useSession();
   const { edgestore } = useEdgeStore();
   const utils = api.useUtils();
@@ -47,26 +55,28 @@ const SubmissionPage = () => {
   const submission = assignment?.submissions.find(
     (item) => item.userId === user.id,
   );
-  const { mutateAsync:submitAssignment } = api.assignment.submitAssignment.useMutation({
-    onSuccess:()=>{
-      form.reset()
-    },
-    onSettled:()=>{
-      utils.assignment.getAssignment.invalidate({
-        assignmentId:assignmentId as string
-      })
-    }
-  })
+  console.log(submission);
+  const { mutateAsync: submitAssignment } =
+    api.assignment.submitAssignment.useMutation({
+      onSuccess: () => {
+        form.reset();
+      },
+      onSettled: () => {
+        utils.assignment.getAssignment.invalidate({
+          assignmentId: assignmentId as string,
+        });
+      },
+    });
 
-  const onSubmit = async(values:SubmissionSchemaType) => {
+  const onSubmit = async (values: SubmissionSchemaType) => {
     const { attachment } = values;
     try {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
       const res = await edgestore.publicFiles.upload({
-        file:attachment,
-        options:{
-          manualFileName:attachment.name as string
-        }
+        file: attachment,
+        options: {
+          manualFileName: attachment.name as string,
+        },
         // input:{
         //   name:file.name
         // }
@@ -76,17 +86,15 @@ const SubmissionPage = () => {
         // },
       });
       await submitAssignment({
-        assignmentId:assignmentId as string,
-        file:res.url
-      })
-    } catch(err) {
-      console.log(err)
+        assignmentId: assignmentId as string,
+        file: res.url,
+      });
+    } catch (err) {
+      console.log(err);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-
-    
-  }
+  };
   return (
     <div>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -105,7 +113,13 @@ const SubmissionPage = () => {
         <div className="border">
           <div className="flex items-center  border-b text-sm">
             <p className="w-[120px] bg-secondary p-4">Submission status</p>
-            <p className="p-4">{submission ? "Submitted" : "No Attempt"}</p>
+            <p
+              className={cn("p-4", {
+                submission: "text-green-700",
+              })}
+            >
+              {submission ? "Submitted" : "No Attempt"}
+            </p>
           </div>
           <div className="flex items-center border-b text-sm">
             <p className="w-[120px] p-4">Time remaining</p>
@@ -115,7 +129,8 @@ const SubmissionPage = () => {
               </p>
             ) : (
               <p className="p-4 text-destructive">
-                Assignment is overdue by {moment(assignment?.dueDate).format("lll")}
+                Assignment is overdue by{" "}
+                {moment(assignment?.dueDate).format("lll")}
               </p>
             )}
           </div>
@@ -124,37 +139,108 @@ const SubmissionPage = () => {
             <p className="p-4">-</p>
           </div>
           <Form {...form}>
-                
-                {submission ? null : <form className="p-2" onSubmit={form.handleSubmit(onSubmit)}>
-              <FormField
-                control={form.control}
-                name="attachment"
-                render={({ field: { value, onChange, ...fieldProps } }) => (
-                  <FormItem>
-                    <FormLabel>Attachment</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...fieldProps}
-                        placeholder="File"
-                        type="file"
-                        accept="image/*, application/pdf,.zip,.rar,.7zip,.doc, .docx,.ppt, .pptx,.txt"
-                        onChange={(event) =>
-                          onChange(event.target.files && event.target.files[0])
-                        }
-                        className="cursor-pointer"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex justify-end">
-                <Button type="submit" className="mt-4 " disabled={isSubmitting}>
-                  {isSubmitting ? "Processing...":"Submit"}
-                </Button>
+            {submission ? null : (
+              <form className="p-2" onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="attachment"
+                  render={({ field: { value, onChange, ...fieldProps } }) => (
+                    <FormItem>
+                      <FormLabel>Attachment</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...fieldProps}
+                          placeholder="File"
+                          type="file"
+                          accept="image/*, application/pdf,.zip,.rar,.7zip,.doc, .docx,.ppt, .pptx,.txt"
+                          onChange={(event) =>
+                            onChange(
+                              event.target.files && event.target.files[0],
+                            )
+                          }
+                          className="cursor-pointer"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    className="mt-4 "
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Processing..." : "Submit"}
+                  </Button>
+                </div>
+              </form>
+            )}
+            {!!submission ? (
+              <div className="flex items-center  border-b text-sm">
+                <p className="w-[120px]  p-4">File submission</p>
+                <div className="p-4">
+                  <div className="flex items-center gap-x-4">
+                    <p>{submission.files.split("/").pop()}</p>
+
+                    <div className="flex items-center gap-x-2">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger
+                            onClick={() =>
+                              handleDownload(
+                                submission.files,
+                                getDownloadFileName(
+                                  submission?.files,
+                                ) as string,
+                              )
+                            }
+                          >
+                            <Download className="text-gray-500" size={16} />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Download</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <form>
+                              <div className="flex flex-row items-center">
+                                <input
+                                  type="file"
+                                  id="custom-input"
+                                  onChange={(event:React.ChangeEvent<HTMLInputElement>) =>
+                                    setSelectedFile(event.target.files?.[0] as File)
+                                  }
+                                  hidden
+                                />
+                                <label
+                                  htmlFor="custom-input"
+                                  className="cursor-pointer"
+                                >
+                                  <SquarePen
+                                    className="text-gray-500"
+                                    size={16}
+                                  />
+                                </label>
+                           
+                              </div>
+                            </form>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Edit file</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex items-center"></div>
+                </div>
               </div>
-            </form>}
-            
+            ) : null}
           </Form>
         </div>
       )}

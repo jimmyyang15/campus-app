@@ -5,18 +5,26 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// // Service Workers
-// export async function registerServiceWorker() {
-//   if(!("serviceWorker" in navigator)) {
-//     throw Error("Service workers are not supported by this browser")
-//   }
-//   await navigator.serviceWorker.register("../app/sw.ts")
-// }
+export const handleDownload = (url:string,fileName:string) => {
+  fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName || "downloaded-file";
+      document.body.appendChild(link);
 
-// export async function getReadyServiceWorker() {
-//   if(!("serviceWorker" in navigator)) {
-//     throw Error("Service workers are not supported by this browser")
+      link.click();
 
-//   }
-//   return navigator.serviceWorker.ready; 
-// }
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error("Error fetching the file:", error);
+    });
+};
+
+export const getDownloadFileName = (url:string) => {
+  return url.split("/").pop()
+}
