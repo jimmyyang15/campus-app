@@ -11,7 +11,10 @@ const edgeStoreRouter = es.router({
   publicFiles: es.fileBucket({
     maxSize: 1024 * 1024 * 10, // 10MB
     // accept: ["application/pdf"],
-  })
+  }).beforeDelete(({ ctx, fileInfo }) => {
+    console.log('beforeDelete', ctx, fileInfo);
+    return true; // allow delete
+  }),
 });
  
 const handler = createEdgeStoreNextHandler({

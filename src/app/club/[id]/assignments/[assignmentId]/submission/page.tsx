@@ -22,11 +22,13 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { cn, getDownloadFileName, handleDownload } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Download, SquarePen } from "lucide-react";
+import { ChevronLeft, Download, SquarePen, Trash2 } from "lucide-react";
 import moment from "moment";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const SubmissionSchema = z.object({
@@ -40,6 +42,8 @@ const SubmissionPage = () => {
   const { assignmentId } = useParams();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isEditing,setIsEditing] = useState<boolean>(false);
+  const [isRemoving,setIsRemoving] = useState<boolean>(false);
   const { user } = useSession();
   const { edgestore } = useEdgeStore();
   const utils = api.useUtils();
@@ -58,9 +62,7 @@ const SubmissionPage = () => {
   console.log(submission);
   const { mutateAsync: submitAssignment } =
     api.assignment.submitAssignment.useMutation({
-      onSuccess: () => {
-        form.reset();
-      },
+    
       onSettled: () => {
         utils.assignment.getAssignment.invalidate({
           assignmentId: assignmentId as string,
@@ -68,13 +70,41 @@ const SubmissionPage = () => {
       },
     });
 
+    const { mutateAsync:editSubmission } = api.assignment.editSubmission.useMutation({
+      onSettled:()=>{
+        utils.assignment.getAssignment.invalidate({
+      assignmentId: assignmentId as string,
+
+        })
+      }
+    });
+    const { mutateAsync:removeSubmission } = api.assignment.removeSubmission.useMutation({
+      onSuccess: () => {
+        toast.success("File removed", {
+          description: moment().format("LLLL"),
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled:()=>{
+        utils.assignment.getAssignment.invalidate({
+      assignmentId: assignmentId as string,
+
+        })
+      }
+    });
   const onSubmit = async (values: SubmissionSchemaType) => {
     const { attachment } = values;
     try {
       setIsSubmitting(true);
       const res = await edgestore.publicFiles.upload({
         file: attachment,
+        
         options: {
+          
           manualFileName: attachment.name as string,
         },
         // input:{
@@ -95,6 +125,46 @@ const SubmissionPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  const handleEditSubmission = async() => {
+    try {
+      setIsEditing(true)
+      const res = await edgestore.publicFiles.upload({
+        file:selectedFile as File,
+        options: {
+          replaceTargetUrl: submission?.files,
+          manualFileName: selectedFile?.name
+        },
+        // ...
+      });
+      await editSubmission({
+        file:res.url,
+        assignmentId:assignmentId as string 
+      })
+    } catch (error) { 
+      throw new Error("Something went wrong!")
+    } finally {
+setIsEditing(false)
+setSelectedFile(null)
+    }
+   
+  }
+
+  const handleRemoveSubmission = async() => {
+    try {
+      setIsRemoving(true)
+       await edgestore.publicFiles.delete({
+        url: submission?.files as string,
+      });
+      await removeSubmission({
+        submissionId:submission?.id as string
+      })
+    } catch (error) { 
+      throw new Error("Something went wrong!")
+    } finally {
+        setIsRemoving(false)
+    }
+  }
   return (
     <div>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -182,7 +252,11 @@ const SubmissionPage = () => {
                 <p className="w-[120px]  p-4">File submission</p>
                 <div className="p-4">
                   <div className="flex items-center gap-x-4">
-                    <p>{submission.files.split("/").pop()}</p>
+                    <p>
+                      {selectedFile
+                        ? selectedFile?.name
+                        : submission.files.split("/").pop()}
+                    </p>
 
                     <div className="flex items-center gap-x-2">
                       <TooltipProvider>
@@ -212,8 +286,12 @@ const SubmissionPage = () => {
                                 <input
                                   type="file"
                                   id="custom-input"
-                                  onChange={(event:React.ChangeEvent<HTMLInputElement>) =>
-                                    setSelectedFile(event.target.files?.[0] as File)
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>,
+                                  ) =>
+                                    setSelectedFile(
+                                      event.target.files?.[0] as File,
+                                    )
                                   }
                                   hidden
                                 />
@@ -221,12 +299,13 @@ const SubmissionPage = () => {
                                   htmlFor="custom-input"
                                   className="cursor-pointer"
                                 >
-                                  <SquarePen
+        
+                                <SquarePen
                                     className="text-gray-500"
                                     size={16}
                                   />
+                              
                                 </label>
-                           
                               </div>
                             </form>
                           </TooltipTrigger>
@@ -235,6 +314,32 @@ const SubmissionPage = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger onClick={handleRemoveSubmission} disabled={isRemoving}>
+                          {isRemoving ? <AiOutlineLoading3Quarters className="animate-spin" />:<Trash2 className="text-gray-500" size={16} />}
+                            
+                          </TooltipTrigger>
+                          <TooltipContent>
+                          <p>Remove submission</p>
+
+                            
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      {selectedFile ? (
+                        <div className="flex items-center gap-x-2">
+                          <Button className="h-8" disabled={isEditing} onClick={handleEditSubmission}>
+                            {isEditing ? "Processing..." : "Edit"}
+                          </Button>
+                          <Button
+                            className="h-8"
+                            onClick={() => setSelectedFile(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className="mt-4 flex items-center"></div>
