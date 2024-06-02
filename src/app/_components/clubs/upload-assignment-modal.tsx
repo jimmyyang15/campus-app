@@ -105,7 +105,6 @@ const UploadAssignmentModal = () => {
     }
   }
 
-  console.log(form.watch("dueDate"));
   return (
     <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
