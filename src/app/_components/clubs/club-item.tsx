@@ -65,7 +65,6 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
     });
   };
 
-console.log(!!user.request)
   return (
     <div className="space-y-2 overflow-hidden rounded-lg border">
       <Image

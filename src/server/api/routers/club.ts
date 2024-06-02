@@ -33,9 +33,11 @@ export const clubRouter = createTRPCRouter({
             include: {
                 members: {
                     include: {
-                        profile: true
+                        profile: true,
+                        submissions:true
                     }
-                }
+                },
+                
             }
         });
 

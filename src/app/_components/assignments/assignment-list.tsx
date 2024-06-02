@@ -32,7 +32,7 @@ const AssignmentList = () => {
               <p className="text-gray-500 text-xs">Due in {moment(assignment.dueDate).format('lll')}</p>
               <div className="flex items-center gap-x-2">
               <Button onClick={()=>handleDownload(assignment.file,assignment.file.split("/").pop() as string)}  className="">Download file</Button>
-              <Button onClick={()=>router.push(`/club/${id}/assignments/${assignment.id}/submission`)} className="">{user.isMentor ? 'Submissions' : "Submit"}</Button>
+              <Button onClick={()=>router.push(user.isMentor ? `/club/${id}/assignments/${assignment.id}/submissions` :  `/club/${id}/assignments/${assignment.id}/submission`)} className="">{user.isMentor ? 'Submissions' : "Submit"}</Button>
 
               </div>
             </div>

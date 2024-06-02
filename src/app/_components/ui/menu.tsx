@@ -22,8 +22,9 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
   const { user } = useSession();
+  const menuList = getMenuList(pathname);
+
   return (
     <nav className="mt-8 h-full w-full">
       <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 px-2 lg:min-h-[calc(100vh-32px-40px-32px)]">

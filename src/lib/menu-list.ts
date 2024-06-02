@@ -1,3 +1,4 @@
+import { User } from "lucia";
 import {
     Tag,
     Users,

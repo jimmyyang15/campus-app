@@ -12,7 +12,6 @@ import { ClubWithPayload } from "@/types";
 const ClubList = () => {
   const { data: clubs, isLoading } = api.club.getClubs.useQuery();
   const { user } = useSession();
-  console.log(user);
   return (
     <>
       {!user.isMentor && user.role === "USER" && !user.club ? (

@@ -30,6 +30,7 @@ specifiers:
   '@slate-serializers/react': ^2.1.6
   '@t3-oss/env-nextjs': ^0.9.2
   '@tanstack/react-query': ^4.36.1
+  '@tanstack/react-table': ^8.17.3
   '@tiptap/pm': ^2.3.0
   '@tiptap/react': ^2.3.0
   '@tiptap/starter-kit': ^2.3.0
@@ -182,6 +183,7 @@ dependencies:
   '@slate-serializers/react': 2.1.6
   '@t3-oss/env-nextjs': 0.9.2_ophst5sms6obxk2veobtcst52a
   '@tanstack/react-query': 4.36.1_biqbaboplfbrettd7655fr4n2y
+  '@tanstack/react-table': 8.17.3_biqbaboplfbrettd7655fr4n2y
   '@tiptap/pm': 2.3.0
   '@tiptap/react': 2.3.0_h5xc5gwmcumlbhykzxjmq7kyou
   '@tiptap/starter-kit': 2.3.0_@tiptap+pm@2.3.0
@@ -6881,6 +6883,23 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/react-table/8.17.3_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-5gwg5SvPD3lNAXPuJJz1fOCEZYk9/GeBFH3w/hCgnfyszOIzwkwgp5I7Q4MJtn0WECp84b5STQUDdmvGi8m3nA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@tanstack/table-core': 8.17.3
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /@tanstack/table-core/8.17.3:
+    resolution: {integrity: sha512-mPBodDGVL+fl6d90wUREepHa/7lhsghg2A3vFpakEhrhtbIlgNAZiMr7ccTgak5qbHqF14Fwy+W1yFWQt+WmYQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /@tiptap/core/2.3.0_@tiptap+pm@2.3.0:
