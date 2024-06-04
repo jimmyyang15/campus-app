@@ -72,20 +72,32 @@ export const clubRouter = createTRPCRouter({
 
     }),
 
-    getMembers: protectedProcedure.query(async ({ ctx }) => {
-        const clubs = await ctx.db.club.findMany({
-            orderBy: {
-                createdAt: 'desc'
+    getMembers: protectedProcedure.input(z.object({
+        clubId:z.string()
+    })).query(async ({ ctx,input }) => {
+        const { clubId } = input;
+        const members = await ctx.db.club.findUnique({
+            where:{
+                id:clubId
             },
-            include: {
-                request: {
-                    include: {
-                        user: true
+       
+           
+            select:{
+                
+                members:{
+                    where:{
+                        NOT:{
+                            isMentor:true
+                        }
+                    },
+                    include:{
+                        profile:true
                     }
-                }
+                },
+                
             }
         });
-        return clubs;
+        return members;
     }),
     kickMember:protectedProcedure.input(z.object({
         clubId:z.string(),

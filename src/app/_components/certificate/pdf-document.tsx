@@ -6,6 +6,14 @@ import {
 	StyleSheet,
 	Text,
 } from "@react-pdf/renderer"
+
+import { Montserrat } from 'next/font/google'
+ 
+// If loading a variable font, you don't need to specify the font weight
+// const montserrat = Montserrat({
+// 	subsets:['latin']
+// })
+
 const styles = StyleSheet.create({
 	page: {
 		backgroundColor: "#ffffff",
@@ -26,7 +34,6 @@ const styles = StyleSheet.create({
 		transform: "translateY(-50%)",
 		textTransform: "uppercase",
 		textAlign: "center",
-		// fontFamily: "Lora",
 	},
 	field: {
 		width: "100%",
@@ -41,12 +48,14 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	date: {
-		color: "#000000",
-		fontSize: "16px",
-		fontWeight: "bold",
+		color: "#1b1b1b",
+		fontSize: "14px",
+		// fontWeight: "bold",
+		textAlign:"center",
+		// width:"100%",
 		position: "absolute",
-		top: "49%",
-		right: "16.5%",
+		bottom: "37.9%",
+		left:'16%',
 	},
 	issueDate: {
 		color: "#000000",
@@ -58,16 +67,16 @@ const styles = StyleSheet.create({
 	},
 })
 
-const PdfDocument = () => {
+const PdfDocument = ({ name,clubName}:{name:string,clubName:string}) => {
 
 
 	return (
 		<Document>
 			<Page size="A4" style={styles.page} orientation="landscape">
 				<Image src={'/assets/certificate.png'} style={styles.img} />
-				<Text style={styles.name}>Andrian Lysander</Text>
-				<Text style={styles.field}>Tit tit</Text>
-				<Text style={styles.date}>fkoff</Text>
+				<Text style={styles.name}>{name}</Text>
+				{/* <Text style={styles.field}>Tit tit</Text> */}
+				<Text style={styles.date}>For participating and completing the extracurricular activity of {clubName}</Text>
 				{/* <Text style={styles.issueDate}></Text> */}
 			</Page>
 		</Document>
