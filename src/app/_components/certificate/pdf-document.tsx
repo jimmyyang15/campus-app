@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 	},
 })
 
-const PdfDocument = ({ name,clubName}:{name:string,clubName:string}) => {
+const PdfComponent = ({ name,clubName}:{name:string,clubName:string}) => {
 
 
 	return (
@@ -83,4 +83,4 @@ const PdfDocument = ({ name,clubName}:{name:string,clubName:string}) => {
 	)
 }
 
-export default PdfDocument
+export default PdfComponent
