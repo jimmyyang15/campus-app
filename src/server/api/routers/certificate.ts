@@ -48,5 +48,13 @@ export const certificateRouter = createTRPCRouter({
                 }
             }
         })
+    }),
+    getCertificate:protectedProcedure.query(async({ctx})=>{
+        const userId = await ctx.session.user.id;
+        return await ctx.db.certificate.findUnique({
+            where:{
+                userId
+            }
+        })
     })
 });

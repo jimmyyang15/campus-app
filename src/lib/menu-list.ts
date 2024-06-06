@@ -37,7 +37,7 @@ import {
             active: pathname === "/",
             icon:  MdOutlineHome,
             role:""
-          }
+          },
         ]
       },
       {
