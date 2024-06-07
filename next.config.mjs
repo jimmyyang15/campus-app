@@ -6,9 +6,11 @@
 // import { createRequire } from "module";
 await import("./src/env.js");
 import withSerwistInit from "@serwist/next";
+
 // const withPWA = require('next-pwa')({
 //   dest: 'public',
 // });
+
 
 const withSerwist = withSerwistInit({
   // Note: This is only an example. If you use Pages Router,
@@ -22,6 +24,7 @@ const withSerwist = withSerwistInit({
 /** @type {import("next").NextConfig} */
 const config = {
   webpack: (config) => {
+    
     config.module.rules.push({
       test: /\.node/,
       use: 'raw-loader',
