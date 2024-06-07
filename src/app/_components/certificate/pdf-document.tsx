@@ -7,7 +7,6 @@ import {
 	Text,
 } from "@react-pdf/renderer"
 
-import { Montserrat } from 'next/font/google'
  
 // If loading a variable font, you don't need to specify the font weight
 // const montserrat = Montserrat({
