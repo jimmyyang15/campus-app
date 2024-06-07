@@ -22,6 +22,10 @@ const withSerwist = withSerwistInit({
 /** @type {import("next").NextConfig} */
 const config = {
   webpack: (config) => {
+    config.module.rules.push({
+      test: /\.node/,
+      use: 'raw-loader',
+    });
     config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
     return config;
   },

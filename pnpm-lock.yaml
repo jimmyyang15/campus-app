@@ -124,6 +124,7 @@ specifiers:
   prettier: ^3.2.5
   prettier-plugin-tailwindcss: ^0.5.11
   prisma: ^5.10.2
+  raw-loader: ^4.0.2
   react: 18.2.0
   react-aria: ^3.33.1
   react-day-picker: ^8.10.1
@@ -313,6 +314,7 @@ devDependencies:
   prettier: 3.2.5
   prettier-plugin-tailwindcss: 0.5.11_prettier@3.2.5
   prisma: 5.10.2
+  raw-loader: 4.0.2_webpack@5.91.0
   serwist: 9.0.2_typescript@5.3.3
   tailwindcss: 3.4.1
   typescript: 5.3.3
@@ -9556,7 +9558,6 @@ packages:
 
   /big.js/5.2.2:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
-    dev: false
 
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
@@ -10252,7 +10253,6 @@ packages:
   /emojis-list/3.0.0:
     resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
     engines: {node: '>= 4'}
-    dev: false
 
   /enhanced-resolve/5.16.1:
     resolution: {integrity: sha512-4U5pNsuDl0EhuZpq46M5xPslstkviJuhrdobaRDBk2Jy2KO37FDAJl4lb2KlNabxT0m4MTK2UHNrsAcphE8nyw==}
@@ -11768,7 +11768,6 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: false
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -11915,7 +11914,6 @@ packages:
       big.js: 5.2.2
       emojis-list: 3.0.0
       json5: 2.2.3
-    dev: false
 
   /locate-path/5.0.0:
     resolution: {integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==}
@@ -13135,6 +13133,17 @@ packages:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
       safe-buffer: 5.2.1
+
+  /raw-loader/4.0.2_webpack@5.91.0:
+    resolution: {integrity: sha512-ZnScIV3ag9A4wPX/ZayxL/jZH+euYb6FcUinPcgiQW0+UBtEv0O6Q3lGd3cqJ+GHH+rksEv3Pj99oxJ3u3VIKA==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      webpack: ^4.0.0 || ^5.0.0
+    dependencies:
+      loader-utils: 2.0.4
+      schema-utils: 3.3.0
+      webpack: 5.91.0
+    dev: true
 
   /react-aria/3.33.1_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-hFC3K/UA+90Krlx2IgRTgzFbC6FSPi4pUwHT+STperPLK+cTEHkI+3Lu0YYwQSBatkgxnIv9+GtFuVbps2kROw==}
