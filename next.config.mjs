@@ -23,6 +23,13 @@ const withSerwist = withSerwistInit({
 
 /** @type {import("next").NextConfig} */
 const config = {
+  experimental: {
+    serverComponentsExternalPackages: [
+        '@react-email/components',
+        '@react-email/render',
+        '@react-email/tailwind'
+    ]
+},
   webpack: (config) => {
     
     config.module.rules.push({
