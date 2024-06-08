@@ -55,10 +55,12 @@ const {
 module.exports = async (phase) => {
   /** @type {import("next").NextConfig} */
   const nextConfig = {
+
     webpack: (
       config,
       { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
     ) => {
+      
       config.plugins = config.plugins || [];
       config.plugins.push(
         new NormalModuleReplacementPlugin(
@@ -75,6 +77,9 @@ module.exports = async (phase) => {
     },
     eslint: {
       ignoreDuringBuilds: true,
+    },
+    experimental: {
+      serverComponentsExternalPackages: ["@node-rs/argon2", "@node-rs/bcrypt"],
     },
     images: {
       remotePatterns: [
