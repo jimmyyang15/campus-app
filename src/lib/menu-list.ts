@@ -8,6 +8,7 @@ import {
   } from "lucide-react";
   import { FaRegUser } from "react-icons/fa6";
   import { MdOutlineGroups2,MdOutlineHome,MdOutlineInsertInvitation  } from "react-icons/md";
+import { TbCertificate } from "react-icons/tb";
   
   type Submenu = {
     href: string;
@@ -37,7 +38,7 @@ import {
             active: pathname === "/",
             icon:  MdOutlineHome,
             role:""
-          },
+          }
         ]
       },
       {
@@ -49,6 +50,14 @@ import {
             icon: MdOutlineGroups2,
             role:""
        
+          },
+          
+          {
+            href: "/certificate",
+            label: "Certificate",
+            active: pathname === "/certificate",
+            icon:  TbCertificate,
+            role:"student"
           },
           {
             href: "/invitations",

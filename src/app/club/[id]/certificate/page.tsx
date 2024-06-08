@@ -6,7 +6,7 @@ const CertificatePage = () => {
   
   return (
     <div>
-      {/* <CertificateComponent /> */}
+      <CertificateComponent />
     </div>
   )
 }
