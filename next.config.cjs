@@ -66,11 +66,11 @@ module.exports = async (phase) => {
           path.resolve(__dirname, "./renderEmailFix.js"),
         ),
       );
-      // config.module.rules.push({
-      //   test: /\.node/,
-      //   use: "raw-loader",
-      // });
-      // config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
+      config.module.rules.push({
+        test: /\.node/,
+        use: "raw-loader",
+      });
+      config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
       return config;
     },
     eslint: {
