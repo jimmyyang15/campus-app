@@ -28,6 +28,7 @@ const config = {
     "no-var": 0,
     " @typescript-eslint/unbound-method":"off",
     "@typescript-eslint/no-floating-promises":"off",
+    "@typescript-eslint/no-misused-promises":"off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
