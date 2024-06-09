@@ -52,7 +52,7 @@ export const columns: ColumnDef<Certificate>[] = [
 
   {
     accessorKey: "fullName",
-    header: ({ column }) => {
+    header: function FullNameHeaderComponent({ column }) {
       return (
         <Button
           variant="ghost"
@@ -64,8 +64,9 @@ export const columns: ColumnDef<Certificate>[] = [
       );
     },
 
-    cell: ({ row }) => (
-      <div className="flex items-center gap-x-2">
+    cell: function FullNameCellComponent({ row }) {
+      return (
+        <div className="flex items-center gap-x-2">
         <Avatar>
           <AvatarImage
             alt="@shadcn"
@@ -82,12 +83,16 @@ export const columns: ColumnDef<Certificate>[] = [
         </Avatar>
         <p>{row.getValue("fullName")}</p>
       </div>
-    ),
+      )
+    }
+
+      
+    ,
   },
 
   {
     id: "actions",
-    header: ({ column }) => {
+    header: function ActionComponent({ column })  {
       const { mutateAsync: sendCertificate } =
         api.certificate.sendCertificate.useMutation();
       const { id } = useParams();

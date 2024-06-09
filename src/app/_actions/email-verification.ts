@@ -2,12 +2,10 @@
 
 import { db } from "@/server/db";
 import { TimeSpan, createDate } from "oslo";
-import { generateRandomString, alphabet } from "oslo/crypto";
 import jwt from "jsonwebtoken"
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { EmailVerificationSchemaType } from "@/lib/schemas/auth";
 import { sendVerificationEmail } from "@/lib/mail";
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {

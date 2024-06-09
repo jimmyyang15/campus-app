@@ -5,7 +5,7 @@ import { db } from "@/server/db";
 import { generateId } from "lucia";
 import { TimeSpan, createDate } from "oslo";
 import { findUserByEmail } from "./user";
-import { sendResetPasswordToken, sendVerificationEmail } from "@/lib/mail";
+import { sendResetPasswordToken } from "@/lib/mail";
 import { sha256 } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
 import { lucia } from "@/server/auth";
