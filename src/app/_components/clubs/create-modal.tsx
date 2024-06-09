@@ -36,31 +36,56 @@ import { UserWithProfile } from "@/types";
 import { useEdgeStore } from "@/lib/edgestore";
 import moment from "moment";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import Link from "next/link";
 const CreateModal = () => {
   const [file, setFile] = useState<File>();
   const utils = api.useUtils();
 
+  const daysValue = () => {
+    return [{
+      value:"1",
+      label:"Monday"
+    },{
+      value:"2",
+      label:"Tuesday"
+    },{
+      value:"3",
+      label:"Wednesday"
+    },{
+      value:"4",
+      label:"Thursday"
+    },{
+      value:"5",
+      label:"Friday"
+    },{
+      value:"6",
+      label:"Saturday"
+    },{
+      value:"0",
+      label:"Sunday"
+    }]
+  }
   const [open, setOpen] = useState(false);
   const { edgestore } = useEdgeStore();
   const { data: mentors } = api.user.getMentors.useQuery();
-  const [isLoading,setIsLoading] = useState<boolean>(false)
-  const { mutateAsync: createClub } =
-    api.club.createClub.useMutation({
-      onSuccess: () => {
-        setOpen(false);
-        toast.success("Club created ", {
-          description: moment().format("LLLL"),
-          // action: {
-          //   label: "Dismiss",
-          //   onClick: () => toast.dismiss(),
-          // },
-          closeButton: true,
-        });
-      },
-      onSettled: () => {
-        utils.club.getClubs.invalidate();
-      },
-    });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { mutateAsync: createClub } = api.club.createClub.useMutation({
+    onSuccess: () => {
+      setOpen(false);
+      toast.success("Club created ", {
+        description: moment().format("LLLL"),
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
+    },
+    onSettled: () => {
+      utils.club.getClubs.invalidate();
+    },
+  });
   const form = useForm<ClubSchemaType>({
     resolver: zodResolver(ClubSchema),
     defaultValues: {
@@ -70,9 +95,9 @@ const CreateModal = () => {
   });
   async function onSubmit(values: ClubSchemaType) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated. 
+    // ✅ This will be type-safe and validated.
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       if (file) {
         const res = await edgestore.publicFiles.upload({
           file,
@@ -92,12 +117,11 @@ const CreateModal = () => {
           desc: values?.desc as string,
         });
       }
-    }catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-    
   }
   return (
     <Credenza onOpenChange={setOpen} open={open}>
@@ -148,6 +172,56 @@ const CreateModal = () => {
                     </FormItem>
                   )}
                 />
+                <div className="space-y-2">
+                  <FormLabel>Time activity</FormLabel>
+                  <div className="flex items-center gap-x-4">
+                    <FormField
+                      control={form.control}
+                      name="time"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input
+                              type="time"
+                              placeholder="Type here..."
+                              {...field}
+                            />
+                          </FormControl>
+                          {/* <FormDescription>
+                        This is the club's description
+                      </FormDescription> */}
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="day"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select day" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {daysValue().map((item)=>(
+                                <SelectItem key={item.value} value={item.value as string}>{item.label}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                   
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
                 <SelectMentors mentors={mentors as UserWithProfile[]} />
                 <SingleImageDropzone
                   className="w-full"

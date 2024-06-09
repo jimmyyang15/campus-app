@@ -25,7 +25,7 @@ const UserCertificate = () => {
         <ChevronLeft size={18} className="mr-2" />
         Back
       </Button>
-      <h3>Your ceriticate</h3>
+      <h3>Your certificate</h3>
       {isLoading ? (
         <Loading />
       ) : (

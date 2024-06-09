@@ -172,7 +172,7 @@ export const columns: ColumnDef<Certificate>[] = [
     },
     size: 300,
 
-    cell: function AcrtionComponent({ row }) {
+    cell: function ActionComponent({ row }) {
       const { id } = useParams();
 
       const [sendingCertificate, setSendingCertificate] =

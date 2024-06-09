@@ -68,6 +68,7 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   return (
     <div className="space-y-2 overflow-hidden rounded-lg border">
       <Image
+      unoptimized={true}
         src={club.clubImage}
         alt="club image"
         width={0}
