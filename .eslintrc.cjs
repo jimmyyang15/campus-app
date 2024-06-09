@@ -14,21 +14,20 @@ const config = {
     // These opinionated rules are enabled in stylistic-type-checked above.
     // Feel free to reconfigure them to your own preference.
     "@typescript-eslint/array-type": "off",
-    "@typescript-eslint/no-unsafe-argument":"off",
-    "@typescript-eslint/no-empty-interface":"off",
-    "@typescript-eslint/no-empty-function":"off",
-    "@typescript-eslint/no-misused-promises":"off",
-    "@typescript-eslint/no-unsafe-member-access":"off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
-    "@typescript-eslint/no-unsafe-member-access":"off",
-    "@typescript-eslint/restrict-template-expressions":"off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
     "react/no-unescaped-entities": 0,
-    "@typescript-eslint/await-thenable":"off",
+    "@typescript-eslint/await-thenable": "off",
     "no-var": 0,
-    " @typescript-eslint/unbound-method":"off",
-    "@typescript-eslint/no-floating-promises":"off",
-    "@typescript-eslint/no-misused-promises":"off",
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
@@ -38,12 +37,7 @@ const config = {
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/require-await": "off",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        checksVoidReturn: { attributes: false },
-      },
-    ],
+ 
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
     "@typescript-eslint/no-unnecessary-type-assertion": "off",
     "@typescript-eslint/no-explicit-any": "off",

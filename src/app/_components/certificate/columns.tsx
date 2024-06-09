@@ -87,12 +87,12 @@ export const columns: ColumnDef<Certificate>[] = [
     }
 
       
-    ,
+    
   },
 
   {
     id: "actions",
-    header: function ActionComponent({ column })  {
+    header: function ActionHeader({ column })  {
       const { mutateAsync: sendCertificate } =
         api.certificate.sendCertificate.useMutation();
       const { id } = useParams();
@@ -172,7 +172,7 @@ export const columns: ColumnDef<Certificate>[] = [
     },
     size: 300,
 
-    cell: ({ row }) => {
+    cell: function AcrtionComponent({ row }) {
       const { id } = useParams();
 
       const [sendingCertificate, setSendingCertificate] =
