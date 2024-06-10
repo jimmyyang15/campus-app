@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 export const signOut = async () => {
     try {
-      const { session } = await validateRequest()
+      const  session = await validateRequest()
   
       if (!session) {
         return {
