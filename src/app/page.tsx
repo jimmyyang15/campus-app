@@ -5,7 +5,6 @@ import { validateRequest } from "@/server/auth";
 
 import MiddleSection from "@/app/_components/home/middle-section";
 import Guidelines from "@/app/_components/layout/guidelines";
-import SendNotification from "./_components/send-notification";
 import ContentLayout from "./_components/layout/content-layout";
 
 
