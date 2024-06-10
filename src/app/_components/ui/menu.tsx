@@ -22,7 +22,7 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const { user } = useSession();
+  const user = useSession();
   const menuList = getMenuList(pathname);
 
   return (
