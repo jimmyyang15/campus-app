@@ -8,8 +8,9 @@ import React from "react";
 import { TbCertificate } from "react-icons/tb";
 import UploadAssignmentModal from "./upload-assignment-modal";
 import { useSession } from "../session-provider";
-import { MdAssignment } from "react-icons/md";
+import { MdAssignment, MdOutlineHome } from "react-icons/md";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { TbUserQuestion } from "react-icons/tb";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
@@ -17,6 +18,17 @@ const ClubSidebar = () => {
   const mobile = useMediaQuery("(max-width: 640px)");
   return (
     <aside className="h-screen  flex-[.10] space-y-8 p-2 sm:p-4 ">
+      <Link
+        href={`/club/${id}`}
+        className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
+          "text-foreground": pathname.includes(`/club/${id}`),
+        })}
+      >
+              <MdOutlineHome size={mobile ? 21 : 23} />
+
+        <p className="hidden text-xs font-semibold sm:block">Home</p>
+      </Link>
+
       <Link
         href={`/club/${id}/settings`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
@@ -66,7 +78,7 @@ const ClubSidebar = () => {
             "text-foreground": pathname.includes("/requests"),
           })}
         >
-          <Settings size={mobile ? 18 : 20} />
+          <TbUserQuestion size={mobile ? 21 : 23} />
           <p className="hidden text-xs font-semibold sm:block">Requests</p>
         </Link>
       ) : null}

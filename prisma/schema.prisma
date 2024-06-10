@@ -29,8 +29,6 @@ model User {
   club               Club?               @relation(fields: [clubId], references: [id])
   invitationsSent    Invitation[]        @relation("SentInvitations") // Invitations sent by the user
   invitationReceived Invitation?         @relation("ReceivedInvitations") // Invitations received by the user
-  rewardsSent        Reward[]            @relation("SentRewards")
-  rewardsReceived    Reward[]            @relation("ReceivedRewards")
   comment            Comment[]
   request            Request?
   clubId             String?
@@ -113,29 +111,20 @@ model Comment {
 }
 
 model Club {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  name        String
-  desc        String?
-  members     User[]
-  posts       Post[]
-  clubImage   String
-  schedules   Schedule[]
-  albums      Album[]
-  assignments Assignment[]
-  request     Request[]
-  invitation  Invitation[]
-}
-
-model Schedule {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  date      DateTime
-  club      Club?    @relation(fields: [clubId], references: [id])
-  clubId    String?
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  name         String
+  desc         String?
+  members      User[]
+  posts        Post[]
+  clubImage    String
+  albums       Album[]
+  assignments  Assignment[]
+  request      Request[]
+  invitation   Invitation[]
+  timeActivity String
+  dayActivity  String
 }
 
 model Album {
@@ -157,15 +146,6 @@ model Invitation {
   recipientId String   @unique // ID of the recipient
 }
 
-model Reward {
-  id          String @id @default(uuid())
-  file        String
-  sender      User   @relation("SentRewards", fields: [senderId], references: [id])
-  senderId    String
-  recipient   User   @relation("ReceivedRewards", fields: [recipientId], references: [id])
-  recipientId String
-}
-
 model Assignment {
   id          String       @id @default(uuid())
   createdAt   DateTime     @default(now())
@@ -182,7 +162,7 @@ model Submission {
   id           String      @id @default(uuid())
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
-  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id],onDelete: Cascade)
   assignmentId String?
   user         User        @relation(fields: [userId], references: [id])
   userId       String

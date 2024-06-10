@@ -5,6 +5,7 @@ import {
     protectedProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
+import { time } from "console";
 
 export const clubRouter = createTRPCRouter({
     getClubs: protectedProcedure.query(async ({ ctx }) => {
@@ -46,10 +47,12 @@ export const clubRouter = createTRPCRouter({
         name: z.string(),
         desc: z.string().optional(),
         clubImage: z.string().optional(),
-        mentorId: z.string()
+        mentorId: z.string(),
+        time:z.string(),
+        day:z.string()
     })).mutation(async ({ input, ctx }) => {
         const userRole = await ctx.session.user.role;
-        const { name, desc, mentorId, clubImage } = input
+        const { name, desc, mentorId, clubImage,time,day } = input
         if (userRole !== "ADMIN") {
             throw new TRPCError({
                 code: "FORBIDDEN",
@@ -60,6 +63,8 @@ export const clubRouter = createTRPCRouter({
         return await ctx.db.club.create({
             data: {
                 name,
+                timeActivity:time,
+                dayActivity:day,
                 desc: desc as string,
                 clubImage: clubImage as string,
                 members: {

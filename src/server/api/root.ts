@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 import {  certificateRouter, submissionRouter,assignmentRouter,notificationRouter, postRouter,commentRouter,userRouter,clubRouter,reactionRouter,profileRouter, requestRouter, invitationRouter } from "./routers";
+import { authRouter } from "./routers/auth";
 
 /**
  * This is the primary router for your server.
@@ -18,7 +19,8 @@ export const appRouter = createTRPCRouter({
   assignment:assignmentRouter,
   notification:notificationRouter,
   submission:submissionRouter,
-  certificate:certificateRouter
+  certificate:certificateRouter,
+  auth:authRouter
 });
 
 // export type definition of API
