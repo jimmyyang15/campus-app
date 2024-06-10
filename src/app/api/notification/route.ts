@@ -9,7 +9,7 @@ export async function POST(req: Request) {
         const body = await req.json();
 
         const { clubId } = body;
-        const { user } = await validateRequest()
+        const user = await validateRequest()
         const members = await db.club.findFirst({
             where: {
                 id: clubId
