@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: "Sign in page",
 };
 const SigninPage = async () => {
+  noStore();
   const { user } = await validateRequest();
   if (user) {
     return redirect("/");

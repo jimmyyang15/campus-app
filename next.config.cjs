@@ -72,15 +72,12 @@ module.exports = async (phase) => {
         test: /\.node/,
         use: "raw-loader",
       });
-      config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
       return config;
     },
     eslint: {
       ignoreDuringBuilds: true,
     },
-    experimental: {
-      serverComponentsExternalPackages: ["@node-rs/argon2", "@node-rs/bcrypt"],
-    },
+
     images: {
       remotePatterns: [
         {
