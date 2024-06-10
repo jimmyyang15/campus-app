@@ -7,7 +7,7 @@ export const metadata = {
     // icons: [{ rel: "icon", url: "/favicon.ico" }],
   };
 const ProfilePage = async() => {
-  const { user } = await validateRequest();
+  const user  = await validateRequest();
 
   return (
     <main className='container py-4 max-w-4xl mx-auto flex flex-col '>

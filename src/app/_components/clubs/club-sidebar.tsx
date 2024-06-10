@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { ClipboardMinus, FileUp, Settings } from "lucide-react";
+import {  Settings } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import React from "react";
@@ -14,7 +14,7 @@ import { TbUserQuestion } from "react-icons/tb";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
-  const { user } = useSession();
+  const user  = useSession();
   const mobile = useMediaQuery("(max-width: 640px)");
   return (
     <aside className="h-screen  flex-[.10] space-y-8 p-2 sm:p-4 ">

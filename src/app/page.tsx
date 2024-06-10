@@ -33,7 +33,7 @@ export const metadata = {
 
 export default async function Home() {
   noStore();
-  const { user } = await validateRequest();
+  const user  = await validateRequest();
 	// if (!user) {
 	// 	return redirect("/auth/signin");
 	// }

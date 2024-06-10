@@ -11,7 +11,7 @@ import { useSession } from "../session-provider";
 import { handleDownload } from "@/lib/utils";
 const AssignmentList = () => {
   const { id } = useParams();
-  const { user } = useSession()
+  const user  = useSession()
   const router = useRouter();
   const { data: assignments, isLoading } =
     api.assignment.getAssignments.useQuery({

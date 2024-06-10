@@ -7,13 +7,12 @@ import { api } from "@/trpc/react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import moment from "moment";
-import { utils } from "prettier/doc.js";
 import { useSession } from "../session-provider";
 
 const MemberItem = ({ member }: { member: UserWithProfile }) => {
   const utils = api.useUtils();
   const { id } = useParams();
-  const { user } = useSession();
+  const user  = useSession();
 
   const { mutateAsync: kickMember, isLoading } =
     api.club.kickMember.useMutation({

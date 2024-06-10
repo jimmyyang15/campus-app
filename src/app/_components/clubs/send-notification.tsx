@@ -2,8 +2,6 @@
 
 import React from "react";
 import { Button } from "../ui/button";
-import { useSession } from "../session-provider";
-import { api } from "@/trpc/react";
 import { useParams } from "next/navigation";
 
 const SendNotificationBtn = () => {

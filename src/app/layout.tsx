@@ -34,7 +34,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const sessionData = await validateRequest();
+  const user = await validateRequest();
 
   return (
     <html lang="en">
@@ -50,10 +50,7 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <SessionProvider
             value={
-              sessionData as {
-                user: User;
-                session: Session;
-              }
+              user  as User
             }
           >
             <ThemeProvider
@@ -62,10 +59,10 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <AuthWrapper user={sessionData.user}>
+              <AuthWrapper user={user as User}>
                 <EdgeStoreProvider>
                   <AdminPanelLayout>
-                    <Navbar user={sessionData.user} />
+                    <Navbar user={user as User} />
 
                     {children}
                   </AdminPanelLayout>

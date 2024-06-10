@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const RequestsPage = async({ params }:{params:{id:string}}) => {
-    const { user } = await validateRequest();
+    const user = await validateRequest();
     const { id } = params
     const clubMembers = await db.club.findFirst({
       where:{

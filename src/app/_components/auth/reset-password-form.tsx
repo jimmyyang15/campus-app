@@ -3,8 +3,7 @@
 import {
   NewPasswordSchema,
   NewPasswordSchemaType,
-  ResetPasswordSchema,
-  ResetPasswordSchemaType,
+
 } from "@/lib/schemas/auth";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -25,7 +24,7 @@ import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { forgotPassword, resetPassword } from "@/app/_actions/reset-password";
+import {  resetPassword } from "@/app/_actions/reset-password";
 
 const ResetPasswordForm = ({ tokenHash }: { tokenHash: string }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);

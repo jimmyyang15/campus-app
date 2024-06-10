@@ -1,6 +1,5 @@
 "use client";
 
-import { Club } from "@prisma/client";
 import React from "react";
 import ClubItem from "./club-item";
 import { api } from "@/trpc/react";
@@ -11,7 +10,7 @@ import { ClubWithPayload } from "@/types";
 
 const ClubList = () => {
   const { data: clubs, isLoading } = api.club.getClubs.useQuery();
-  const { user } = useSession();
+  const user = useSession();
   return (
     <>
       {!user.isMentor && user.role === "USER" && !user.club ? (

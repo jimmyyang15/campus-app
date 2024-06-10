@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 const SigninPage = async () => {
   noStore();
-  const { user } = await validateRequest();
+  const user = await validateRequest();
   if (user) {
     return redirect("/");
   }

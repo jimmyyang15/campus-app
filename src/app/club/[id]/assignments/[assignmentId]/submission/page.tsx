@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 
 const SubmissionPage = async() => {
-  const { user } =await validateRequest();
+  const user =await validateRequest();
 
   if(user?.isMentor) {
       return redirect("/")

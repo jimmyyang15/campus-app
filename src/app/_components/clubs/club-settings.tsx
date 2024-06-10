@@ -1,8 +1,7 @@
 "use client";
 
-import { ClubWithPayload, UserWithProfile } from "@/types";
+import { UserWithProfile } from "@/types";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import InviteModal from "./invite-modal";
 import MembersModal from "./members-modal";
@@ -15,7 +14,7 @@ import { useSession } from "../session-provider";
 
 const ClubSettings = () => {
   const { id } = useParams();
-  const { user } = useSession()
+  const  user= useSession()
   const router = useRouter();
   const { data: club, isLoading } = api.club.singleClub.useQuery({
     id: id as string,

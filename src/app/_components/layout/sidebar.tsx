@@ -1,11 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { PanelsTopLeft } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
-import { Button } from "@/app/_components/ui/button";
 import { Menu } from "@/app/_components/ui/menu";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "./sidebar-toggle";

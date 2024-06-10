@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import SendNotificationBtn from "@/app/_components/clubs/send-notification";
 
 const ClubPage = async ({ params }: { params: { id: string } }) => {
-  const { user } = await validateRequest();
+  const user  = await validateRequest();
   const clubMembers = await db.club.findFirst({
     where:{
       id:params.id

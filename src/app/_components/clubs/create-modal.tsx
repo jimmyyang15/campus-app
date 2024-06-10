@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import {
   Credenza,
   CredenzaBody,
-  CredenzaClose,
   CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
   CredenzaTrigger,
@@ -24,7 +21,6 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ClubSchema, ClubSchemaType } from "@/lib/schemas/club";
 import { Loader2, Plus } from "lucide-react";
@@ -37,7 +33,6 @@ import { useEdgeStore } from "@/lib/edgestore";
 import moment from "moment";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import Link from "next/link";
 const CreateModal = () => {
   const [file, setFile] = useState<File>();
   const utils = api.useUtils();

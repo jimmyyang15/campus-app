@@ -11,7 +11,7 @@ type Props = {
   handleReact:()=>void
 };
 const ReactionButton = ({ count,icon,items,handleReact }: Props) => {
-  const { user } = useSession();
+  const  user  = useSession();
   const userReacted = items.find((item)=>item.userId === user.id);
   if (count <= 0) return null;
   return (

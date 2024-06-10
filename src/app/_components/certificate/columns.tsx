@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Checkbox } from "@/app/_components/ui/checkbox";
 import {
   Avatar,
   AvatarFallback,

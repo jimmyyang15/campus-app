@@ -8,7 +8,7 @@ export const metadata = {
   // icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 const CreatePostPage = async () => {
-  const { user } = await validateRequest();
+  const user  = await validateRequest();
 
   if (user?.role !== "ADMIN") {
     return redirect("/");

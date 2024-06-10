@@ -1,7 +1,6 @@
 import React from 'react'
 import AvatarProfile from '../avatar-profile'
-import { useSession } from '../session-provider'
-import { Comment, Profile } from '@prisma/client'
+import {  Profile } from '@prisma/client'
 import { CommentWithUser } from '@/types'
 import moment from 'moment'
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { AlertCircle, CheckCircle2, Terminal } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { AlertType } from "./signup-form";
 
 const FormAlert = ({ alert }: { alert: AlertType | null }) => {

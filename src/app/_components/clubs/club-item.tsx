@@ -1,4 +1,3 @@
-import { Club } from "@prisma/client";
 import Image from "next/image";
 import React from "react";
 import { Button } from "@/app/_components/ui/button";
@@ -10,7 +9,7 @@ import moment from "moment";
 import Link from "next/link";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
-  const { user } = useSession();
+  const user = useSession();
   const { data:userRequest } = api.request.userRequest.useQuery();
   const alreadyInTheClub = user?.club?.id === club.id;
   const utils = api.useUtils();
