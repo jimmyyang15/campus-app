@@ -19,7 +19,7 @@ export const useSubmission = () => {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isRemoving, setIsRemoving] = useState<boolean>(false);
-    const { user } = useSession();
+    const user = useSession();
     const { edgestore } = useEdgeStore();
     const utils = api.useUtils();
 

@@ -58,7 +58,6 @@ module.exports = async (phase) => {
 
     webpack: (
       config,
-      { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
     ) => {
       
       config.plugins = config.plugins || [];
