@@ -14,7 +14,7 @@ export async function POST(req: Request) {
             })
         }
         console.log("received push subscription")
-        const { user } = await validateRequest();
+        const user = await validateRequest();
         if (!user) {
             return NextResponse.json({
                 error: "User not authenticated"
@@ -58,7 +58,7 @@ export async function DELETE(req: Request) {
             })
         }
         console.log('received push subs: ', subscriptionToDelete);
-        const { user } = await validateRequest();
+        const user = await validateRequest();
         if (!user) {
             return NextResponse.json({
                 error: "User not authenticated",
