@@ -11,7 +11,7 @@ const SettingsClubPage = async ({
 }: {
   params: { id:string };
 }) => {
-  const { user } = await validateRequest();
+  const user = await validateRequest();
   const clubMembers = await db.club.findFirst({
     where:{
       id:params.id
