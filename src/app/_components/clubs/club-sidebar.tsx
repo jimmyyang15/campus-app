@@ -21,7 +21,7 @@ const ClubSidebar = () => {
       <Link
         href={`/club/${id}`}
         className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
-          "text-foreground": pathname.includes(`/club/${id}`),
+          "text-foreground": pathname === `/club/${id}`,
         })}
       >
               <MdOutlineHome size={mobile ? 21 : 23} />

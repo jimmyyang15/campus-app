@@ -1,6 +1,7 @@
 "use server";
 
 import { lucia, validateRequest } from "@/server/auth";
+import { db } from "@/server/db";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -9,6 +10,11 @@ export const signOut = async () => {
     try {
       const  session = await validateRequest()
   
+      await db.subscription.deleteMany({
+        where:{
+          userId:session?.id as string
+        }
+      })
       if (!session) {
         return {
           error: "Unauthorized",

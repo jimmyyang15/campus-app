@@ -38,7 +38,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body
+        className={`font-sans ${inter.variable}`}
+        suppressHydrationWarning={true}
+      >
         <Toaster
           richColors
           toastOptions={{
@@ -47,18 +50,14 @@ export default async function RootLayout({
             },
           }}
         />
-        <TRPCReactProvider>
-          <SessionProvider
-            value={
-              user  as User
-            }
-          >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TRPCReactProvider>
+            <SessionProvider value={user as User}>
               <AuthWrapper user={user as User}>
                 <EdgeStoreProvider>
                   <AdminPanelLayout>
@@ -68,9 +67,9 @@ export default async function RootLayout({
                   </AdminPanelLayout>
                 </EdgeStoreProvider>
               </AuthWrapper>
-            </ThemeProvider>
-          </SessionProvider>
-        </TRPCReactProvider>
+            </SessionProvider>
+          </TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

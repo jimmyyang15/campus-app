@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 // await import("./src/env.js");
 // import withSerwistInit from "@serwist/next";
 
@@ -19,7 +19,6 @@
 //       test: /\.node/,
 //       use: 'raw-loader',
 //     });
-//     config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
 //     return config;
 //   },
 //   eslint: {
