@@ -6,12 +6,21 @@ import { useParams } from "next/navigation";
 import React from "react";
 import SendNotificationBtn from "./send-notification";
 import NoActivityModal from "./no-club-modal";
+import { useQuery } from "@tanstack/react-query";
+import { ClubWithPayload } from "@/types";
+import Loading from "../loading";
 
 const ClubHome = () => {
   const { id } = useParams();
-  
-  const { data: club } = api.club.singleClub.useQuery({
-    id: id as string,
+
+  // const { data: club } = api.club.singleClub.useQuery({
+  //   id: id as string,
+  // });
+  const { data:club, isLoading } = useQuery<{
+    data:ClubWithPayload
+  }>({
+    queryKey: ["clubHome"],
+    queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
   });
   function getNextWeekday(weekday: string) {
     const date = new Date();
@@ -28,26 +37,33 @@ const ClubHome = () => {
 
     return resultDate;
   }
-  
-  console.log(getNextWeekday(club?.dayActivity as string).toString());
+
   return (
     <div>
-      {club?.dayActivity === new Date().getDay().toString() ? (
-        <>
-          <h3>Your club activity will start at {club.timeActivity} PM</h3>
-          <NoActivityModal timeActivity={club.timeActivity} />
-        </>
+      {isLoading ? (
+        <Loading />
       ) : (
         <>
-          <h3>There will be no club activity today</h3>
-          <h5>
-            Next activity will be on{" "}
-            {moment(getNextWeekday(club?.dayActivity as string)).format("LL")}{" "}
-            at {club?.timeActivity} PM
-          </h5>
+          {club?.data.dayActivity === new Date().getDay().toString() ? (
+            <>
+              <h3>Your club activity will start at {club.data.timeActivity} PM</h3>
+              <NoActivityModal timeActivity={club.data.timeActivity} />
+            </>
+          ) : (
+            <>
+              <h3>There will be no club activity today</h3>
+              <h5>
+                Next activity will be on{" "}
+                {moment(getNextWeekday(club?.data.dayActivity as string)).format(
+                  "LL",
+                )}{" "}
+                at {club?.data.timeActivity} PM
+              </h5>
+            </>
+          )}
+          {/* <SendNotificationBtn /> */}
         </>
       )}
-      {/* <SendNotificationBtn /> */}
     </div>
   );
 };

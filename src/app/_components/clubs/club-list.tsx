@@ -17,6 +17,7 @@ const ClubList = () => {
         res.json(),
       ),
   })
+  
   // const { data: clubs, isLoading } = api.club.getClubs.useQuery();
   const user = useSession();
   return (

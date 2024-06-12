@@ -1,26 +1,29 @@
 "use client";
 
-import { UserWithProfile } from "@/types";
-import Image from "next/image";
+import { ClubWithPayload, UserWithProfile } from "@/types";
 import React from "react";
 import InviteModal from "./invite-modal";
 import MembersModal from "./members-modal";
 import { useParams, useRouter } from "next/navigation";
-import { api } from "@/trpc/react";
 import Loading from "../loading";
 import { Button } from "@/app/_components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useSession } from "../session-provider";
+import { useQuery } from "@tanstack/react-query";
 
 const ClubSettings = () => {
   const { id } = useParams();
   const  user= useSession()
   const router = useRouter();
-  const { data: club, isLoading } = api.club.singleClub.useQuery({
-    id: id as string,
+  const { data:club, isLoading } = useQuery<{
+    data:ClubWithPayload
+  }>({
+    queryKey: ["clubSettings"],
+    queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
   });
 
-  console.log(club);
+  console.log(club)
+
   return (
     <>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -32,20 +35,18 @@ const ClubSettings = () => {
           <Loading />
         ) : (
           <>
-            <p className="text-center text-xl font-bold ">{club?.name}</p>
-            <Image
-              src={club?.clubImage as string}
+            <p className="text-center text-xl font-bold ">{club?.data.name}</p>
+            <img
+              src={club?.data.clubImage as string}
               alt="club profile image"
-              width={0}
-              height={0}
-              sizes="100vw"
+          
               className="h-[100px] w-[100px] rounded-full"
             />
-            <p className="text-gray-500">{club?.members.length} members</p>
+            <p className="text-gray-500">{club?.data.members.length} members</p>
             <ul className="space-y-4 self-start text-gray-500">
               {user.isMentor ? <InviteModal />: null}
               
-              <MembersModal members={club?.members as UserWithProfile[]} />
+              <MembersModal members={club?.data.members as UserWithProfile[]} />
             </ul>
           </>
         )}
