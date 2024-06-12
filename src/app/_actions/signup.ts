@@ -1,5 +1,5 @@
 "use server"
-import * as argon2 from "argon2"
+// import * as argon2 from "argon2"
 import { generateId } from "lucia";
 import { db } from "@/server/db";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
@@ -8,6 +8,7 @@ import { generateEmailVerificationCode, generateRedirectUrl } from "./email-veri
 import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
 import { adminUsername, mentorNid, userNim } from "@/user-nim";
+import { hash } from "bcrypt";
 export const signUp = async (values: RegisterSchemaType) => {
 
 
@@ -22,7 +23,7 @@ export const signUp = async (values: RegisterSchemaType) => {
 
     const { username, city, fullName, email } = validatedFields.data;
 
-    const hashedPassword = await argon2.hash(values.password);
+    const hashedPassword = await hash(values.password,12);
     const userId = generateId(15);
 
     const userExistsByUsername = await findUserByUsername(username)

@@ -9,10 +9,10 @@ import { sendResetPasswordToken } from "@/lib/mail";
 import { sha256 } from "oslo/crypto";
 import { encodeHex } from "oslo/encoding";
 import { lucia } from "@/server/auth";
-import * as argon2 from "argon2"
-
+// import * as argon2 from "argon2"
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { hash } from "bcrypt";
 async function createPasswordResetToken(userId: string): Promise<string> {
     // optionally invalidate all existing tokens
     await db.passwordResetToken.deleteMany({
@@ -71,7 +71,7 @@ export const resetPassword = async (values: NewPasswordSchemaType, tokenHash: st
     const { password } = validatedFields.data;
     const tokenExists = await findPasswordToken(tokenHash);
     await lucia.invalidateUserSessions(tokenExists?.userId as string);
-    const hashedPassword = await argon2.hash(password);
+    const hashedPassword = await hash(password,12);
     await db.user.update({
         where: {
             id: tokenExists?.userId

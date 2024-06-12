@@ -1,5 +1,5 @@
 "use server";
-import * as argon2 from "argon2"
+// import * as argon2 from "argon2"
 import { cookies } from "next/headers";
 import { lucia } from "@/server/auth";
 import { redirect } from "next/navigation";
@@ -7,6 +7,7 @@ import { LoginSchema, LoginSchemaType } from "@/lib/schemas/auth";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
 import { sendVerificationEmail } from "@/lib/mail";
 import { findUserByUsername } from "./user";
+import { compare } from 'bcrypt'
 export async function signin(values: LoginSchemaType) {
 
     const validatedFields = LoginSchema.safeParse(values);
@@ -38,7 +39,7 @@ export async function signin(values: LoginSchemaType) {
 
 
 
-    const validPassword = await argon2.verify(existingUser.hashedPassword as string, password);
+    const validPassword = await compare(password,existingUser.hashedPassword as string);
     if (!validPassword) {
         return {
             error: "Incorrect username or password"
