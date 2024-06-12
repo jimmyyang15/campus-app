@@ -7,9 +7,17 @@ import CreateModal from "./create-modal";
 import Loading from "../loading";
 import { useSession } from "../session-provider";
 import { ClubWithPayload } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 
 const ClubList = () => {
-  const { data: clubs, isLoading } = api.club.getClubs.useQuery();
+  const { data:clubs,isLoading } = useQuery<ClubWithPayload[]>({
+    queryKey: ['clubList'],
+    queryFn: () =>
+      fetch('/api/clubs').then((res) =>
+        res.json(),
+      ),
+  })
+  // const { data: clubs, isLoading } = api.club.getClubs.useQuery();
   const user = useSession();
   return (
     <>
@@ -23,7 +31,7 @@ const ClubList = () => {
         <>
           {clubs && !isLoading ? (
             <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {clubs?.map((club, i) => (
+              {clubs?.map((club, i:number) => (
                 <ClubItem key={i} club={club as ClubWithPayload} />
               ))}
               {user.role === "ADMIN" ? <CreateModal /> : null}
