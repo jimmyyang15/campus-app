@@ -12,21 +12,30 @@ import { Club } from "@prisma/client";
 import { DataTable } from "./data-table";
 import { Certificate, columns } from "./columns";
 import Loading from "../loading";
+import { useQuery } from "@tanstack/react-query";
+import { User } from "lucia";
 
 const CertificateComponent = () => {
   const router = useRouter();
   const { id } = useParams();
 
-  const { data, isLoading } = api.club.getMembers.useQuery({
-    clubId: id as string,
-  });
-  const { data: club } = api.club.singleClub.useQuery({
-    id: id as string,
-  });
+  const { data:assignments,isLoading } = useQuery<{
+    data:{
+      members:User[]
+    }
+  }>({
+    queryKey: ['membersCertificate'],
+    queryFn: () =>
+      fetch(`/api/clubs/${id}/members`).then((res) =>
+        res.json(),
+      ),
+  })
+
+  console.log(assignments)
 
   const mappedMembers = useMemo(
     () =>
-      data?.members?.map((member) => {
+      assignments?.data.members?.map((member) => {
         return {
           id: member.id,
           profilePicture: member.profile?.profilePicture,
@@ -34,7 +43,7 @@ const CertificateComponent = () => {
           fullName: member.profile?.fullName,
         };
       }),
-    [data],
+    [assignments?.data],
   );
 
   console.log(mappedMembers);
@@ -45,18 +54,13 @@ const CertificateComponent = () => {
         <ChevronLeft size={18} className="mr-2" />
         Back
       </Button>
-      {/* <button onClick={handleGenerate}>Generate certificate</button> */}
-      <p className="mt-4 text-xl font-semibold">Certificates</p>
-      {/* <p className="text-center text-lg mt-4">
-        Club members
-      </p> */}
+      <h5>Certificates</h5>
+
       {(isLoading || !mappedMembers)? (
         <Loading />
       ) : (
         <div className="mx-auto mt-4 flex  w-3/4 flex-col space-y-8 rounded-lg p-2">
-          {/* {data?.members?.map((member)=>(
-           <Item key={member.id} memberId={member.id} memberName={member.profile?.fullName as string} club={club as Club} />
-        ))} */}
+      
           <DataTable columns={columns} data={mappedMembers as unknown as Certificate[]} />
         </div>
       )}

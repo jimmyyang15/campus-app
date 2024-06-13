@@ -20,7 +20,7 @@ const AssignmentList = () => {
   }>({
     queryKey: ['assignmentList'],
     queryFn: () =>
-      fetch(`/api/assignments/${id}`).then((res) =>
+      fetch(`/api/clubs/${id}/assignments`).then((res) =>
         res.json(),
       ),
   })

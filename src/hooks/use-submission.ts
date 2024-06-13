@@ -1,6 +1,9 @@
 import { useSession } from "@/app/_components/session-provider";
 import { useEdgeStore } from "@/lib/edgestore";
 import { api } from "@/trpc/react";
+import { AssignmentWithPayload } from "@/types";
+import { Assignment } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -14,7 +17,7 @@ const SubmissionSchema = z.object({
 });
 type SubmissionSchemaType = z.infer<typeof SubmissionSchema>;
 export const useSubmission = () => {
-    const { assignmentId } = useParams();
+    const { assignmentId,id } = useParams();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -23,12 +26,16 @@ export const useSubmission = () => {
     const { edgestore } = useEdgeStore();
     const utils = api.useUtils();
 
-    const { data: assignment, isLoading } = api.assignment.getAssignment.useQuery(
-        {
-            assignmentId: assignmentId as string,
-        },
-    );
-    const submission = assignment?.submissions.find(
+    const { data:assignment,isLoading } = useQuery<{
+        data:AssignmentWithPayload
+      }>({
+        queryKey: ['assignment'],
+        queryFn: () =>
+          fetch(`/api/clubs/${id}/assignments/${assignmentId}`).then((res) =>
+            res.json(),
+          ),
+      })
+    const submission = assignment?.data.submissions.find(
         (item) => item.userId === user.id,
     );
     console.log(submission);
@@ -138,6 +145,6 @@ export const useSubmission = () => {
         }
     }
 
-    return { submission, assignment, handleRemoveSubmission,handleEditSubmission,onSubmit,setSelectedFile,selectedFile,isSubmitting,isEditing,isRemoving,isLoading }
+    return { submission, assignment:assignment?.data, handleRemoveSubmission,handleEditSubmission,onSubmit,setSelectedFile,selectedFile,isSubmitting,isEditing,isRemoving,isLoading }
 
 }

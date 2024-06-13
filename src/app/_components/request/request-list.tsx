@@ -7,10 +7,18 @@ import Loading from "../loading";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { RequestWithPayload } from "@/types";
 
 const RequestList = ({ clubId }: { clubId: string }) => {
-  const { data: requests, isLoading } = api.request.getRequests.useQuery({
-    clubId,
+  const { data:requests,isLoading } = useQuery<{
+    data:RequestWithPayload[]
+  }>({
+    queryKey: ['requestsList'],
+    queryFn: () =>
+      fetch(`/api/clubs/${clubId}/requests`).then((res) =>
+        res.json(),
+      ),
   });
   const router = useRouter();
   return (
@@ -25,11 +33,11 @@ const RequestList = ({ clubId }: { clubId: string }) => {
         <Loading />
       ) : (
         <div className="space-y-4">
-          {requests?.length === 0 ? (
+          {requests?.data.length === 0 ? (
             <p className="text-gray-500 ">No requests here</p>
           ) : (
             <>
-              {requests?.map((request) => (
+              {requests?.data.map((request) => (
                 <RequestItem key={request.id} request={request} />
               ))}
             </>

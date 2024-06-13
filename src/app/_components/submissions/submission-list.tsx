@@ -5,24 +5,31 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import Loading from "../loading";
 import { DataTable } from "./data-table";
-import { Submission, columns } from "./columns";
-import { ColumnDef } from "@tanstack/react-table";
+import { MappedSubmission, columns } from "./columns";
 import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { ClubWithPayload, SubmissionWithPayload } from "@/types";
 
 const SubmissionList = () => {
   const { id, assignmentId } = useParams();
-  const { data: submissions } = api.submission.getSubmissions.useQuery({
-    assignmentId: assignmentId as string,
+  const { data:submissions } = useQuery<{
+    data:SubmissionWithPayload[]
+  }>({
+    queryKey: ["submissionList"],
+    queryFn: () => fetch(`/api/clubs/${id}/assignments/${assignmentId}/submissions`).then((res) => res.json()),
   });
-  const { data: club, isLoading } = api.club.singleClub.useQuery({
-    id: id as string,
+  const { data:club, isLoading } = useQuery<{
+    data:ClubWithPayload
+  }>({
+    queryKey: ["clubSubmissions"],
+    queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
   });
   const router = useRouter()
 
-  const members = club?.members.filter((member) => !member.isMentor);
+  const members = club?.data.members.filter((member) => !member.isMentor);
   const findSubmission = (userId: string) => {
-    return submissions?.find((submission) => submission.userId === userId);
+    return submissions?.data.find((submission) => submission.userId === userId);
   };
   const mappedMembers = members?.map((member) => {
     return {
@@ -50,11 +57,11 @@ const SubmissionList = () => {
         Back
       </Button>
       <h3>Submissions</h3>
-      {isLoading || !club?.members ? (
+      {isLoading || !club?.data.members ? (
         <Loading />
       ) : (
         <div className="mt-4">
-          <DataTable columns={columns} data={mappedMembers as Submission[]} />
+          <DataTable columns={columns} data={mappedMembers as MappedSubmission[]} />
         </div>
       )}
     </div>

@@ -8,11 +8,12 @@ import { useSubmission } from "@/hooks/use-submission";
 import Loading from "@/app/_components/loading";
 import { cn, getDownloadFileName, handleDownload } from "@/lib/utils";
 import moment from "moment";
-import { Form, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   FormControl,
   FormField,
+  Form,
   FormItem,
   FormLabel,
   FormMessage,
@@ -79,7 +80,7 @@ const AssignmentActivity = () => {
           </div>
           <div className="flex items-center border-b text-sm">
             <p className="w-[120px] p-4">Time remaining</p>
-            {new Date() < assignment!.dueDate ? (
+            {new Date() < new Date(assignment!.dueDate) ? (
               <p className="p-4 text-green-700">
                 Assignment is due on {moment(assignment?.dueDate).format("lll")}
               </p>

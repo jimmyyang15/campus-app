@@ -18,6 +18,10 @@ import PdfComponent from "./pdf-document";
 import { PDFDocument } from "pdf-lib";
 import moment from "moment";
 import { toast } from "sonner";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ClubWithPayload } from "@/types";
+import { User } from "lucia";
+import axios from 'axios'
 export type Certificate = {
   id: string;
   profilePicture: string;
@@ -92,31 +96,46 @@ export const columns: ColumnDef<Certificate>[] = [
   {
     id: "actions",
     header: function ActionHeader({ column })  {
-      const { mutateAsync: sendCertificate } =
-        api.certificate.sendCertificate.useMutation();
+      const { mutateAsync:sendCertificate } = useMutation({
+        mutationFn:(payload:{
+          file:string,
+          recipientId:string
+        })=>axios.post(`/api/certificates/send-certificate`,payload)
+      })
       const { id } = useParams();
       const [isSending, setIsSending] = useState<boolean>(false);
-      const { data: membersWithoutCertificate } =
-        api.certificate.getMembersWithoutCertificate.useQuery({
-          clubId: id as string,
-        });
-      const { data: club } = api.club.singleClub.useQuery({
-        id: id as string,
+      const { data:membersWithoutCertificate,isLoading } = useQuery<{
+        data:{
+          members:User[]
+        }
+      }>({
+        queryKey: ['assignmentWithoutCertificate'],
+        queryFn: () =>
+          fetch(`/api/clubs/${id}/members/without-certificate`).then((res) =>
+            res.json(),
+          ),
+      })
+      const { data:club } = useQuery<{
+        data:ClubWithPayload
+      }>({
+        queryKey: ["clubHome"],
+        queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
       const { edgestore } = useEdgeStore();
+      console.log(membersWithoutCertificate)
       const handleSend = async () => {
         setIsSending(true);
 
         try {
 
-          const promises = membersWithoutCertificate?.members.map((member) => {
+          const promises = membersWithoutCertificate?.data.members.map((member) => {
 
             async function sendCertificatePromise() {
               try {
                 const blob = await pdf(
                   <PdfComponent
                     name={member.profile?.fullName as string}
-                    clubName={club?.name as string}
+                    clubName={club?.data.name as string}
                   />,
                 ).toBlob();
                 const file = new File(
@@ -163,7 +182,7 @@ export const columns: ColumnDef<Certificate>[] = [
       };
       return (
         <div className="flex justify-end">
-          <Button variant={"outline"} onClick={handleSend} disabled={isSending}>
+          <Button variant={"outline"} onClick={handleSend} disabled={isSending || membersWithoutCertificate?.data.members.length === 0}>
             {isSending ? "Sending..." : "Send to all"}
           </Button>
         </div>
@@ -177,14 +196,23 @@ export const columns: ColumnDef<Certificate>[] = [
       const [sendingCertificate, setSendingCertificate] =
         useState<boolean>(false);
       const { edgestore } = useEdgeStore();
-      const { data: club } = api.club.singleClub.useQuery({
-        id: id as string,
+      const { data:club } = useQuery<{
+        data:ClubWithPayload
+      }>({
+        queryKey: ["clubHome"],
+        queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
-      const { mutateAsync: sendCertificate } =
-        api.certificate.sendCertificate.useMutation();
+      // const { mutateAsync: sendCertificate } =
+      //   api.certificate.sendCertificate.useMutation();
+      const { mutateAsync:sendCertificate } = useMutation({
+        mutationFn:(payload:{
+          file:string,
+          recipientId:string
+        })=>axios.post(`/api/certificates/send-certificate`,payload)
+      })
       const handleGenerate = async (name: string) => {
         const blob = await pdf(
-          <PdfComponent name={name} clubName={club?.name as string} />,
+          <PdfComponent name={name} clubName={club?.data.name as string} />,
         ).toBlob();
         const url = URL.createObjectURL(blob);
         window.open(url, "_blank");
@@ -197,7 +225,7 @@ export const columns: ColumnDef<Certificate>[] = [
         try {
           setSendingCertificate(true);
           const blob = await pdf(
-            <PdfComponent name={name} clubName={club?.name as string} />,
+            <PdfComponent name={name} clubName={club?.data.name as string} />,
           ).toBlob();
           const file = new File([blob], `${name}.pdf`, {
             type: "application/pdf",

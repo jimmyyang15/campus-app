@@ -41,15 +41,16 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { useParams } from "next/navigation";
 import { DateTimePicker } from "../date-time-picker";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
   const mobile = useMediaQuery("(max-width: 640px)")
-
-  const utils=api.useUtils()
+  const queryClient = useQueryClient()
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const { id } = useParams();
   const { edgestore } = useEdgeStore();
+  const { id } = useParams()
   // const [file,setFile] = useState<File | undefined>(undefined)
   const form = useForm<AssignmentSchemaType>({
     resolver: zodResolver(AssignmentSchema),
@@ -57,19 +58,17 @@ const UploadAssignmentModal = () => {
       name: "",
     },
   });
-  const { mutateAsync: createAssignment } =
-    api.assignment.createAssignment.useMutation({
-      onSuccess:()=>{
-        setOpen(false)
-        form.reset();
-
-      },
-      onSettled:()=>{
-        utils.assignment.getAssignments.invalidate({
-          clubId:id as string
-        })
-      }
-    });
+  const { mutateAsync:createAssignment } = useMutation({
+    mutationFn:(payload:{
+      name: string,
+      desc?: string,
+      dueDate: Date,
+      file:string,
+    })=>axios.post(`/api/clubs/${id}/assignments/upload-assignment`,payload),
+    onSettled:()=>{
+      queryClient.invalidateQueries({ queryKey:['assignmentList']})
+    }
+  })
 
   // 2. Define a submit handler.
   async function onSubmit(values: AssignmentSchemaType) {
@@ -96,7 +95,6 @@ const UploadAssignmentModal = () => {
       await createAssignment({
         ...values,
         file: res?.url as string,
-        clubId: id as string,
       });
     } catch (err) {
       console.log(err);

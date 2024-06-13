@@ -61,3 +61,28 @@ export type RequestWithPayload = Prisma.RequestGetPayload<{
         }
     }
 }>
+
+export type SubmissionWithPayload = Prisma.SubmissionGetPayload<{
+    include:{
+        assignment:true,
+        user:{
+            include:{
+                profile:true
+            }
+        }
+    }
+}>
+
+export type AssignmentWithPayload = Prisma.AssignmentGetPayload<{
+    include:{
+        submissions:{
+            include:{
+                user:{
+                    include:{
+                        profile:true
+                    }
+                }
+            }
+        }
+    }
+}>

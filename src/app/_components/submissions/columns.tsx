@@ -6,7 +6,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { cn, getDownloadFileName, handleDownload } from "@/lib/utils";
 
-export type Submission = {
+export type MappedSubmission = {
     id:string;
     status:"Not Attempted" | "Submitted" | "Overdue",
     username:string,
@@ -15,7 +15,7 @@ export type Submission = {
 }
 
  
-export const columns: ColumnDef<Submission>[] = [
+export const columns: ColumnDef<MappedSubmission>[] = [
     {
       accessorKey: "status",
       header: "Status",
