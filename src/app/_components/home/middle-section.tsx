@@ -27,7 +27,7 @@ const MiddleSection = ({ isAdmin }: Props) => {
   return (
     <section className="flex-1 border-x">
       {isAdmin ? <CreatePostSection /> : null}
-      {posts ? (
+      {(posts || isLoading) ? (
         <>
           {posts?.data.map((item, i) => (
             <PostItem key={i} item={item as PostsWithUser} />

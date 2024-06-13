@@ -22,3 +22,20 @@ export async function GET(req:NextRequest,{params}:{params:{assignmentId:string}
         data
     })
 }
+
+export async function POST(req:NextRequest,{params}:{params:{assignmentId:string}}) {
+    const { file } = await req.json()
+    const user = await validateRequest()
+    await db.submission.create({
+        data:{
+            assignmentId:params.assignmentId,
+            files:file,
+            userId:user?.id as string,
+        }
+    })
+
+    return NextResponse.json({
+        status:201,
+        message:"Assignment submitted"
+    })
+}

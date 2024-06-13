@@ -18,7 +18,7 @@ const ProfileAvatar = ({ profile, setFile, preview }: Props) => {
   return (
     <div className=" flex justify-center">
       <div className="relative cursor-pointer " onClick={handleClick}>
-        <Image
+        <img
           alt="profile-picture"
           src={
             preview
@@ -27,9 +27,7 @@ const ProfileAvatar = ({ profile, setFile, preview }: Props) => {
                 ? profile.profilePicture
                 : `https://ui-avatars.com/api/?background=random&name=${profile.fullName}`
           }
-          width={0}
-          height={0}
-          sizes="100vw"
+    
           className="object-cover rounded-full h-[100px] w-[100px]"
         />
         <div className="absolute bottom-0 left-0 right-0 top-0  rounded-full bg-[#00000071]"></div>

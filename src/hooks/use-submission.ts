@@ -3,7 +3,8 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { api } from "@/trpc/react";
 import { AssignmentWithPayload } from "@/types";
 import { Assignment } from "@prisma/client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -17,47 +18,59 @@ const SubmissionSchema = z.object({
 });
 type SubmissionSchemaType = z.infer<typeof SubmissionSchema>;
 export const useSubmission = () => {
-    const { assignmentId,id } = useParams();
+    const { assignmentId, id } = useParams();
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isRemoving, setIsRemoving] = useState<boolean>(false);
     const user = useSession();
     const { edgestore } = useEdgeStore();
-    const utils = api.useUtils();
-
-    const { data:assignment,isLoading } = useQuery<{
-        data:AssignmentWithPayload
-      }>({
+    const queryClient = useQueryClient()
+    const { data: assignment, isLoading } = useQuery<{
+        data: AssignmentWithPayload
+    }>({
         queryKey: ['assignment'],
         queryFn: () =>
-          fetch(`/api/clubs/${id}/assignments/${assignmentId}`).then((res) =>
-            res.json(),
-          ),
-      })
+            fetch(`/api/clubs/${id}/assignments/${assignmentId}`).then((res) =>
+                res.json(),
+            ),
+    })
     const submission = assignment?.data.submissions.find(
         (item) => item.userId === user.id,
     );
     console.log(submission);
-    const { mutateAsync: submitAssignment } =
-        api.assignment.submitAssignment.useMutation({
-
-            onSettled: () => {
-                utils.assignment.getAssignment.invalidate({
-                    assignmentId: assignmentId as string,
-                });
-            },
-        });
-
-    const { mutateAsync: editSubmission } = api.assignment.editSubmission.useMutation({
+    const { mutateAsync: submitAssignment } = useMutation({
+        mutationFn: (payload: {
+            file:string
+        },
+        
+        ) => axios.post(`/api/clubs/${id}/assignments/${assignmentId}/submissions`, payload),
+        onSuccess: () => {
+            toast.success("Assignment submitted", {
+                description: moment().format("LLLL"),
+                // action: {
+                //   label: "Dismiss",
+                //   onClick: () => toast.dismiss(),
+                // },
+                closeButton: true,
+            });
+        },
         onSettled: () => {
-            utils.assignment.getAssignment.invalidate({
-                assignmentId: assignmentId as string,
+            queryClient.invalidateQueries(['assignment'])
+        },
+    });
 
-            })
+    const { mutateAsync: editSubmission } = useMutation({
+        mutationFn:(payload: {
+            file:string
+        })=>axios.put(`/api/clubs/${id}/assignments/${assignmentId}/submissions/${submission?.id}`,payload),
+        onSettled: () => {
+            queryClient.invalidateQueries(['assignment'])
+
         }
     });
-    const { mutateAsync: removeSubmission } = api.assignment.removeSubmission.useMutation({
+    const { mutateAsync: removeSubmission } = useMutation({
+        mutationFn:()=>axios.delete(`/api/clubs/${id}/assignments/${assignmentId}/submissions/${submission?.id}`),
         onSuccess: () => {
             toast.success("File removed", {
                 description: moment().format("LLLL"),
@@ -69,10 +82,8 @@ export const useSubmission = () => {
             });
         },
         onSettled: () => {
-            utils.assignment.getAssignment.invalidate({
-                assignmentId: assignmentId as string,
+            queryClient.invalidateQueries(['assignment'])
 
-            })
         }
     });
     const onSubmit = async (values: SubmissionSchemaType) => {
@@ -95,7 +106,6 @@ export const useSubmission = () => {
                 // },
             });
             await submitAssignment({
-                assignmentId: assignmentId as string,
                 file: res.url,
             });
         } catch (err) {
@@ -118,7 +128,6 @@ export const useSubmission = () => {
             });
             await editSubmission({
                 file: res.url,
-                assignmentId: assignmentId as string
             })
         } catch (error) {
             throw new Error("Something went wrong!")
@@ -135,9 +144,7 @@ export const useSubmission = () => {
             await edgestore.publicFiles.delete({
                 url: submission?.files as string,
             });
-            await removeSubmission({
-                submissionId: submission?.id as string
-            })
+            await removeSubmission()
         } catch (error) {
             throw new Error("Something went wrong!")
         } finally {
@@ -145,6 +152,6 @@ export const useSubmission = () => {
         }
     }
 
-    return { submission, assignment:assignment?.data, handleRemoveSubmission,handleEditSubmission,onSubmit,setSelectedFile,selectedFile,isSubmitting,isEditing,isRemoving,isLoading }
+    return { submission, assignment: assignment?.data, handleRemoveSubmission, handleEditSubmission, onSubmit, setSelectedFile, selectedFile, isSubmitting, isEditing, isRemoving, isLoading }
 
 }
