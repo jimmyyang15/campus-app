@@ -18,22 +18,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CommentSchema, CommentSchemaType } from "@/lib/schemas/comment";
 import { Button } from "@/app/_components/ui/button";
 import CommentComponent from "./comment";
-import { CommentWithUser } from "@/types";
+import { CommentWithUser, PostsWithUser } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const PostDetailComponent = ({ id }: { id: string }) => {
-  const { data: post, isLoading } = api.post.singlePost.useQuery({
-    postId: id,
-  });
-  const utils = api.useUtils()
-
+  const { data:post,isLoading } = useQuery<{
+    data:PostsWithUser
+  }>({
+    queryKey: ['postDetail'],
+    queryFn: () =>
+      fetch(`/api/posts/${id}`).then((res) =>
+        res.json(),
+      ),
+  })
+  const queryClient = useQueryClient()
   const { mutateAsync: createComment,isLoading:isCreating } =
-    api.comment.createComment.useMutation({
+   useMutation({
+      mutationFn:(payload:{
+        comment:string
+      })=>axios.post(`/api/posts/${id}/comment`,payload),
       onSettled() {
         // Sync with server once mutation has settled
         form.reset();
-        utils.post.singlePost.invalidate({
-          postId:id
-        })
+        queryClient.invalidateQueries(['postDetail'])
       },
     });
   const form = useForm<CommentSchemaType>({
@@ -49,7 +57,6 @@ const PostDetailComponent = ({ id }: { id: string }) => {
     const { comment } = values;
     await createComment({
       comment,
-      postId:id
     });
   }
   return (
@@ -59,15 +66,15 @@ const PostDetailComponent = ({ id }: { id: string }) => {
       ) : (
         <div className="space-y-4  p-4  ">
           <div className="flex items-center gap-x-4">
-            <AvatarProfile profile={post?.user.profile as Profile} />
-            <p>{post?.user.profile?.fullName}</p>
+            <AvatarProfile profile={post?.data.user.profile as Profile} />
+            <p>{post?.data.user.profile?.fullName}</p>
           </div>
-          <p className="text-lg font-bold ">{post?.title}</p>
-          <div dangerouslySetInnerHTML={{ __html: post?.content as string }} />
+          <p className="text-lg font-bold ">{post?.data.title}</p>
+          <div dangerouslySetInnerHTML={{ __html: post?.data.content as string }} />
           <PostActions postId={id} noComments={true} />
           <ReactionsList
             postId={id}
-            reactions={post?.reactions as Reaction[]}
+            reactions={post?.data.reactions as Reaction[]}
           />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -90,15 +97,15 @@ const PostDetailComponent = ({ id }: { id: string }) => {
                   type="submit"
                   disabled={form.watch("comment").length <= 0 || isCreating}
                 >
-                  Comment
+                  {isCreating ? "Sending..." :"Comment"}
                 </Button>
               </div>
             </form>
           </Form>
           <p className="text-lg font-semibold">
-            {post?.comments?.length} Comments
+            {post?.data.comments?.length} Comments
           </p>
-          {post?.comments?.map((item)=><CommentComponent key={item.id} comment={item as CommentWithUser} />)}
+          {post?.data.comments?.map((item)=><CommentComponent key={item.id} comment={item as CommentWithUser} />)}
         </div>
       )}
     </>

@@ -6,12 +6,27 @@ import { Button } from "@/app/_components/ui/button";
 import Loading from "../loading";
 import { toast } from "sonner";
 import moment from "moment";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { Invitation } from "@prisma/client";
+import { InvitationWithPayload } from "@/types";
 
 const InvitationsList = () => {
-  const utils = api.useUtils();
-  const { data: invitations, isLoading } =
-    api.invitation.getInvitations.useQuery();
-    const { mutateAsync: acceptInvitation,isLoading:isJoining } = api.invitation.acceptInvitation.useMutation({
+  const queryClient = useQueryClient()
+  const { data:invitations,isLoading } = useQuery<{
+    data:InvitationWithPayload[]
+  }>({
+    queryKey: ['invitationsList'],
+    queryFn: () =>
+      fetch(`/api/invitations`).then((res) =>
+        res.json(),
+      ),
+  })
+    const { mutateAsync: acceptInvitation,isLoading:isJoining } = useMutation({
+      mutationFn:(payload:{
+        clubId:string,
+        invitationId:string,
+      })=>axios.post(`/api/invitations/accept-invitation`,payload),
       onSuccess: () => {
         toast.success("Club joined", {
           description: moment().format("LLLL"),
@@ -23,10 +38,13 @@ const InvitationsList = () => {
         });
       },
       onSettled:()=>{
-        utils.invitation.getInvitations.invalidate()
+        queryClient.invalidateQueries(['invitationsList'])
       }
     });
-    const { mutateAsync: declineInvitation,isLoading:isDeclining } = api.invitation.rejectInvitation.useMutation({
+    const { mutateAsync: declineInvitation,isLoading:isDeclining } = useMutation({
+      mutationFn:(payload:{
+        invitationId:string,
+      })=>axios.post(`/api/invitations/decline-invitation`,payload),
       onSuccess: () => {
         toast.success("Invitation declined", {
           description: moment().format("LLLL"),
@@ -38,7 +56,8 @@ const InvitationsList = () => {
         });
       },
       onSettled:()=>{
-        utils.invitation.getInvitations.invalidate()
+        queryClient.invalidateQueries(['invitationsList'])
+
       }
     });
     const handleAccept = async(clubId:string,invitationId:string)=>{
@@ -58,8 +77,8 @@ const InvitationsList = () => {
         <Loading />
       ) : (
         <>
-        {invitations?.length !== 0 ?<>
-          {invitations?.map((invitation) => (
+        {invitations?.data.length !== 0 ?<>
+          {invitations?.data.map((invitation) => (
             <div
               key={invitation.id}
               className="space-y-2 rounded-lg border p-4"

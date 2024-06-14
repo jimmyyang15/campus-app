@@ -18,7 +18,7 @@ const MiddleSection = ({ isAdmin }: Props) => {
   const { data:posts,isLoading } = useQuery<{
     data:PostsWithUser[]
   }>({
-    queryKey: ['assignmentList'],
+    queryKey: ['postsList'],
     queryFn: () =>
       fetch(`/api/posts`).then((res) =>
         res.json(),

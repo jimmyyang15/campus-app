@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
-import { slateToHtml, htmlToSlate } from "@slate-serializers/html";
+import React from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
@@ -21,14 +20,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PostSchema } from "@/lib/schemas/post";
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
-import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useDebounce } from "use-debounce";
 import QuillToolbar, { modules, formats } from "./editor-toolbar";
-import PostActions from "../post/post-actions";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const CreatePostForm = () => {
+  const router = useRouter()
   const form = useForm<z.infer<typeof PostSchema>>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -38,8 +38,10 @@ const CreatePostForm = () => {
   });
 
   const { mutateAsync: createPost, isLoading } =
-    api.post.createPost.useMutation({
+    useMutation({
+      mutationFn:(payload:{title:string,content:string})=> axios.post(`/api/posts`,payload),
       onSuccess: () => {
+        router.push("/")
         toast.success("Post created", {
           description: moment().format("LLLL"),
           // action: {

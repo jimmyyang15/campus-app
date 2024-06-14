@@ -11,7 +11,17 @@ export type PostsWithUser = Prisma.PostGetPayload<{
             include:{
                 user:true
             }
-        }
+        },
+        comments:{
+      
+            include:{
+              user:{
+                include:{
+                  profile:true
+                }
+              }
+            }
+          }
     }
 }>
 
@@ -84,5 +94,17 @@ export type AssignmentWithPayload = Prisma.AssignmentGetPayload<{
                 }
             }
         }
+    }
+}>
+
+export type InvitationWithPayload = Prisma.InvitationGetPayload<{
+    include:{
+        club:true,
+        sender:{
+            include:{
+                profile:true
+            }
+        }
+       
     }
 }>

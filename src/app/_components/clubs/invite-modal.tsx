@@ -19,11 +19,13 @@ import {
 } from "@/app/_components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AutoComplete,type Option } from "../autocomplete";
-import { api } from "@/trpc/react";
 import { useParams } from "next/navigation";
 import Loading from "../loading";
 import { toast } from "sonner";
 import moment from "moment";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { UserWithProfile } from "@/types";
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username can't be empty",
@@ -32,12 +34,22 @@ const formSchema = z.object({
 const InviteModal = () => {
   const [open, setOpen] = useState(false);
   const { id } = useParams()
-  const {data,isLoading} = api.club.getInviteMembers.useQuery({
-    clubId:id as string
-  });
-  const utils = api.useUtils();
+  const { data:members,isLoading } = useQuery<{
+    data:UserWithProfile[]
+  }>({
+    queryKey: ['invitationMembers'],
+    queryFn: () =>
+      fetch(`/api/invitations/members/${id}`).then((res) =>
+        res.json(),
+      ),
+  })
+  const queryClient = useQueryClient()
 
-  const { mutateAsync:inviteMember,isLoading:isInviting } = api.club.inviteMember.useMutation({
+  const { mutateAsync:inviteMember,isLoading:isInviting } = useMutation({
+    mutationFn:(payload:{
+      recipientId:string,
+      clubId:string
+    })=>axios.post(`/api/invitations/invite-member`,payload),  
     onSuccess: () => {
       setOpen(false)
       toast.success("Member invited", {
@@ -50,9 +62,7 @@ const InviteModal = () => {
       });
     },
     onSettled:()=>{
-      utils.club.getInviteMembers.invalidate({
-        clubId:id as string
-      })
+      queryClient.invalidateQueries(['invitationMembers'])
     }
   })
   const [value, setValue] = useState<Option>()
@@ -71,14 +81,14 @@ const InviteModal = () => {
     })
 
   }
-  const memberOptions = data?.map((member)=>{
+  const memberOptions = members?.data?.map((member)=>{
     return {
       value:member.id,
-      label:member?.profile?.fullName
+      label:member.profile?.fullName
     }
   })
 
-  console.log(data)
+  console.log(members)
   return (
     <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild>
@@ -88,7 +98,7 @@ const InviteModal = () => {
         </li>
       </CredenzaTrigger>
       <CredenzaContent>
-        {isLoading && !data ? <Loading /> : <>
+        {(isLoading && !members)? <Loading /> : <>
         <CredenzaHeader>
           <CredenzaTitle className="text-center">Invite members</CredenzaTitle>
         </CredenzaHeader>
