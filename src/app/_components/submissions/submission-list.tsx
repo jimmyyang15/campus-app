@@ -8,24 +8,28 @@ import { DataTable } from "./data-table";
 import { MappedSubmission, columns } from "./columns";
 import { Button } from "../ui/button";
 import { ChevronLeft } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ClubWithPayload, SubmissionWithPayload } from "@/types";
+
 
 const SubmissionList = () => {
   const { id, assignmentId } = useParams();
-  const { data:submissions } = useQuery<{
-    data:SubmissionWithPayload[]
+  const { data: submissions } = useQuery<{
+    data: SubmissionWithPayload[];
   }>({
     queryKey: ["submissionList"],
-    queryFn: () => fetch(`/api/clubs/${id}/assignments/${assignmentId}/submissions`).then((res) => res.json()),
+    queryFn: () =>
+      fetch(`/api/clubs/${id}/assignments/${assignmentId}/submissions`).then(
+        (res) => res.json(),
+      ),
   });
-  const { data:club, isLoading } = useQuery<{
-    data:ClubWithPayload
+  const { data: club, isLoading } = useQuery<{
+    data: ClubWithPayload;
   }>({
     queryKey: ["clubSubmissions"],
     queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
   });
-  const router = useRouter()
+  const router = useRouter();
 
   const members = club?.data.members.filter((member) => !member.isMentor);
   const findSubmission = (userId: string) => {
@@ -35,10 +39,10 @@ const SubmissionList = () => {
     return {
       // id:member.id,
       status: findSubmission(member.id)
-        ? (findSubmission(member.id)?.createdAt?.getTime() as number) >=
+        ? (findSubmission(member.id)?.createdAt?.getTime?.() as number) >=
           (findSubmission(
             member.id,
-          )?.assignment?.createdAt!.getTime() as number)
+          )?.assignment?.createdAt?.getTime?.() as number)
           ? "Overdue"
           : "Submitted"
         : "Not Attempted",
@@ -52,7 +56,7 @@ const SubmissionList = () => {
 
   return (
     <div>
-         <Button variant="ghost" onClick={() => router.back()}>
+      <Button variant="ghost" onClick={() => router.back()}>
         <ChevronLeft size={18} className="mr-2" />
         Back
       </Button>
@@ -61,11 +65,15 @@ const SubmissionList = () => {
         <Loading />
       ) : (
         <div className="mt-4">
-          <DataTable columns={columns} data={mappedMembers as MappedSubmission[]} />
+          <DataTable
+            columns={columns}
+            data={mappedMembers as MappedSubmission[]}
+          />
         </div>
       )}
     </div>
   );
 };
+
 
 export default SubmissionList;

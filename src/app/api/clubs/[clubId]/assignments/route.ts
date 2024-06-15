@@ -5,6 +5,9 @@ export async function GET(req: NextRequest, { params }: { params: { clubId: stri
     const data =  await db.assignment.findMany({
         where:{
             clubId:params.clubId
+        },
+        include:{
+            submissions:true
         }
     })
 

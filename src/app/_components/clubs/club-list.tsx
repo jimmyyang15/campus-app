@@ -10,7 +10,9 @@ import { ClubWithPayload } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 const ClubList = () => {
-  const { data:clubs,isLoading } = useQuery<ClubWithPayload[]>({
+  const { data:clubs,isLoading } = useQuery<{
+    data:ClubWithPayload[]
+  }>({
     queryKey: ['clubList'],
     queryFn: () =>
       fetch('/api/clubs').then((res) =>
@@ -32,7 +34,7 @@ const ClubList = () => {
         <>
           {clubs && !isLoading ? (
             <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {clubs?.map((club, i:number) => (
+              {clubs?.data.map((club, i:number) => (
                 <ClubItem key={i} club={club as ClubWithPayload} />
               ))}
               {user.role === "ADMIN" ? <CreateModal /> : null}

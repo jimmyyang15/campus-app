@@ -1,30 +1,37 @@
 "use client";
 
-import { api } from "@/trpc/react";
 import { useParams, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/app/_components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Loading from "../loading";
 import moment from "moment";
 import { useSession } from "../session-provider";
 import { handleDownload } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { Assignment } from "@prisma/client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+import { toast } from "sonner";
+import { AssignmentWithPayload } from "@/types";
+import { useEdgeStore } from "@/lib/edgestore";
 const AssignmentList = () => {
   const { id } = useParams();
   const user = useSession();
   const router = useRouter();
-  const { data:assignments,isLoading } = useQuery<{
-    data:Assignment[]
+  const { data: assignments, isLoading } = useQuery<{
+    data: AssignmentWithPayload[];
   }>({
-    queryKey: ['assignmentList'],
+    queryKey: ["assignmentList"],
     queryFn: () =>
-      fetch(`/api/clubs/${id}/assignments`).then((res) =>
-        res.json(),
-      ),
-  })
-  console.log(assignments)
+      fetch(`/api/clubs/${id}/assignments`).then((res) => res.json()),
+  });
+  console.log(assignments);
   return (
     <div>
       <Button variant="ghost" onClick={() => router.back()}>
@@ -47,7 +54,10 @@ const AssignmentList = () => {
                     className="space-y-2 rounded-lg border p-4"
                     key={assignment.id}
                   >
-                    <p>{assignment.name}</p>
+                    <div className="flex items-center justify-between">
+                      <p>{assignment.name}</p>
+                      <ItemDropdown assignment={assignment} />
+                    </div>
                     <p className="text-xs text-gray-500">
                       Due in {moment(assignment.dueDate).format("lll")}
                     </p>
@@ -86,5 +96,63 @@ const AssignmentList = () => {
     </div>
   );
 };
+
+
+const ItemDropdown = ({ assignment }: { assignment:AssignmentWithPayload }) => {
+  const queryClient = useQueryClient();
+  const { id } = useParams()
+  const { edgestore } = useEdgeStore();
+  const [isDeleting,setIsDeleting] = useState<boolean>(false)
+
+  const { mutateAsync: deleteAssignment } = useMutation({
+    mutationFn: () => axios.delete(`/api/clubs/${id}/assignments/${assignment.id}`),
+    onSuccess: () => {
+      toast.success("Post deleted", {
+        description: moment().format("LLLL"),
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["assignmentList"]);
+    },
+  });
+
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      const promises = assignment.submissions.map((submission)=>{
+        edgestore.publicFiles.delete({
+         url: submission.files,
+       });
+     })
+     await Promise.all(promises as void[])
+     await deleteAssignment();
+    } catch (error) {
+      throw new Error("Oops... Something went wrong")
+    }finally {
+      setIsDeleting(false)
+    }
+
+  };
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <IoEllipsisHorizontalSharp />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem
+          onClick={handleDelete}
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 
 export default AssignmentList;

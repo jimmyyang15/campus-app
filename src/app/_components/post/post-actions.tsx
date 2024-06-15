@@ -10,7 +10,7 @@ type Props = {
 const PostActions = ({ postId, noComments }: Props) => {
   return (
     <div className="flex items-center gap-x-4">
-      <ReactionPopover postId={postId} />
+      <ReactionPopover  postId={postId} />
 
       {noComments ? null : (
         <Button className="bg-transparent text-xs text-gray-500 hover:bg-transparent hover:text-foreground">

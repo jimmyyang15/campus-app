@@ -35,3 +35,16 @@ export async function GET(req:NextRequest,{params}:{params:{postId:string}}) {
         data
     })
 }
+
+
+export async function DELETE(req:NextRequest,{params}:{params:{postId:string}}) {
+  await db.post.delete({
+    where:{
+      id:params.postId
+    }
+  })
+  return NextResponse.json({
+    status:201,
+    message:"Post Deleted"
+})
+}
