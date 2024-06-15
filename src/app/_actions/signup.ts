@@ -5,10 +5,10 @@ import { db } from "@/server/db";
 import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
 import { findUserByEmail, findUserByUsername } from "./user";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
-import { sendVerificationEmail } from "@/lib/mail";
 import { redirect } from "next/navigation";
 import { adminUsername, mentorNid, userNim } from "@/user-nim";
 import { hash } from "bcrypt";
+import { sendVerificationEmail } from "@/lib/nodemailer";
 export const signUp = async (values: RegisterSchemaType) => {
 
 

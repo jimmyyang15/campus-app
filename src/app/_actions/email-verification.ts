@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken"
 import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendVerificationEmail } from "@/lib/nodemailer";
+// import { sendVerificationEmail } from "@/lib/mail";
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
     // await db.table("email_verification_code").where("user_id", "=", userId).deleteAll();
