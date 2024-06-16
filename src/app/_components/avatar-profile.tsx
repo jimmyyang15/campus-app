@@ -7,16 +7,15 @@ import {
 import { Profile } from "@prisma/client";
 
 const AvatarProfile = ({ profile }: { profile: Profile }) => {
-  const { fullName, profilePicture } = profile;
 
   return (
     <Avatar>
       <AvatarImage
         alt="@shadcn"
         src={
-          profilePicture
-            ? profilePicture
-            : `https://ui-avatars.com/api/?background=random&name=${fullName}`
+          profile?.profilePicture
+            ? profile?.profilePicture
+            : `https://ui-avatars.com/api/?background=random&name=${profile?.fullName}`
         }
         className="object-cover"
       />
