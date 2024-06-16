@@ -15,7 +15,7 @@ import { Profile } from "@prisma/client";
 import AvatarProfile from "./avatar-profile";
 
 const AvatarDropdown = ({ profile }: { profile: Profile }) => {
-  const { fullName } = profile;
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -23,7 +23,7 @@ const AvatarDropdown = ({ profile }: { profile: Profile }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="truncate text-center">
-          {fullName}
+          {profile?.fullName}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center gap-x-2">
