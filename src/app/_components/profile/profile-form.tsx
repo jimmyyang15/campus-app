@@ -29,6 +29,8 @@ import { toast } from "sonner";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Profile } from "@prisma/client";
 import moment from "moment";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 type Props = {
   user: User | null;
@@ -53,7 +55,13 @@ const ProfileForm = ({ user }: Props) => {
 }, [file])
 
   const { isLoading, mutateAsync: updateProfile } =
-    api.profile.updateProfile.useMutation({
+    useMutation({
+      mutationFn:(payload: {
+        profilePicture?: string;
+        fullName?: string | undefined;
+        city?: string | undefined;
+        dob?: Date | undefined;
+    })=>axios.put(`/api/profile`,payload),
       onSuccess: () => {
         toast.success("Profile updated", {
           description: moment().format('LLLL'),

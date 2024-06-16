@@ -3,23 +3,37 @@ import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    const user = await validateRequest()
-    const data = await db.invitation.findMany({
-        where:{
-            recipientId:user?.id
-        },
-        include:{
-            club:true,
-            sender:{
-                include:{
-                    profile:true
+    try {
+        const user = await validateRequest();
+        if (!user) {
+            return NextResponse.json({
+                error: "Unauthorized"
+            }, {
+                status: 401
+            })
+        }
+        const data = await db.invitation.findMany({
+            where: {
+                recipientId: user?.id
+            },
+            include: {
+                club: true,
+                sender: {
+                    include: {
+                        profile: true
+                    }
                 }
             }
-        }
-    })
+        })
 
-    return NextResponse.json({
-        data,
-    })
+        return NextResponse.json({
+            data,
+        })
+    } catch (error) {
+        return new NextResponse("Internal server error", {
+            status: 500
+        })
+    }
+
 }
 

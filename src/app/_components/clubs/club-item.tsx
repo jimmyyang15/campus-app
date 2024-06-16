@@ -7,15 +7,22 @@ import { ClubWithPayload } from "@/types";
 import { toast } from "sonner";
 import moment from "moment";
 import Link from "next/link";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const user = useSession();
-  const { data:userRequest } = api.request.userRequest.useQuery();
+  const { data:userRequest } = useQuery({
+    queryKey:['userRequest'],
+    queryFn: () =>
+      fetch(`/api/clubs/${club.id}/requests/user-request`).then((res) => res.json()),
+  });
   const alreadyInTheClub = user?.club?.id === club.id;
-  const utils = api.useUtils();
+  const queryClient = useQueryClient()
   const requestSent = club?.request?.find((item) => item.userId === user.id);
   const { mutateAsync: requestJoin, isLoading: isRequesting } =
-    api.request.requestJoin.useMutation({
+    useMutation({
+      mutationFn:()=>axios.post(`/api/clubs/${club.id}/requests`),
       onSuccess: () => {
         toast.success("Request Sent", {
           description: moment().format("LLLL"),
@@ -28,13 +35,14 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
         });
       },
       onSettled: () => {
-        utils.club.getClubs.invalidate();
-        utils.request.userRequest.invalidate();
+        queryClient.invalidateQueries(['clubList'])
+        // utils.request.userRequest.invalidate();
 
       },
     });
     const { mutateAsync: cancelRequest, isLoading: isCancelling } =
-    api.request.cancelRequest.useMutation({
+    useMutation({
+      mutationFn:()=>axios.post(`/api/clubs/${club.id}/requests/cancel-request`),
       onSuccess: () => {
         toast.success("Request Cancelled", {
           description: moment().format("LLLL"),
@@ -47,21 +55,18 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
         });
       },
       onSettled: () => {
-        utils.club.getClubs.invalidate();
-        utils.request.userRequest.invalidate();
+        queryClient.invalidateQueries(['clubList'])
+
+        // utils.request.userRequest.invalidate();
       },
     });
 
   const handleRequest = async () => {
-    await requestJoin({
-      clubId: club.id,
-    });
+    await requestJoin();
   };
 
   const handleCancel = async () => {
-    await cancelRequest({
-      clubId:club.id
-    });
+    await cancelRequest();
   };
 
   return (

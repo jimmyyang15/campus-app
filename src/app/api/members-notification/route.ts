@@ -78,7 +78,7 @@ export async function POST(req: Request) {
                 headers: err.headers,
             });
         }
-        console.log(err);
+        
         return new NextResponse("Internal Server Error", {
             status: 500,
         });

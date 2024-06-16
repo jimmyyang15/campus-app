@@ -14,7 +14,7 @@ const transport = nodemailer.createTransport({
 
 
 export const sendVerificationEmail =async(email:string,code:string) => {
-    const send = await transport.sendMail({
+    await transport.sendMail({
         from:process.env.EMAIL_TEST,
         to:email,
         subject: "Confirm your email",
@@ -24,5 +24,16 @@ export const sendVerificationEmail =async(email:string,code:string) => {
         <p>Please copy and paste this code to your confirmation form </p></div>`,
 
     });
-    console.log(send)
+}
+
+export const sendResetPasswordToken = async(email:string,verificationLink:string) => {
+    await transport.sendMail({
+        from:process.env.EMAIL_TEST,
+        to:email,
+        subject: "Reset password",
+        html: `
+        <p>Click <a href=${verificationLink}>here</a> to reset password</p>
+      
+       `
+    });
 }

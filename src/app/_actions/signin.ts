@@ -5,7 +5,7 @@ import { lucia } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { LoginSchema, LoginSchemaType } from "@/lib/schemas/auth";
 import { generateEmailVerificationCode, generateRedirectUrl } from "./email-verification";
-import { sendVerificationEmail } from "@/lib/mail";
+import { sendVerificationEmail } from "@/lib/nodemailer";
 import { findUserByUsername } from "./user";
 import { compare } from 'bcrypt'
 export async function signin(values: LoginSchemaType) {

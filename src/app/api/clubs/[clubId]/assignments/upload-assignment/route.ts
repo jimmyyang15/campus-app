@@ -9,18 +9,24 @@ type Payload = {
     file:string,
 }
 export async function POST(req:Request,{params}:{params:{clubId:string}}) {
+    try {
+        const payload:Payload = await req.json();
+        await db.assignment.create({
+            data: {
+                ...payload,
+                clubId:params.clubId
+            }
+        })
+    
+        return NextResponse.json({
+            status:201,
+            message:"Assignment Uploaded"
+        })
+    } catch (error) {
+        return new NextResponse("Internal server error",{
+            status:500
+        }) 
+    }
 
-
-    const payload:Payload = await req.json();
-    await db.assignment.create({
-        data: {
-            ...payload,
-            clubId:params.clubId
-        }
-    })
-
-    return NextResponse.json({
-        status:201,
-        message:"Assignment Uploaded"
-    })
+  
 }
