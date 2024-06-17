@@ -27,7 +27,7 @@ const RequestList = ({ clubId }: { clubId: string }) => {
         <ChevronLeft size={18} className="mr-2" />
         Back
       </Button>
-      <p className="text-center text-lg font-bold">Requests</p>
+      <p className="text-center text-lg font-bold mb-4">Requests</p>
 
       {isLoading ? (
         <Loading />

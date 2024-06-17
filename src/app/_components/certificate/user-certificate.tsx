@@ -27,7 +27,6 @@ const UserCertificate = () => {
   
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const router = useRouter();
-  console.log(certificate)
   return (
     <div className="space-y-4">
       <Button variant="ghost" onClick={() => router.back()} >
@@ -39,7 +38,7 @@ const UserCertificate = () => {
         <Loading />
       ) : (
         <>
-          {certificate ? (
+          {certificate?.data ? (
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
               <div style={{ height: "750px" }}>
                 <Viewer
