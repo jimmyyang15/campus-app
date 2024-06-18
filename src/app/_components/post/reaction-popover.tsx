@@ -34,11 +34,11 @@ const ReactionPopover = ({ postId }: Props) => {
         }}
         className="flex justify-between text-2xl [&>*]:flex-1 [&>*]:cursor-pointer   [&>*]:transition-all [&>*]:duration-150 [&>*]:ease-in"
       >
-        <span onClick={() => handleReaction("THUMBS-UP")}>👍</span>
-        <span onClick={() => handleReaction("HEART")}>❤️</span>
-        <span onClick={() => handleReaction("HAPPY")}>😀</span>
-        <span onClick={() => handleReaction("FUNNY")}>🤣</span>
-        <span onClick={() => handleReaction("FIRE")}>🔥</span>️
+        <span onClick={(e:any) => handleReaction(e,"THUMBS-UP")}>👍</span>
+        <span onClick={(e:any) => handleReaction(e,"HEART")}>❤️</span>
+        <span onClick={(e:any) => handleReaction(e,"HAPPY")}>😀</span>
+        <span onClick={(e:any) => handleReaction(e,"FUNNY")}>🤣</span>
+        <span onClick={(e:any) => handleReaction(e,"FIRE")}>🔥</span>️
       </PopoverContent>
     </Popover>
   );
