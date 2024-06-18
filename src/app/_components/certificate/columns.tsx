@@ -11,25 +11,26 @@ import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useState } from "react";
-import { api } from "@/trpc/react";
 import { pdf } from "@react-pdf/renderer";
 import { useParams } from "next/navigation";
 import PdfComponent from "./pdf-document";
 import { PDFDocument } from "pdf-lib";
 import moment from "moment";
 import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ClubWithPayload } from "@/types";
 import { User } from "lucia";
 import axios from 'axios'
-export type Certificate = {
+import { Certificate } from "@prisma/client";
+export type CertificateColumn = {
   id: string;
   profilePicture: string;
   userId: string;
   fullName: string;
+  email:string
 };
 
-export const columns: ColumnDef<Certificate>[] = [
+export const columns: ColumnDef<CertificateColumn>[] = [
   //   {
   //     id: "select",
   //     header: ({ table }) => (
@@ -99,7 +100,8 @@ export const columns: ColumnDef<Certificate>[] = [
       const { mutateAsync:sendCertificate } = useMutation({
         mutationFn:(payload:{
           file:string,
-          recipientId:string
+          recipientId:string,
+          email:string,
         })=>axios.post(`/api/certificates/send-certificate`,payload)
       })
       const { id } = useParams();
@@ -122,7 +124,6 @@ export const columns: ColumnDef<Certificate>[] = [
         queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
       const { edgestore } = useEdgeStore();
-      console.log(membersWithoutCertificate)
       const handleSend = async () => {
         setIsSending(true);
 
@@ -151,7 +152,6 @@ export const columns: ColumnDef<Certificate>[] = [
                 const compressedFile = new File([pdfBytes], file.name, {
                   type: file.type,
                 });
-                console.log(file);
                 const res = await edgestore.publicFiles.upload({
                   options: {
                     manualFileName: `${member.profile?.fullName} Certificate.pdf`,
@@ -166,6 +166,8 @@ export const columns: ColumnDef<Certificate>[] = [
                 await sendCertificate({
                   file: res.url,
                   recipientId: member.id,
+                  email:member.email,
+                  
                 });
               } catch (error) {
                 throw new Error("Something went wrong");
@@ -177,7 +179,15 @@ export const columns: ColumnDef<Certificate>[] = [
         } catch (error) {
           console.error(error)
         }finally{
-          setIsSending(false)
+          setIsSending(false);
+          toast.success("Certificate sent!", {
+            description: moment().format("LLLL"),
+            // action: {
+            //   label: "Dismiss",
+            //   onClick: () => toast.dismiss(),
+            // },
+            closeButton: true,
+          });
         }
       };
       return (
@@ -192,10 +202,19 @@ export const columns: ColumnDef<Certificate>[] = [
 
     cell: function ActionComponent({ row }) {
       const { id } = useParams();
-
+      const queryClient = useQueryClient()
       const [sendingCertificate, setSendingCertificate] =
         useState<boolean>(false);
       const { edgestore } = useEdgeStore();
+      const { data:certificate } = useQuery<{
+        data:Certificate
+      }>({
+        queryKey: ['memberCertificate'],
+        queryFn: () =>
+          fetch(`/api/certificates/member-certificate/${row.original.userId}`).then((res) =>
+            res.json(),
+          ),
+      })
       const { data:club } = useQuery<{
         data:ClubWithPayload
       }>({
@@ -207,8 +226,13 @@ export const columns: ColumnDef<Certificate>[] = [
       const { mutateAsync:sendCertificate } = useMutation({
         mutationFn:(payload:{
           file:string,
-          recipientId:string
-        })=>axios.post(`/api/certificates/send-certificate`,payload)
+          recipientId:string,
+          email:string
+        })=>axios.post(`/api/certificates/send-certificate`,payload),
+        onSettled:()=>{
+          queryClient.invalidateQueries(['memberCertificate'])
+        }
+
       })
       const handleGenerate = async (name: string) => {
         const blob = await pdf(
@@ -221,6 +245,7 @@ export const columns: ColumnDef<Certificate>[] = [
       const handleSendCertificate = async (
         name: string,
         recipientId: string,
+        email:string
       ) => {
         try {
           setSendingCertificate(true);
@@ -242,9 +267,12 @@ export const columns: ColumnDef<Certificate>[] = [
               console.log(progress);
             },
           });
+          console.log(res)
+          
           await sendCertificate({
             file: res.url,
             recipientId,
+            email
           });
         } catch (error) {
           console.error(error);
@@ -273,10 +301,10 @@ export const columns: ColumnDef<Certificate>[] = [
         </Button>
           <Button
             variant={"outline"}
-            disabled={sendingCertificate}
+            disabled={sendingCertificate || !!certificate?.data}
             className="h-8 text-sm"
             onClick={() =>
-              handleSendCertificate(row.original.fullName, row.original.userId)
+              handleSendCertificate(row.original.fullName, row.original.userId,row.original.email)
             }
           >
             {sendingCertificate ? "Sending..." : "Send"}

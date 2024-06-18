@@ -56,8 +56,5 @@ const UserCertificate = () => {
   );
 };
 
-const PdfDocument = () => {
-  return <div></div>;
-};
 
 export default UserCertificate;

@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
+import { getDownloadFileName } from './utils';
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
@@ -35,5 +36,21 @@ export const sendResetPasswordToken = async(email:string,verificationLink:string
         <p>Click <a href=${verificationLink}>here</a> to reset password</p>
       
        `
+    });
+}
+export const sendEmailCertificate = async(email:string,file:string) => {
+    await transport.sendMail({
+        from:process.env.EMAIL_TEST,
+        to:email,
+        subject: "Certificate of completion",
+        html: `
+        <p>Congratulations on completing the club's activity. Here's your certificate</p>,
+      
+       `,
+       attachments:[{
+        filename:getDownloadFileName(file),
+        path:file,
+        contentType: 'application/pdf'
+       }]
     });
 }

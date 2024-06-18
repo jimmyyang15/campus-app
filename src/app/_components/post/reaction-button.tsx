@@ -8,7 +8,7 @@ type Props = {
   count: number;
   icon:string;
   items:ReactionWithUser[];
-  handleReact:()=>void
+  handleReact:(e:React.ChangeEvent)=>void
 };
 const ReactionButton = ({ count,icon,items,handleReact }: Props) => {
   const  user  = useSession();
@@ -22,7 +22,7 @@ const ReactionButton = ({ count,icon,items,handleReact }: Props) => {
       variant="outline"
       size="icon"
       type="button"
-      onClick={handleReact}
+      onClick={(e:any)=>handleReact(e)}
     >
       <span>{icon}</span>
       <span>{count}</span>

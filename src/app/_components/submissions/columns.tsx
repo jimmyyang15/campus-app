@@ -51,7 +51,7 @@ export const columns: ColumnDef<MappedSubmission>[] = [
       
       id: "actions",
       cell: ({ row }) => {
-        if(!row.original.file) return null
+        if(row.original.file === "-") return null
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

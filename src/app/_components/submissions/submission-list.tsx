@@ -64,7 +64,7 @@ const SubmissionList = () => {
       {isLoading || !club?.data.members ? (
         <Loading />
       ) : (
-        <div className="mt-4">
+        <div className="mt-4 md:overflow-x-auto overflow-x-scroll w-[90%] mx-auto">
           <DataTable
             columns={columns}
             data={mappedMembers as MappedSubmission[]}

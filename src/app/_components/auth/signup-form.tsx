@@ -19,6 +19,7 @@ import { RegisterSchema, RegisterSchemaType } from "@/lib/schemas/auth";
 import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export interface AlertType {
   status: "error" | "success";
@@ -26,6 +27,8 @@ export interface AlertType {
   desc: string;
 }
 const SignupForm = () => {
+  const mobile = useMediaQuery("(max-width:640px)")
+
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<AlertType | null>(null);
   const [success, setSuccess] = useState<AlertType | null>(null);
@@ -165,9 +168,9 @@ const SignupForm = () => {
                         onClick={() => setPasswordVisible((prev) => !prev)}
                         type="button"
                         variant={"outline"}
-                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input h-full"
                       >
-                        {passwordVisible ? <EyeOff /> : <Eye />}
+                        {passwordVisible ? <EyeOff size={mobile?16:22} /> : <Eye size={mobile?16:22} />}
                       </Button>
                     </div>
                   </FormControl>
@@ -198,9 +201,9 @@ const SignupForm = () => {
                         }
                         type="button"
                         variant={"outline"}
-                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                        className="absolute  bottom-0 right-0 cursor-pointer text-input h-full"
                       >
-                        {passwordConfirmVisible ? <EyeOff /> : <Eye />}
+                        {passwordConfirmVisible ?<EyeOff size={mobile?16:22} /> : <Eye size={mobile?16:22} />}
                       </Button>
                     </div>
                   </FormControl>

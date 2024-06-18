@@ -22,9 +22,11 @@ import FormAlert from "./alert";
 import { AlertType } from "./signup-form";
 import { signin } from "@/app/_actions/signin";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 const SigninForm = () => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-
+  const mobile = useMediaQuery("(max-width:640px)")
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -105,9 +107,9 @@ const SigninForm = () => {
                         onClick={() => setPasswordVisible((prev) => !prev)}
                         type="button"
                         variant={"outline"}
-                        className="absolute  bottom-0 right-0 cursor-pointer text-input "
+                        className="absolute h-full bottom-0 right-0 cursor-pointer text-input"
                       >
-                        {passwordVisible ? <EyeOff /> : <Eye />}
+                        {passwordVisible ? <EyeOff size={mobile?16:22} /> : <Eye size={mobile?16:22}  />}
                       </Button>
                     </div>
                   </FormControl>

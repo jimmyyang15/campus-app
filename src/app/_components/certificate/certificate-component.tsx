@@ -10,7 +10,7 @@ import { api } from "@/trpc/react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Club } from "@prisma/client";
 import { DataTable } from "./data-table";
-import { Certificate, columns } from "./columns";
+import { CertificateColumn, columns } from "./columns";
 import Loading from "../loading";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "lucia";
@@ -41,6 +41,7 @@ const CertificateComponent = () => {
           profilePicture: member.profile?.profilePicture,
           userId: member.id,
           fullName: member.profile?.fullName,
+          email:member.email
         };
       }),
     [assignments?.data],
@@ -59,9 +60,9 @@ const CertificateComponent = () => {
       {(isLoading || !mappedMembers)? (
         <Loading />
       ) : (
-        <div className="mx-auto mt-4 flex  w-3/4 flex-col space-y-8 rounded-lg p-2">
+        <div className="mx-auto mt-4 flex  w-full md:w-3/4 flex-col space-y-8 rounded-lg p-2">
       
-          <DataTable columns={columns} data={mappedMembers as unknown as Certificate[]} />
+          <DataTable columns={columns} data={mappedMembers as unknown as CertificateColumn[]} />
         </div>
       )}
     </div>

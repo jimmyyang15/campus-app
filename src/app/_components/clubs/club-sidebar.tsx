@@ -67,7 +67,7 @@ const ClubSidebar = () => {
           })}
         >
           <TbCertificate size={mobile ? 18 : 20} />
-          <p className="hidden text-xs font-semibold sm:block">Certificate</p>
+          <p className="hidden text-xs text-center font-semibold sm:block">Send Certificate</p>
         </Link>
       ) : null}
 

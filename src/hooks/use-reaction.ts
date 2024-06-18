@@ -28,7 +28,9 @@ export const useReaction = (postId:string) => {
           queryClient.invalidateQueries(['postDetail'])
         },
       });
-  const handleReaction = async (type: ReactionType_Zod) => {
+  const handleReaction = async (e:React.ChangeEvent,type: ReactionType_Zod) => {
+    e.nativeEvent.preventDefault();
+    e.stopPropagation()
     setReactionOpen(false)
     await giveReaction({
       type,
