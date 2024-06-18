@@ -33,9 +33,11 @@ import { useEdgeStore } from "@/lib/edgestore";
 import moment from "moment";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 const CreateModal = () => {
   const [file, setFile] = useState<File>();
-  const utils = api.useUtils();
+  const queryClient = useQueryClient()
 
   const daysValue = () => {
     return [{
@@ -63,9 +65,25 @@ const CreateModal = () => {
   }
   const [open, setOpen] = useState(false);
   const { edgestore } = useEdgeStore();
-  const { data: mentors } = api.user.getMentors.useQuery();
+  const { data: mentors } = useQuery<{
+    data:UserWithProfile[]
+  }>({
+    queryKey: ['mentors'],
+    queryFn: () =>
+      fetch('/api/user/mentors').then((res) =>
+        res.json(),
+      ),
+  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { mutateAsync: createClub } = api.club.createClub.useMutation({
+  const { mutateAsync: createClub } = useMutation({
+    mutationFn:(payload:{
+      name: string,
+      clubImage?:string,
+      mentorId: string,
+      time: string,
+      day: string,
+      desc?: string,
+    })=>axios.post(`/api/clubs`,payload),
     onSuccess: () => {
       setOpen(false);
       toast.success("Club created ", {
@@ -78,7 +96,7 @@ const CreateModal = () => {
       });
     },
     onSettled: () => {
-      utils.club.getClubs.invalidate();
+      queryClient.invalidateQueries(['clubList'])
     },
   });
   const form = useForm<ClubSchemaType>({
@@ -217,7 +235,7 @@ const CreateModal = () => {
                   </div>
                 </div>
 
-                <SelectMentors mentors={mentors as UserWithProfile[]} />
+                <SelectMentors mentors={mentors?.data as UserWithProfile[]} />
                 <SingleImageDropzone
                   className="w-full"
                   width={0}

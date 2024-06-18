@@ -19,10 +19,7 @@ const PostActions = ({ postId, noComments }: Props) => {
         </Button>
       )}
 
-      <Button className="bg-transparent text-xs text-gray-500 hover:bg-transparent hover:text-foreground">
-        <Share size={13} className="mr-2" />
-        Share
-      </Button>
+
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
+import Image from "next/image";
 
 export function SheetMenu() {
   return (
@@ -18,16 +19,21 @@ export function SheetMenu() {
           <MenuIcon size={20} />
         </Button>
       </SheetTrigger>
-      <SheetContent className="sm:w-72 px-3 h-full flex flex-col" side="left">
+      <SheetContent className="flex h-full flex-col px-3 sm:w-72" side="left">
         <SheetHeader>
           <Button
-            className="flex justify-center items-center pb-2 pt-1"
+            className="flex items-center justify-center pb-2 pt-1"
             variant="link"
             asChild
           >
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <PanelsTopLeft className="w-6 h-6 mr-1" />
-              <h1 className="font-bold text-lg">Brand</h1>
+            <Link href="/" className="">
+              <Image
+                className="object-cover"
+                src="/assets/logo.png"
+                alt="logo"
+                width={70}
+                height={70}
+              />
             </Link>
           </Button>
         </SheetHeader>
