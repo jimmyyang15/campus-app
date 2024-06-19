@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 const PushSubscriptionToggle = () => {
   const [hasActivePushSubscription, setHasActivePushSubscription] =
-    useState<boolean>();
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     async function getActivePushSubscription() {
@@ -58,7 +58,7 @@ const PushSubscriptionToggle = () => {
       setIsLoading(false);
     }
   }
-  if (hasActivePushSubscription === undefined) return null;
+  // if (hasActivePushSubscription === undefined) return null;
   return (
     <Button variant={"outline"} disabled={isLoading}>
       {isLoading ? (
