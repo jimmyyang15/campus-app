@@ -84,7 +84,7 @@ const PostDetailComponent = ({ id }: { id: string }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Textarea placeholder="Write a comment" {...field} />
+                      <Textarea className="bg-transparent" placeholder="Write a comment" {...field} />
                     </FormControl>
 
                     {/* <FormMessage /> */}

@@ -4,7 +4,7 @@ import {
     Users,
     Settings,
     Bookmark,
- 
+    CircleUser 
   } from "lucide-react";
   import { FaRegUser } from "react-icons/fa6";
   import { MdOutlineGroups2,MdOutlineHome,MdOutlineInsertInvitation  } from "react-icons/md";
@@ -71,18 +71,18 @@ import { TbCertificate } from "react-icons/tb";
       },
       {
         menus: [
+          // {
+          //   href: "/profile",
+          //   label: "Profile",
+          //   active: pathname.includes("/profile"),
+          //   icon: FaRegUser ,
+          //   role:""
+          // },
           {
-            href: "/profile",
-            label: "Profile",
-            active: pathname.includes("/profile"),
-            icon: FaRegUser ,
-            role:""
-          },
-          {
-            href: "/account",
+            href: "/account/profile",
             label: "Account",
             active: pathname.includes("/account"),
-            icon: Settings,
+            icon: CircleUser,
             role:""
           }
         ]
