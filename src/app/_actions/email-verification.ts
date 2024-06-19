@@ -7,6 +7,7 @@ import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { sendVerificationEmail } from "@/lib/nodemailer";
+import { env } from "@/env";
 // import { sendVerificationEmail } from "@/lib/mail";
 
 export async function generateEmailVerificationCode(userId: string, email: string): Promise<string> {
@@ -59,13 +60,13 @@ export async function generateRedirectUrl(props: {
     });
     const token = jwt.sign(
         { email, temporaryCode, userId },
-        process.env.JWT_SECRET!,
+        env.JWT_SECRET!,
         {
             expiresIn: "5m",
         }
     );
 
-    const redirectUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`;
+    const redirectUrl = `${env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`;
 
     return redirectUrl
 }
@@ -99,20 +100,20 @@ export const verifyEmail = async (decodedValue: {
     email: string,
     userId: string,
 
-}, otp:string) => {
+}, otp: string) => {
     const { email, userId } = decodedValue;
 
     const verifyCode = await db.emailVerification.findFirst({
         where: {
-          AND:[
-            {
-                email
-            },{
-                userId
-            },{
-                code:otp
-            }
-          ]
+            AND: [
+                {
+                    email
+                }, {
+                    userId
+                }, {
+                    code: otp
+                }
+            ]
         }
     });
 
@@ -160,11 +161,11 @@ export const resendVerificationEmail = async (userId: string, email: string) => 
 
     //find existing email verification
     const existingVerification = await db.emailVerification.findFirst({
-        where:{
-            AND:[
+        where: {
+            AND: [
                 {
                     email
-                },{
+                }, {
                     userId
                 }
             ]
@@ -173,11 +174,11 @@ export const resendVerificationEmail = async (userId: string, email: string) => 
 
     //resend limit
     const curDate = new Date()
-    const dateLimit = new Date(existingVerification!.expiresAt.getTime()  - (2 * 60000 + 30 * 1000))
+    const dateLimit = new Date(existingVerification!.expiresAt.getTime() - (2 * 60000 + 30 * 1000))
 
-    if(curDate < dateLimit) {
+    if (curDate < dateLimit) {
         return {
-            error:"Please wait for a while!"
+            error: "Please wait for a while!"
         }
     }
 
@@ -196,6 +197,6 @@ export const resendVerificationEmail = async (userId: string, email: string) => 
     });
     await sendVerificationEmail(email, code);
     return {
-        success:"Email resent successfully!"
+        success: "Email resent successfully!"
     }
 }

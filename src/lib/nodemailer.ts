@@ -1,14 +1,15 @@
 import nodemailer from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import { getDownloadFileName } from './utils';
+import { env } from '@/env';
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     secure:process.env.NODE_ENV !== "development",
     auth:{
-        user:process.env.EMAIL_TEST,
-        pass:process.env.EMAIL_TEST_PSWD
+        user:env.EMAIL_TEST,
+        pass:env.EMAIL_TEST_PSWD
     },
 
 } as SMTPTransport.Options);
@@ -29,7 +30,7 @@ export const sendVerificationEmail =async(email:string,code:string) => {
 
 export const sendResetPasswordToken = async(email:string,verificationLink:string) => {
     await transport.sendMail({
-        from:process.env.EMAIL_TEST,
+        from:env.EMAIL_TEST,
         to:email,
         subject: "Reset password",
         html: `
@@ -40,7 +41,7 @@ export const sendResetPasswordToken = async(email:string,verificationLink:string
 }
 export const sendEmailCertificate = async(email:string,file:string) => {
     await transport.sendMail({
-        from:process.env.EMAIL_TEST,
+        from:env.EMAIL_TEST,
         to:email,
         subject: "Certificate of completion",
         html: `

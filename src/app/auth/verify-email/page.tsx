@@ -2,7 +2,6 @@ import VerifyEmailForm from "@/app/_components/auth/verify-email-form";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import jwt from "jsonwebtoken";
-import { db } from "@/server/db";
 import { emailVerification } from "@/app/_actions/email-verification";
 export const metadata: Metadata = {
   title: "Verify your email",
