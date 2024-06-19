@@ -36,7 +36,7 @@ export const env = createEnv({
     WEB_PUSH_EMAIL: z.string(),
     EMAIL_TEST_PSWD: z.string(),
     EMAIL_TEST: z.string(),
-
+    BASE_URL:z.string()
     // STREAM_SECRET:z.string()
   },
 
@@ -46,7 +46,6 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_BASE_URL: z.string(),
     NEXT_PUBLIC_VAPID_KEY: z.string(),
     // NEXT_PUBLIC_STREAM_KEY:z.string(),
   },
@@ -64,7 +63,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     JWT_SECRET: process.env.JWT_SECRET,
-    NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+    BASE_URL: process.env.BASE_URL,
     NEXT_PUBLIC_VAPID_KEY: process.env.NEXT_PUBLIC_VAPID_KEY,
     WEB_PUSH_PRIVATE_KEY: process.env.WEB_PUSH_PRIVATE_KEY,
     WEB_PUSH_EMAIL: process.env.WEB_PUSH_EMAIL,

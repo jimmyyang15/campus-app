@@ -6,7 +6,7 @@ import { env } from '@/env';
 const transport = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
-    secure:process.env.NODE_ENV !== "development",
+    secure:env.NODE_ENV !== "development",
     auth:{
         user:env.EMAIL_TEST,
         pass:env.EMAIL_TEST_PSWD

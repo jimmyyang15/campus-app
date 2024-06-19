@@ -66,7 +66,7 @@ export async function generateRedirectUrl(props: {
         }
     );
 
-    const redirectUrl = `${env.NEXT_PUBLIC_BASE_URL}/auth/verify-email?token=${token}`;
+    const redirectUrl = `${env.BASE_URL}/auth/verify-email?token=${token}`;
 
     return redirectUrl
 }

@@ -13,6 +13,8 @@ import { lucia } from "@/server/auth";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { hash } from "bcrypt";
+import { env } from "@/env";
+
 async function createPasswordResetToken(userId: string): Promise<string> {
     // optionally invalidate all existing tokens
     await db.passwordResetToken.deleteMany({
@@ -51,7 +53,7 @@ export const forgotPassword = async (values: ResetPasswordSchemaType) => {
     }
 
     const verificationToken = await createPasswordResetToken(user.id);
-    const verificationLink = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password?token=${verificationToken}`;
+    const verificationLink = `${env.BASE_URL}/auth/reset-password?token=${verificationToken}`;
     await sendResetPasswordToken(email, verificationLink);
 
     return {
