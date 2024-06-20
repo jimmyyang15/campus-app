@@ -20,12 +20,9 @@ import { signUp } from "@/app/_actions/signup";
 import FormAlert from "./alert";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { AlertType } from "@/types";
 
-export interface AlertType {
-  status: "error" | "success";
-  message: string;
-  desc: string;
-}
+
 const SignupForm = () => {
   const mobile = useMediaQuery("(max-width:640px)")
 

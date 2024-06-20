@@ -19,7 +19,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Separator } from "@/app/_components/ui/separator";
 import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
-import { AlertType } from "./signup-form";
+import { AlertType } from "@/types";
 import { signin } from "@/app/_actions/signin";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useMediaQuery } from "@/hooks/use-media-query";

@@ -7,9 +7,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
 import { signOut } from "../_actions/signout";
-import { LogOut, User } from "lucide-react";
+import { CircleUser, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Profile } from "@prisma/client";
 import AvatarProfile from "./avatar-profile";
@@ -27,8 +27,8 @@ const AvatarDropdown = ({ profile }: { profile: Profile }) => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="flex items-center gap-x-2">
-          <User size={16} />
-          <Link href="/profile">Profile</Link>
+          <CircleUser size={16} />
+          <Link href="/account/profile">Account</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <form action={signOut} className="flex items-center gap-x-2">

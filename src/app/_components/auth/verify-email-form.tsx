@@ -21,7 +21,7 @@ import {
 } from "@/app/_components/ui/form";
 
 import FormAlert from "@/app/_components/auth/alert";
-import { AlertType } from "@/app/_components/auth/signup-form";
+import { AlertType } from "@/types";
 
 import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";

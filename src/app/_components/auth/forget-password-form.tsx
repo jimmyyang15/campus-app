@@ -21,7 +21,7 @@ import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { useRouter } from "next/navigation";
 import FormAlert from "./alert";
-import { AlertType } from "./signup-form";
+import { AlertType } from "@/types";
 import { Loader2 } from "lucide-react";
 import { forgotPassword } from "@/app/_actions/reset-password";
 

@@ -10,7 +10,7 @@ const ProfilePage = async() => {
   const user  = await validateRequest();
 
   return (
-    <main className='container py-4 max-w-4xl mx-auto flex flex-col '>
+    <main className=' flex-[0.7] mx-auto p-4 flex flex-col '>
         <ProfileForm user={user} />
     </main>
   )

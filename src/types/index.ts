@@ -1,5 +1,10 @@
 import { Prisma } from "@prisma/client";
 
+export interface AlertType {
+    status: "error" | "success";
+    message: string;
+    desc?: string;
+  }
 export type PostsWithUser = Prisma.PostGetPayload<{
     include: {
         user:{

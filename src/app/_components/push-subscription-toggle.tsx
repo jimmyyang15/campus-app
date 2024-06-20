@@ -12,12 +12,14 @@ import { toast } from "sonner";
 
 const PushSubscriptionToggle = () => {
   const [hasActivePushSubscription, setHasActivePushSubscription] =
-    useState<boolean>(false);
+    useState<boolean>();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     async function getActivePushSubscription() {
       const subscription = await getCurrentPushSubscription();
       setHasActivePushSubscription(!!subscription);
+      console.log(subscription)
+      console.log(hasActivePushSubscription)
     }
 
     getActivePushSubscription();
