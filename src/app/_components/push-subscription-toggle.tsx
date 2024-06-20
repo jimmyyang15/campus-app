@@ -60,7 +60,7 @@ const PushSubscriptionToggle = () => {
       setIsLoading(false);
     }
   }
-  // if (hasActivePushSubscription === undefined) return null;
+  if (hasActivePushSubscription === undefined) return null;
   return (
     <Button variant={"outline"} disabled={isLoading}>
       {isLoading ? (
