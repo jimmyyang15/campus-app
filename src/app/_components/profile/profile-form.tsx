@@ -29,18 +29,26 @@ import { toast } from "sonner";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Profile } from "@prisma/client";
 import moment from "moment";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { UserWithProfile } from "@/types";
+import Loading from "../loading";
 
 type Props = {
   user: User | null;
 };
-const ProfileForm = ({ user }: Props) => {
+const ProfileForm = () => {
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<string | undefined>()
   const { edgestore } = useEdgeStore();
+  const { data: user,isLoading:userLoading } = useQuery<{
+    data: UserWithProfile;
+  }>({
+    queryKey: ["user"],
+    queryFn: () => fetch(`/api/user`).then((res) => res.json()),
+  });
+  const queryClient = useQueryClient()
 
-  console.log(file);
   useEffect(() => {
     if (!file) {
         setPreview(undefined)
@@ -73,13 +81,16 @@ const ProfileForm = ({ user }: Props) => {
           closeButton: true,
         });
       },
+      onSettled:()=>{
+        queryClient.invalidateQueries(['user'])
+      }
     });
 
   const form = useForm<ProfileSchemaType>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      fullName: user?.profile.fullName,
-      city: user?.profile.city as string,
+      fullName: user?.data.profile?.fullName,
+      city: user?.data.profile?.city as string,
     },
   });
 
@@ -95,7 +106,7 @@ const ProfileForm = ({ user }: Props) => {
         // },
         
         options: {
-          replaceTargetUrl: user?.profile.profilePicture as string,
+          replaceTargetUrl: user?.data.profile?.profilePicture as string,
         },
       });
       const data = {
@@ -111,15 +122,16 @@ const ProfileForm = ({ user }: Props) => {
   }
   return (
     <div>
-      <ProfileAvatar
-        profile={user?.profile as Profile}
+      {userLoading ? <Loading /> : <>
+        <ProfileAvatar
+        profile={user?.data.profile as Profile}
         preview={preview as string}
         setFile={setFile}
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
-            defaultValue={user?.profile.fullName}
+            defaultValue={user?.data.profile?.fullName}
             control={form.control}
             name="fullName"
             render={({ field }) => (
@@ -135,7 +147,7 @@ const ProfileForm = ({ user }: Props) => {
           />
           <FormField
             control={form.control}
-            defaultValue={user?.profile.city as string}
+            defaultValue={user?.data?.profile?.city as string}
             name="city"
             render={({ field }) => (
               <FormItem>
@@ -150,7 +162,7 @@ const ProfileForm = ({ user }: Props) => {
           />
           <FormField
             control={form.control}
-            defaultValue={user?.profile.dob as Date}
+            defaultValue={user?.data.profile?.dob as Date}
             name="dob"
             render={({ field }) => (
               <FormItem className="flex flex-col">
@@ -212,6 +224,8 @@ const ProfileForm = ({ user }: Props) => {
           </Button>
         </form>
       </Form>
+      </>}
+      
     </div>
   );
 };

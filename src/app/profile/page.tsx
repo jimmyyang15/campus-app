@@ -11,7 +11,7 @@ const ProfilePage = async() => {
 
   return (
     <main className='container py-4 max-w-4xl mx-auto flex flex-col '>
-        <ProfileForm user={user} />
+        <ProfileForm  />
     </main>
   )
 }

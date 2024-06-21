@@ -127,7 +127,7 @@ const AssignmentActivity = () => {
                   <Button
                     type="submit"
                     className="mt-4 "
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !form.watch("attachment")}
                   >
                     {isSubmitting ? "Processing..." : "Submit"}
                   </Button>

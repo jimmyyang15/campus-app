@@ -8,6 +8,7 @@ import { api } from "@/trpc/react";
 import { PostsWithUser } from "@/types";
 import Loading from "@/app/_components/loading";
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "../session-provider";
 // import { posts } from "@/data";
 
 type Props = {
@@ -23,7 +24,9 @@ const MiddleSection = ({ isAdmin }: Props) => {
       fetch(`/api/posts`).then((res) =>
         res.json(),
       ),
-  })
+  });
+  const user = useSession();
+  console.log(user)
   return (
     <section className="flex-1 border-r">
       {isAdmin ? <CreatePostSection /> : null}

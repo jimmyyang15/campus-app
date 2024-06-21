@@ -36,3 +36,34 @@ export async function GET(req: NextRequest, { params }: { params: { clubId: stri
     }
   
 }
+
+type Payload = {
+    memberId:string
+}
+export async function POST(req: NextRequest,{ params }: { params: { clubId: string } }) {
+    
+    try {
+        const { memberId }:Payload = await req.json();
+       await db.club.update({
+            where:{
+                id:params.clubId
+            },
+            data:{
+                members:{
+                    disconnect:{
+                        id:memberId
+                    }
+                }
+            }
+        })
+        return NextResponse.json({
+            status:201,
+            message:"Member Kicked"
+        })
+    } catch (error) {
+        return new NextResponse("Internal server error",{
+            status:500
+        })
+    }
+  
+}

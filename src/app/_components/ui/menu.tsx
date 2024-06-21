@@ -15,6 +15,7 @@ import {
 } from "@/app/_components/ui/tooltip";
 import { signOut } from "@/app/_actions/signout";
 import { useSession } from "../session-provider";
+import { SheetClose } from "./sheet";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -61,6 +62,7 @@ export function Menu({ isOpen }: MenuProps) {
                                 </p>
                               </Link>
                             </Button>
+                            
                           </TooltipTrigger>
                           {isOpen === false && (
                             <TooltipContent side="right">
@@ -76,6 +78,7 @@ export function Menu({ isOpen }: MenuProps) {
                     <TooltipProvider disableHoverableContent>
                       <Tooltip delayDuration={100}>
                         <TooltipTrigger asChild>
+
                           <Button
                             variant={active ? "secondary" : "ghost"}
                             className="mb-1 h-10 w-full justify-start"
@@ -99,6 +102,7 @@ export function Menu({ isOpen }: MenuProps) {
                               </p>
                             </Link>
                           </Button>
+                          
                         </TooltipTrigger>
                         {isOpen === false && (
                           <TooltipContent side="right">{label}</TooltipContent>

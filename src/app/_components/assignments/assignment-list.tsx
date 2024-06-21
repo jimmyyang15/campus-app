@@ -56,7 +56,8 @@ const AssignmentList = () => {
                   >
                     <div className="flex items-center justify-between">
                       <p>{assignment.name}</p>
-                      <ItemDropdown assignment={assignment} />
+                      {user.isMentor ? <ItemDropdown assignment={assignment} /> : null}
+                      
                     </div>
                     <p className="text-xs text-gray-500">
                       Due in {moment(assignment.dueDate).format("lll")}
@@ -103,7 +104,6 @@ const ItemDropdown = ({ assignment }: { assignment:AssignmentWithPayload }) => {
   const { id } = useParams()
   const { edgestore } = useEdgeStore();
   const [isDeleting,setIsDeleting] = useState<boolean>(false)
-
   const { mutateAsync: deleteAssignment } = useMutation({
     mutationFn: () => axios.delete(`/api/clubs/${id}/assignments/${assignment.id}`),
     onSuccess: () => {

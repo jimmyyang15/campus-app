@@ -8,6 +8,8 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import moment from "moment";
 import { useSession } from "../session-provider";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 const MemberItem = ({ member }: { member: UserWithProfile }) => {
   const utils = api.useUtils();
@@ -15,7 +17,10 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
   const user  = useSession();
 
   const { mutateAsync: kickMember, isLoading } =
-    api.club.kickMember.useMutation({
+    useMutation({
+      mutationFn:(payload:{
+        memberId:string
+      })=>axios.post(`/api/clubs/${id}/members`,payload),
       onSuccess: () => {
         toast.success("Club created ", {
           description: moment().format("LLLL"),
@@ -34,7 +39,6 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
     });
   const handleKick = async () => {
     await kickMember({
-      clubId: id as string,
       memberId: member.id,
     });
   };
@@ -56,9 +60,7 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
               >
                 {isLoading ? "Processing..." : "Kick"}
               </Button>
-              <Button variant={"outline"} className="h-8 text-xs">
-                Appoint as Admin
-              </Button>
+   
             </div>
           ) : null}
         </>
