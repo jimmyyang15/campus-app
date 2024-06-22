@@ -1,11 +1,17 @@
 import { env } from "@/env";
-import { validateRequest } from "@/server/auth";
 import { db } from "@/server/db";
 import { Subscription } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import webPush from 'web-push'
 
 export async function GET(req: NextRequest) {
+    const searchParams = req.nextUrl.searchParams;
+    const key = searchParams.get("key")
+    if(key !== "sharedKey") {
+        return new NextResponse("Not found", {
+            status: 404
+        })
+    }
     const today = new Date().getDay();
     const sendNotification = async (subscription: Subscription, notification: string) => {
         try {
