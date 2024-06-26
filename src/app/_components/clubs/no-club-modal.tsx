@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Credenza,
   CredenzaBody,
@@ -37,6 +37,8 @@ export type NotificationSchemaType = z.infer<typeof NotificationSchema>;
 const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
   const { id } = useParams();
   const user = useSession();
+  const [open, setOpen] = useState(false);
+
   const { mutateAsync: notifyMentor, isLoading: notifyingMentor } = useMutation(
     {
       mutationFn: (payload: { clubId: string; reason: string }) =>
@@ -45,6 +47,7 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
         throw new Error("Failed to send notification");
       },
       onSuccess: () => {
+        setOpen(false)
         toast.success("Mentor notified", {
           description: moment().format("LLLL"),
           // action: {
@@ -57,6 +60,7 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
       onSettled: () => {},
     },
   );
+
   const { mutateAsync: notifyMembers, isLoading: notifyingMembers } =
     useMutation({
       mutationFn: (payload: { clubId: string; reason: string }) =>
@@ -65,6 +69,7 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
         throw new Error("Failed to send notification");
       },
       onSuccess: () => {
+        setOpen(false)
         toast.success("Members notified", {
           description: moment().format("LLLL"),
           // action: {
@@ -106,7 +111,7 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
     return minutes2 < minutes1;
   }
   return (
-    <Credenza>
+    <Credenza onOpenChange={setOpen} open={open}>
       <CredenzaTrigger asChild className="mt-4">
         <Button
           disabled={isLater(moment().format("HH:mm").slice(0, 5), timeActivity)}

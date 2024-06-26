@@ -42,39 +42,39 @@ const VerifyEmailForm = ({
   //set resend time limit by 2.30 minutes depends on the expiresAt field of email verification
   // Subtract 2 minutes and 30 seconds
   // (2 * 60 * 1000 + 30 * 1000)
-  const curDate = new Date()
-  // Calculate the time difference in seconds
-  const timeDifferenceInSeconds = Math.floor((expiresAt - curDate.getTime() ) / 1000)
-  const [timeLeft, setTimeLeft] = useState<number | null>(
-    timeDifferenceInSeconds,
-  );
+  // const curDate = new Date()
+  // // Calculate the time difference in seconds
+  // const timeDifferenceInSeconds = Math.floor((expiresAt - curDate.getTime() ) / 1000)
+  // const [timeLeft, setTimeLeft] = useState<number | null>(
+  //   timeDifferenceInSeconds,
+  // );
   // //limit by 150 seconds
   // const resendLimit = expiresAt - ((2 * 60 + 150) * 1000);
 
   //   // Convert milliseconds to seconds
   //   const seconds = Math.floor(resendLimit / 1000);
 
-  useEffect(() => {
-    if (timeLeft === 0) {
-      console.log("TIME LEFT IS 0");
-      setTimeLeft(null);
-    }
+  // useEffect(() => {
+  //   if (timeLeft === 0) {
+  //     console.log("TIME LEFT IS 0");
+  //     setTimeLeft(null);
+  //   }
 
-    console.log(timeLeft);
-    // exit early when we reach 0
-    if (!timeLeft) return;
+  //   console.log(timeLeft);
+  //   // exit early when we reach 0
+  //   if (!timeLeft) return;
 
-    // save intervalId to clear the interval when the
-    // component re-renders
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
+  //   // save intervalId to clear the interval when the
+  //   // component re-renders
+  //   const intervalId = setInterval(() => {
+  //     setTimeLeft(timeLeft - 1);
+  //   }, 1000);
 
-    // clear interval on re-render to avoid memory leaks
-    return () => clearInterval(intervalId);
-    // add timeLeft as a dependency to re-rerun the effect
-    // when we update it
-  }, [timeLeft]);
+  //   // clear interval on re-render to avoid memory leaks
+  //   return () => clearInterval(intervalId);
+  //   // add timeLeft as a dependency to re-rerun the effect
+  //   // when we update it
+  // }, [timeLeft]);
 
   const [isPending, startTransition] = useTransition();
   const [isResendingEmail, startResendTransition] = useTransition();
@@ -140,8 +140,8 @@ const VerifyEmailForm = ({
   return (
     <BackgroundDot>
       <BackgroundGradient
-        containerClassName="w-1/3"
-        className="max-w-xl rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
+        containerClassName="w-[85%] sm:w-3/4 md:w-1/2 lg:w-1/3"
+        className=" w-full rounded-[22px] bg-white p-4 dark:bg-zinc-900 sm:p-10"
       >
         <h1 className="text-center text-xl font-bold ">Verify your email</h1>
         <Form {...form}>
@@ -199,13 +199,13 @@ const VerifyEmailForm = ({
             {isPending ? (
               <p className="flex justify-end text-sm">Verifying...</p>
             ) : null}
-            <Button
+            {/* <Button
               variant={"link"}
               type="button"
               onClick={resendEmailVerification}
             >
               Resend verification email
-            </Button>
+            </Button> */}
             <FormAlert alert={successResend || errorResend} />
           </form>
         </Form>

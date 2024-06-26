@@ -97,12 +97,16 @@ export const columns: ColumnDef<CertificateColumn>[] = [
   {
     id: "actions",
     header: function ActionHeader({ column })  {
+      const queryClient = useQueryClient();
       const { mutateAsync:sendCertificate } = useMutation({
         mutationFn:(payload:{
           file:string,
           recipientId:string,
           email:string,
-        })=>axios.post(`/api/certificates/send-certificate`,payload)
+        })=>axios.post(`/api/certificates/send-certificate`,payload),
+        onSettled:()=>{
+          queryClient.invalidateQueries(['membersCertificate'])
+        }
       })
       const { id } = useParams();
       const [isSending, setIsSending] = useState<boolean>(false);

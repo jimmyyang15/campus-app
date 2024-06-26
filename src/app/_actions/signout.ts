@@ -10,11 +10,7 @@ export const signOut = async () => {
     try {
       const  session = await validateRequest()
   
-      await db.subscription.deleteMany({
-        where:{
-          userId:session?.id as string
-        }
-      })
+
       if (!session) {
         return {
           error: "Unauthorized",
