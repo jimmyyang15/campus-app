@@ -21,6 +21,7 @@ type Props = {
   mentors: UserWithProfile[];
 };
 const SelectMentors = ({ mentors }: Props) => {
+  console.log(mentors)
   const form = useFormContext<ClubSchemaType>();
   return (
     <FormField
@@ -36,7 +37,7 @@ const SelectMentors = ({ mentors }: Props) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {mentors.map((mentor, i) => (
+              {mentors?.map((mentor, i) => (
                 <SelectItem key={i} value={mentor.id}>
                   {mentor.profile?.fullName}
                 </SelectItem>

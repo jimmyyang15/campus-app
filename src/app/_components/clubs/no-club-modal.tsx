@@ -24,6 +24,9 @@ import { Input } from "@/app/_components/ui/input";
 import { useParams } from "next/navigation";
 import { useSession } from "../session-provider";
 import moment from "moment";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 export const NotificationSchema = z.object({
   reason: z.string(),
@@ -34,7 +37,45 @@ export type NotificationSchemaType = z.infer<typeof NotificationSchema>;
 const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
   const { id } = useParams();
   const user = useSession();
-
+  const { mutateAsync: notifyMentor, isLoading: notifyingMentor } = useMutation(
+    {
+      mutationFn: (payload: { clubId: string; reason: string }) =>
+        axios.post(`/api/notification`, payload),
+      onError: () => {
+        throw new Error("Failed to send notification");
+      },
+      onSuccess: () => {
+        toast.success("Mentor notified", {
+          description: moment().format("LLLL"),
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled: () => {},
+    },
+  );
+  const { mutateAsync: notifyMembers, isLoading: notifyingMembers } =
+    useMutation({
+      mutationFn: (payload: { clubId: string; reason: string }) =>
+        axios.post(`/api/members-notification`, payload),
+      onError: () => {
+        throw new Error("Failed to send notification");
+      },
+      onSuccess: () => {
+        toast.success("Members notified", {
+          description: moment().format("LLLL"),
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+      },
+      onSettled: () => {},
+    });
   const form = useForm<NotificationSchemaType>({
     resolver: zodResolver(NotificationSchema),
     defaultValues: {
@@ -42,36 +83,16 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
     },
   });
   const handleNotifyMentor = async () => {
-    const response = await fetch("/api/notification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clubId: id,
-        reason: form.getValues("reason"),
-      }),
+    await notifyMentor({
+      clubId: id as string,
+      reason: form.getValues("reason"),
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to send notification");
-    }
   };
   const handleNotifyMembers = async () => {
-    const response = await fetch("/api/members-notification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clubId: id,
-        reason: form.getValues("reason"),
-      }),
+    await notifyMembers({
+      clubId: id as string,
+      reason: form.getValues("reason"),
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to send notification");
-    }
   };
 
   function parseTime(time: string) {
@@ -116,17 +137,24 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
               />
               <Button
                 disabled={
-                  isLater(
+                  (isLater(
                     moment().format("HH:mm").slice(0, 5),
                     timeActivity,
-                  ) as boolean
+                  ) as boolean) ||
+                  notifyingMembers ||
+                  notifyingMentor
                 }
+                type="button"
                 className="mt-4"
                 onClick={
                   user.isMentor ? handleNotifyMembers : handleNotifyMentor
                 }
               >
-                {user.isMentor ? "Notify members" : "Notify mentor"}
+                {notifyingMembers || notifyingMentor ? (
+                  "Sending..."
+                ) : (
+                  <>{user.isMentor ? "Notify members" : "Notify mentor"}</>
+                )}
               </Button>
             </form>
           </Form>
