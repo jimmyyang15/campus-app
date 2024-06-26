@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        const { clubId } = body;
+        const { clubId,reason } = body;
         const user = await validateRequest()
         const members = await db.club.findFirst({
             where: {
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
         const mentor = members?.members.find((member) => member.isMentor);
         const notificationPayload = JSON.stringify({
             title: 'Class Absence Notification',
-            body: `Student ${user!.profile.fullName} cannot attend class. `,
+            body: `Student ${user!.profile.fullName} cannot attend class. Reason: ${reason} `,
             icon: '/icon512_rounded.png',
             clubId
         });

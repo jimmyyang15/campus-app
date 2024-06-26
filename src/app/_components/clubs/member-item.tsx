@@ -8,11 +8,11 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import moment from "moment";
 import { useSession } from "../session-provider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 const MemberItem = ({ member }: { member: UserWithProfile }) => {
-  const utils = api.useUtils();
+  const queryClient = useQueryClient()
   const { id } = useParams();
   const user  = useSession();
 
@@ -22,7 +22,7 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
         memberId:string
       })=>axios.post(`/api/clubs/${id}/members`,payload),
       onSuccess: () => {
-        toast.success("Club created ", {
+        toast.success("Member Kicked", {
           description: moment().format("LLLL"),
           // action: {
           //   label: "Dismiss",
@@ -32,12 +32,11 @@ const MemberItem = ({ member }: { member: UserWithProfile }) => {
         });
       },
       onSettled: () => {
-        utils.club.singleClub.invalidate({
-          id: id as string,
-        });
+        queryClient.invalidateQueries(['clubSettings'])
       },
     });
   const handleKick = async () => {
+    
     await kickMember({
       memberId: member.id,
     });

@@ -83,9 +83,7 @@ model Post {
   media     String?
   comments  Comment[]
   reactions Reaction[]
-  isClub    Boolean    @default(false)
-  club      Club?      @relation(fields: [clubId], references: [id])
-  clubId    String?
+
 }
 
 model Reaction {
@@ -117,9 +115,7 @@ model Club {
   name         String
   desc         String?
   members      User[]
-  posts        Post[]
   clubImage    String
-  albums       Album[]
   assignments  Assignment[]
   request      Request[]
   invitation   Invitation[]
@@ -127,12 +123,7 @@ model Club {
   dayActivity  String
 }
 
-model Album {
-  id     String   @id @default(uuid())
-  media  String[]
-  club   Club?    @relation(fields: [clubId], references: [id])
-  clubId String?
-}
+
 
 model Invitation {
   id          String   @id @default(uuid())

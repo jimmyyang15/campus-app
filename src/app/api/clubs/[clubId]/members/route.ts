@@ -1,5 +1,6 @@
 
 
+import { backendClient } from "@/lib/edgestore-server";
 import { db } from "@/server/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -55,7 +56,24 @@ export async function POST(req: NextRequest,{ params }: { params: { clubId: stri
                     }
                 }
             }
-        })
+        });
+        const userCertificate = await db.certificate.findUnique({
+            where:{
+                userId:memberId
+            }
+        });
+        if(userCertificate) {
+            await backendClient.publicFiles.deleteFile({
+                url: userCertificate.file,
+              });
+            await db.certificate.delete({
+                where:{
+                    userId:memberId
+                }
+            })
+        }
+
+  
         return NextResponse.json({
             status:201,
             message:"Member Kicked"

@@ -12,13 +12,13 @@ const AccountLayout = () => {
     return (
     <div>
 
-        <ul className='space-y-2 flex-[.2] md:flex-[.3]'>
+        <ul className=' flex md:flex-col md:items-start items-center '>
             <li className={cn(`font-semibold p-2 px-4 rounded-lg `,{
                 "bg-accent" : pathname.includes("profile")
             })}>
                 <Link href="/account/profile" className='w-full'>Profile</Link>
             </li>
-            <li className={cn('font-semibold py-2 px-4 rounded-lg w-full' ,{
+            <li className={cn('font-semibold py-2 px-4 rounded-lg' ,{
                 "bg-accent" : pathname.includes("change-password")
 
             })}>

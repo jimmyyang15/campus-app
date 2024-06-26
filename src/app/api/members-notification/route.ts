@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
 
-        const { clubId } = body;
+        const { clubId,reason } = body;
         // const user = await validateRequest()
         const members = await db.club.findFirst({
             where: {
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         });
         const notificationPayload = JSON.stringify({
             title: 'Club Notification',
-            body: `There won't be club activity today!`,
+            body: `There won't be club activity today! Reason: ${reason}`,
             icon: '/icon512_rounded.png',
             clubId
         });

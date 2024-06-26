@@ -43,6 +43,8 @@ import { DateTimePicker } from "../date-time-picker";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "sonner";
+import moment from "moment";
 
 const UploadAssignmentModal = () => {
   const [open, setOpen] = useState(false);
@@ -67,6 +69,17 @@ const UploadAssignmentModal = () => {
     })=>axios.post(`/api/clubs/${id}/assignments/upload-assignment`,payload),
     onSettled:()=>{
       queryClient.invalidateQueries({ queryKey:['assignmentList']})
+    },
+    onSuccess:()=>{
+      setOpen(false)
+      toast.success("Assignment uploaded", {
+        description: moment().format("LLLL"),
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
     }
   })
 

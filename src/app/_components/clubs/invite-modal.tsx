@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Credenza,
   CredenzaBody,
@@ -81,12 +81,15 @@ const InviteModal = () => {
     })
 
   }
-  const memberOptions = members?.data?.map((member)=>{
-    return {
-      value:member.id,
-      label:member.profile?.fullName
-    }
-  })
+  const memberOptions = useMemo(()=>{
+    return  members?.data?.map((member)=>{
+      return {
+        value:member.id,
+        label:member.profile?.fullName
+      }
+    })
+  
+  },[members]) 
 
   console.log(members)
   return (

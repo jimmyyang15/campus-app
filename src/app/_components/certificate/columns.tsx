@@ -180,7 +180,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           console.error(error)
         }finally{
           setIsSending(false);
-          toast.success("Certificate sent!", {
+          toast.success("Certificates sent!", {
             description: moment().format("LLLL"),
             // action: {
             //   label: "Dismiss",
@@ -214,7 +214,9 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           fetch(`/api/certificates/member-certificate/${row.original.userId}`).then((res) =>
             res.json(),
           ),
-      })
+          enabled: !!row.original.userId,
+      });
+      
       const { data:club } = useQuery<{
         data:ClubWithPayload
       }>({
@@ -241,6 +243,8 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         const url = URL.createObjectURL(blob);
         window.open(url, "_blank");
       };
+
+      console.log("test", row.original.userId, !!certificate?.data)
 
       const handleSendCertificate = async (
         name: string,

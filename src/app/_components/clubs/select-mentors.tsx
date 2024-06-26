@@ -43,9 +43,7 @@ const SelectMentors = ({ mentors }: Props) => {
               ))}
             </SelectContent>
           </Select>
-          <FormDescription>
-            You can manage email addresses in your{" "}
-          </FormDescription>
+    
           <FormMessage />
         </FormItem>
       )}
