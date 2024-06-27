@@ -3,7 +3,7 @@
 import { UserWithProfile } from "@/types";
 import { Schedule } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { useParams,useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import Loading from "../loading";
 import moment from "moment";
@@ -55,10 +55,9 @@ const AttendanceDetail = () => {
         <div className="space-y-4">
           <h2>{schedule?.data.title}</h2>
           <p>{moment(schedule?.data.date).format("LL")}</p>
-          <DataTable
-            columns={columns}
-            data={mappedMembers as MappedAttendance[]}
-          />
+          <div className="mx-auto mt-4 w-[90%] overflow-x-scroll md:overflow-x-auto">
+            <DataTable columns={columns} data={mappedMembers as MappedAttendance[]} />
+          </div>
         </div>
       )}
     </div>

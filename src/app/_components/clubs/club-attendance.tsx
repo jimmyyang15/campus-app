@@ -8,12 +8,13 @@ import { FaPlus } from "react-icons/fa6";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ClubWithPayload } from "@/types";
-import { getNextWeekday } from "@/lib/utils";
+import { cn, getNextWeekday } from "@/lib/utils";
 import { Schedule } from "@prisma/client";
 import moment from "moment";
 import { toast } from "sonner";
 import Link from "next/link";
 import Loading from "../loading";
+import { AiOutlineSchedule } from "react-icons/ai";
 const ClubAttendance = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -73,7 +74,16 @@ const ClubAttendance = () => {
             <ChevronLeft size={18} className="mr-2" />
             Back
           </Button>
+          <div className="flex items-center justify-between">
           <h5>Attendance List</h5>
+          <Link
+          href={`/club/${id}/attendance-list/info`}
+         
+        >
+          <AiOutlineSchedule size={20}  />
+     
+        </Link>
+          </div>
           {clubSchedules?.data.map((schedule) => (
             <ScheduleComponent key={schedule.id} schedule={schedule} />
           ))}
