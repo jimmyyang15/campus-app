@@ -21,7 +21,12 @@ export async function GET(req: NextRequest, { params }: { params: { clubId: stri
                         }
                     },
                     include: {
-                        profile: true
+                        profile: true,
+                        absences:{
+                            include:{
+                                schedule:true
+                            }
+                        }
                     }
                 },
     

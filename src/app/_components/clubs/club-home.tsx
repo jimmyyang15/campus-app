@@ -1,14 +1,13 @@
 "use client";
 
-import { api } from "@/trpc/react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import React from "react";
-import SendNotificationBtn from "./send-notification";
 import NoActivityModal from "./no-club-modal";
 import { useQuery } from "@tanstack/react-query";
 import { ClubWithPayload } from "@/types";
 import Loading from "../loading";
+import { getNextWeekday } from "@/lib/utils";
 
 const ClubHome = () => {
   const { id } = useParams();
@@ -22,21 +21,7 @@ const ClubHome = () => {
     queryKey: ["clubHome"],
     queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
   });
-  function getNextWeekday(weekday: string) {
-    const date = new Date();
-    const resultDate = new Date(date.getTime());
 
-    // Get the current day of the week (0-6)
-    const currentDay = date.getDay();
-
-    // Calculate how many days to add to get to the desired weekday
-    const daysToAdd = (Number(weekday) + 7 - currentDay) % 7 || 7;
-    console.log(daysToAdd);
-    // Add the days to the current date
-    resultDate.setDate(date.getDate() + daysToAdd);
-
-    return resultDate;
-  }
 
   return (
     <div>

@@ -28,3 +28,19 @@ export const handleDownload = (url:string,fileName:string) => {
 export const getDownloadFileName = (url:string) => {
   return url.split("/").pop()
 }
+
+export   function getNextWeekday(weekday: string) {
+  const date = new Date();
+  const resultDate = new Date(date.getTime());
+
+  // Get the current day of the week (0-6)
+  const currentDay = date.getDay();
+
+  // Calculate how many days to add to get to the desired weekday
+  const daysToAdd = (Number(weekday) + 7 - currentDay) % 7 || 7;
+  console.log(daysToAdd);
+  // Add the days to the current date
+  resultDate.setDate(date.getDate() + daysToAdd);
+
+  return resultDate;
+}

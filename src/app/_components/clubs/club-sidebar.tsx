@@ -13,6 +13,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { TbUserQuestion } from "react-icons/tb";
 import { RequestWithPayload } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import { AiOutlineSchedule } from "react-icons/ai";
 const ClubSidebar = () => {
   const { id } = useParams();
   const pathname = usePathname();
@@ -76,7 +77,7 @@ const ClubSidebar = () => {
         >
           <TbCertificate size={mobile ? 18 : 20} />
           <p className="hidden text-center text-xs font-semibold sm:block">
-            Send Certificate
+            Send E Certificate
           </p>
         </Link>
       ) : null}
@@ -99,6 +100,20 @@ const ClubSidebar = () => {
 
           <TbUserQuestion size={mobile ? 21 : 23} />
           <p className="hidden text-xs font-semibold sm:block">Requests</p>
+        </Link>
+        
+      ) : null}
+            {user.isMentor ? (
+        <Link
+          href={`/club/${id}/attendance-list`}
+          className={cn("flex flex-col items-center gap-y-1 text-gray-500", {
+            "text-foreground": pathname.includes("/attendance-list"),
+          })}
+        >
+          <AiOutlineSchedule size={mobile ? 18 : 20} />
+          <p className="hidden text-center text-xs font-semibold sm:block">
+            Attendance List
+          </p>
         </Link>
       ) : null}
     </aside>

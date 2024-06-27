@@ -54,7 +54,7 @@ import { TbCertificate } from "react-icons/tb";
           
           {
             href: "/certificate",
-            label: "Certificate",
+            label: "E Certificate",
             active: pathname === "/certificate",
             icon:  TbCertificate,
             role:"student"
