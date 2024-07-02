@@ -5,7 +5,13 @@ export async function GET(req: NextRequest) {
     try {
         const data = await db.user.findMany({
             where:{
-                isMentor:true
+              AND:[{
+                isMentor:true,
+
+              },{
+                club:null
+              }]
+                
             },
             include:{
                 profile:true

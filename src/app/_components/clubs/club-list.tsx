@@ -46,6 +46,7 @@ const ClubList = () => {
       ) : (
         <>
           <div className="mb-4  gap-4">
+            
             <ClubItem club={user.club as ClubWithPayload} />
 
             {user.role === "ADMIN" ? <CreateModal /> : null}
