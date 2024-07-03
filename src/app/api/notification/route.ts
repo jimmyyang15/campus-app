@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { formatDate } from "@/lib/utils";
 import { validateRequest } from "@/server/auth";
 import { db } from "@/server/db";
 import { Subscription } from "@prisma/client";
@@ -22,6 +23,21 @@ export async function POST(req: Request) {
                 }
             }
         });
+        const schedules = await db.schedule.findMany({
+            where:{
+                clubId
+            }
+        });
+
+        const todaySchedule = schedules.find((item)=>formatDate(item.date.toISOString()) === formatDate(new Date().toISOString()))
+        await db.absence.create({
+            data:{
+                userId:user?.id as string,
+                reason,
+                scheduleId:todaySchedule?.id as string
+            }
+        })
+
         const mentor = members?.members.find((member) => member.isMentor);
         const notificationPayload = JSON.stringify({
             title: 'Class Absence Notification',

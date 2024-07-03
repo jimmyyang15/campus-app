@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
             })
         }
 
+
+
+
         await db.club.create({
             data: {
                 name,
@@ -54,7 +57,9 @@ export async function POST(req: NextRequest) {
                     }
                 }
             }
-        })
+        });
+
+
 
         return NextResponse.json({
             status: 201,

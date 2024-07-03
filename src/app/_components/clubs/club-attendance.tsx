@@ -36,7 +36,8 @@ const ClubAttendance = () => {
   const { mutateAsync: createSchedule, isLoading: isCreating } = useMutation({
     mutationFn: (payload: { title: string; dateTime: Date }) =>
       axios.post(`/api/clubs/${id}/attendance`, payload),
-    onSuccess: () => {
+    onSuccess: (err) => {
+      console.log(err)
       toast.success("Schedule created ", {
         description: moment().format("LLLL"),
         // action: {
@@ -45,6 +46,20 @@ const ClubAttendance = () => {
         // },
         closeButton: true,
       });
+    },
+    onError:(err)=>{
+      if (axios.isAxiosError(err)) {
+        toast.error(err.message, {
+          description: err.response?.data,
+          // action: {
+          //   label: "Dismiss",
+          //   onClick: () => toast.dismiss(),
+          // },
+          closeButton: true,
+        });
+        // Do something with this error...
+      }
+    
     },
     onSettled: () => {
       queryClient.invalidateQueries(["clubSchedules"]);
@@ -55,7 +70,7 @@ const ClubAttendance = () => {
     if(club?.data.dayActivity === new Date().getDay().toString()) {
       await createSchedule({
         title: `Pertemuan ${!clubSchedules ? 1 : clubSchedules.data.length + 1}`,
-        dateTime: getNextWeekday(club?.data.dayActivity as string),
+        dateTime: new Date(),
       });
     } else {
       toast.error("Please wait until the next activity",{

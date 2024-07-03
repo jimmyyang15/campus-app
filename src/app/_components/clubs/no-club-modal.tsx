@@ -43,8 +43,19 @@ const NoActivityModal = ({ timeActivity }: { timeActivity: string }) => {
     {
       mutationFn: (payload: { clubId: string; reason: string }) =>
         axios.post(`/api/notification`, payload),
-      onError: () => {
-        throw new Error("Failed to send notification");
+      onError:(err)=>{
+        if (axios.isAxiosError(err)) {
+          toast.error(err.message, {
+            description: err.response?.data,
+            // action: {
+            //   label: "Dismiss",
+            //   onClick: () => toast.dismiss(),
+            // },
+            closeButton: true,
+          });
+          // Do something with this error...
+        }
+      
       },
       onSuccess: () => {
         setOpen(false)
