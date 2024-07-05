@@ -23,6 +23,8 @@ const SubmissionList = () => {
         (res) => res.json(),
       ),
   });
+
+  console.log(submissions)
   const { data: club, isLoading } = useQuery<{
     data: ClubWithPayload;
   }>({
@@ -48,9 +50,11 @@ const SubmissionList = () => {
         : "Not Attempted",
       username: member.username,
       name: member.profile?.fullName,
+      mark:findSubmission(member.id)?.mark,
       file: findSubmission(member.id)
         ? findSubmission(member.id)?.files.split("/").pop()
         : "-",
+      submissionId:findSubmission(member.id)?.id
     };
   });
 

@@ -18,7 +18,7 @@ import { PDFDocument } from "pdf-lib";
 import moment from "moment";
 import { toast } from "sonner";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ClubWithPayload } from "@/types";
+import { AssignmentWithPayload, ClubWithPayload, UserWithProfile } from "@/types";
 import { User } from "lucia";
 import axios from 'axios'
 import { Certificate } from "@prisma/client";
@@ -105,17 +105,24 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           email:string,
         })=>axios.post(`/api/certificates/send-certificate`,payload),
         onSettled:()=>{
-          queryClient.invalidateQueries(['membersCertificate'])
+          queryClient.invalidateQueries(['memberCertificate'])
         }
-      })
+      });
+      const { data: assignments } = useQuery<{
+        data: AssignmentWithPayload[];
+      }>({
+        queryKey: ["assignmentList"],
+        queryFn: () =>
+          fetch(`/api/clubs/${id}/assignments`).then((res) => res.json()),
+      });
       const { id } = useParams();
       const [isSending, setIsSending] = useState<boolean>(false);
       const { data:membersWithoutCertificate,isLoading } = useQuery<{
         data:{
-          members:User[]
+          members:UserWithProfile[]
         }
       }>({
-        queryKey: ['assignmentWithoutCertificate'],
+        queryKey: ['usersWithoutCertificate'],
         queryFn: () =>
           fetch(`/api/clubs/${id}/members/without-certificate`).then((res) =>
             res.json(),
@@ -127,6 +134,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         queryKey: ["clubHome"],
         queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
+  
       const { edgestore } = useEdgeStore();
       const handleSend = async () => {
         setIsSending(true);
@@ -134,11 +142,14 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         try {
 
           const promises = membersWithoutCertificate?.data.members.map((member) => {
+            const mappedAssignments = assignments?.data.filter((assignment)=>assignment.submissions.filter((submission)=>submission.userId === member.id));
+
 
             async function sendCertificatePromise() {
               try {
                 const blob = await pdf(
                   <PdfComponent
+                  assignments={mappedAssignments as AssignmentWithPayload[]}
                     name={member.profile?.fullName as string}
                     clubName={club?.data.name as string}
                   />,
@@ -210,15 +221,32 @@ export const columns: ColumnDef<CertificateColumn>[] = [
       const [sendingCertificate, setSendingCertificate] =
         useState<boolean>(false);
       const { edgestore } = useEdgeStore();
+      const { data:assignments } = useQuery<{
+        data:AssignmentWithPayload[]
+      }>({
+        queryKey: ['userSubmissions',row.original.userId],
+        queryFn: () =>
+          fetch(`/api/clubs/${id}/${row.original.userId}/user-submissions`,).then((res) =>
+            res.json(),
+          ),
+      });
+    
+      console.log(assignments?.data.map((assignment)=>{
+        return {
+          ...assignment,
+          mark:assignment.submissions.find((submission)=>submission.assignmentId === assignment.id)?.mark
+        }
+      }))
       const { data:certificate } = useQuery<{
         data:Certificate
       }>({
-        queryKey: ['memberCertificate'],
+        queryKey: ['memberCertificate',row.original.userId],
         queryFn: () =>
           fetch(`/api/certificates/member-certificate/${row.original.userId}`).then((res) =>
             res.json(),
           ),
           enabled: !!row.original.userId,
+
       });
       
       const { data:club } = useQuery<{
@@ -242,13 +270,13 @@ export const columns: ColumnDef<CertificateColumn>[] = [
       })
       const handleGenerate = async (name: string) => {
         const blob = await pdf(
-          <PdfComponent name={name} clubName={club?.data.name as string} />,
+          <PdfComponent assignments={assignments?.data as AssignmentWithPayload[]} name={name} clubName={club?.data.name as string} />,
         ).toBlob();
         const url = URL.createObjectURL(blob);
         window.open(url, "_blank");
       };
 
-      console.log("test", row.original.userId, !!certificate?.data)
+      // console.log("test", row.original.userId, !!certificate?.data)
 
       const handleSendCertificate = async (
         name: string,
@@ -258,7 +286,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         try {
           setSendingCertificate(true);
           const blob = await pdf(
-            <PdfComponent name={name} clubName={club?.data.name as string} />,
+            <PdfComponent assignments={assignments?.data as AssignmentWithPayload[]} name={name} clubName={club?.data.name as string} />,
           ).toBlob();
           const file = new File([blob], `${name}.pdf`, {
             type: "application/pdf",

@@ -39,6 +39,7 @@ export type ReactionWithUser = Prisma.ReactionGetPayload<{
 export type UserWithProfile = Prisma.UserGetPayload<{
     include: {
         profile: true,
+        submissions:true,
         absences:{
             include:{
                 schedule:true

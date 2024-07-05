@@ -69,77 +69,77 @@ const CertificateComponent = () => {
   );
 };
 
-const Item = ({
-  memberName,
-  memberId,
-  club,
-}: {
-  memberName: string;
-  memberId: string;
-  club: Club;
-}) => {
-  const [sendingCertificate, setSendingCertificate] = useState<boolean>(false);
-  const { edgestore } = useEdgeStore();
+// const Item = ({
+//   memberName,
+//   memberId,
+//   club,
+// }: {
+//   memberName: string;
+//   memberId: string;
+//   club: Club;
+// }) => {
+//   const [sendingCertificate, setSendingCertificate] = useState<boolean>(false);
+//   const { edgestore } = useEdgeStore();
 
-  const { mutateAsync: sendCertificate } =
-    api.certificate.sendCertificate.useMutation();
-  const handleGenerate = async (name: string) => {
-    const blob = await pdf(
-      <PdfDocument name={name} clubName={club?.name as string} />,
-    ).toBlob();
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
-  };
+//   const { mutateAsync: sendCertificate } =
+//     api.certificate.sendCertificate.useMutation();
+//   const handleGenerate = async (name: string) => {
+//     const blob = await pdf(
+//       <PdfDocument name={name} clubName={club?.name as string} />,
+//     ).toBlob();
+//     const url = URL.createObjectURL(blob);
+//     window.open(url, "_blank");
+//   };
 
-  const handleSendCertificate = async (name: string, recipientId: string) => {
-    try {
-      setSendingCertificate(true);
-      const blob = await pdf(
-        <PdfDocument name={name} clubName={club?.name as string} />,
-      ).toBlob();
-      const file = new File([blob], `${name}.pdf`, { type: "application/pdf" });
-      console.log(file);
-      const res = await edgestore.publicFiles.upload({
-        options: {
-          manualFileName: `${name} Certificate.pdf`,
-        },
-        file,
+//   const handleSendCertificate = async (name: string, recipientId: string) => {
+//     try {
+//       setSendingCertificate(true);
+//       const blob = await pdf(
+//         <PdfDocument name={name} clubName={club?.name as string} />,
+//       ).toBlob();
+//       const file = new File([blob], `${name}.pdf`, { type: "application/pdf" });
+//       console.log(file);
+//       const res = await edgestore.publicFiles.upload({
+//         options: {
+//           manualFileName: `${name} Certificate.pdf`,
+//         },
+//         file,
 
-        onProgressChange: (progress) => {
-          // you can use this to show a progress bar
-          console.log(progress);
-        },
-      });
-      await sendCertificate({
-        file: res.url,
-        recipientId,
-      });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setSendingCertificate(false);
-    }
-  };
-  return (
-    <div className="flex items-center justify-between gap-x-2">
-      <p className="w-[100px] text-sm">{memberName}</p>
-      <div className="flex items-center gap-x-2">
-        <Button
-          className="h-8 text-sm"
-          onClick={() => handleGenerate(memberName)}
-        >
-          Generate
-        </Button>
-        <Button
-          disabled={sendingCertificate}
-          className="h-8 text-sm"
-          onClick={() => handleSendCertificate(memberName, memberId)}
-        >
-          {sendingCertificate ? "Sending..." : "Send"}
-        </Button>
-      </div>
-    </div>
-  );
-};
+//         onProgressChange: (progress) => {
+//           // you can use this to show a progress bar
+//           console.log(progress);
+//         },
+//       });
+//       await sendCertificate({
+//         file: res.url,
+//         recipientId,
+//       });
+//     } catch (error) {
+//       console.error(error);
+//     } finally {
+//       setSendingCertificate(false);
+//     }
+//   };
+//   return (
+//     <div className="flex items-center justify-between gap-x-2">
+//       <p className="w-[100px] text-sm">{memberName}</p>
+//       <div className="flex items-center gap-x-2">
+//         <Button
+//           className="h-8 text-sm"
+//           onClick={() => handleGenerate(memberName)}
+//         >
+//           Generate
+//         </Button>
+//         <Button
+//           disabled={sendingCertificate}
+//           className="h-8 text-sm"
+//           onClick={() => handleSendCertificate(memberName, memberId)}
+//         >
+//           {sendingCertificate ? "Sending..." : "Send"}
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default CertificateComponent;

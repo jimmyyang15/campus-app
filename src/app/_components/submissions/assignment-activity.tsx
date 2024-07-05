@@ -240,6 +240,10 @@ const AssignmentActivity = () => {
               </div>
             ) : null}
           </Form>
+          <div className="flex items-center border-b text-sm">
+            <p className="w-[120px] bg-secondary p-4">Mark</p>
+            <p className="p-4">{submission?.mark ? submission?.mark : "-"}</p>
+          </div>
         </div>
       )}
     </div>

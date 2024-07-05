@@ -45,6 +45,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts",
-  "next.config.mjs"],
+  "next.config.mjs", "src/app/api/clubs/[clubId]/[userId]/user-submissions"],
   "exclude": ["node_modules"]
 }

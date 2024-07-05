@@ -12,7 +12,8 @@ export async function GET(req: NextRequest, { params }: { params: { clubId: stri
             select: {
                 members: {
                     include: {
-                        profile: true
+                        profile: true,
+                        submissions:true
                     },
                     
                     where:{

@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@ag-media/react-pdf-table': ^1.0.1
   '@auth/core': ^0.27.0
   '@auth/prisma-adapter': ^1.4.0
   '@ducanh2912/next-pwa': ^10.2.7
@@ -167,6 +168,7 @@ specifiers:
   zustand: ^4.5.2
 
 dependencies:
+  '@ag-media/react-pdf-table': 1.0.1_n5cjqar75lsoyj3wb5ioum5nqy
   '@auth/core': 0.27.0_nodemailer@6.9.13
   '@auth/prisma-adapter': 1.6.0_vkz6llisv3jvbo4x7mkzixdjtu
   '@ducanh2912/next-pwa': 10.2.7_next@14.2.3+webpack@5.91.0
@@ -335,6 +337,17 @@ devDependencies:
   webpack: 5.91.0
 
 packages:
+
+  /@ag-media/react-pdf-table/1.0.1_n5cjqar75lsoyj3wb5ioum5nqy:
+    resolution: {integrity: sha512-R5T2oFHq+uGikI0oBgZsLK+sTFUC59+REH564cS0zVpCIF/zOBogann3wyc72LS0uHVx4l/8hVtg9VvXjp2deA==}
+    peerDependencies:
+      '@react-pdf/renderer': ^2.0.2 || ^3.0.0
+      '@react-pdf/stylesheet': ^2.0.0 || ^3.0.0 || ^4.0.0
+      react: ^16.8.6 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@react-pdf/renderer': 3.4.4_au3wyuemydd2ii7dqaa7tiwwui
+      react: 18.2.0
+    dev: false
 
   /@alloc/quick-lru/5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
