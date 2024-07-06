@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import { Table, TR, TH, TD } from "@ag-media/react-pdf-table";
 import { useQuery } from "@tanstack/react-query";
-import { AssignmentWithPayload } from "@/types";
+import { AssignmentWithPayload, ExtendedAssignment } from "@/types";
 // If loading a variable font, you don't need to specify the font weight
 // const montserrat = Montserrat({
 // 	subsets:['latin']
@@ -70,21 +70,39 @@ const styles = StyleSheet.create({
 
 const backStyle = StyleSheet.create({
   headerText: {
-    fontSize: "20",
-    fontWeight: "bold",
+    fontSize: "16px",
+    fontWeight: "semibold",
     textAlign: "center",
     padding: "16px",
   },
+  table:{
+    marginLeft:"32px",
+    marginRight:"32px"
+  },
+  tableCell:{
+    padding:'2px',
+    fontSize:"12px"
+  },
+  bottomSignature:{
+    bottom:"10%",
+    position: "absolute",
+    right: "10%",
+  }
 });
+
 
 const PdfComponent = ({
   name,
   clubName,
   assignments,
+  mentorName,
+  date
 }: {
   name: string;
   clubName: string;
-  assignments: AssignmentWithPayload[];
+  assignments: ExtendedAssignment[];
+  mentorName:string;
+  date:string
 }) => {
   return (
     <Document>
@@ -102,20 +120,31 @@ const PdfComponent = ({
         <View>
           <Text style={backStyle.headerText}>Daftar nilai</Text>
         </View>
-        <Table>
+        <Table style={backStyle.table}>
           <TH>
-            <TD>No</TD>
-            <TD>Tugas</TD>
-            <TD>Mark</TD>
+            <TD style={backStyle.tableCell}>No</TD>
+            <TD style={backStyle.tableCell}>Tugas</TD>
+            <TD style={backStyle.tableCell}>Mark</TD>
           </TH>
-          {assignments.map((assignment, i) => (
+          {assignments?.map((assignment, i) => (
             <TR key={assignment.id}>
-              <TD>{i + 1}</TD>
-              <TD>{assignment.name}</TD>
-              <TD>wqwq</TD>
+              <TD style={backStyle.tableCell}>{i + 1}</TD>
+              <TD style={backStyle.tableCell}>{assignment.name}</TD>
+              <TD style={backStyle.tableCell}>{assignment.mark ? assignment.mark : "-"}</TD>
             </TR>
           ))}
         </Table>
+        <View style={backStyle.bottomSignature}>
+        <Text style={{
+            fontSize:"14px"
+          }}>Medan, {date}</Text>
+        <Text style={{
+            fontSize:"14px"
+          }}>STMIK TIME Medan</Text>
+          <Text style={{
+            fontSize:"14px"
+          }}>{mentorName}</Text>
+        </View>
       </Page>
     </Document>
   );

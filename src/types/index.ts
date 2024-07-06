@@ -120,3 +120,7 @@ export type InvitationWithPayload = Prisma.InvitationGetPayload<{
     }
 }>
 
+export interface ExtendedAssignment extends AssignmentWithPayload {
+    mark:number
+  }
+  
