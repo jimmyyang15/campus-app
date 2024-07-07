@@ -136,8 +136,8 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         queryKey: ["clubHome"],
         queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
-      const mentorName = club?.data.members.find((member) => member.isMentor)
-        ?.profile?.fullName;
+      const mentor = club?.data.members.find((member) => member.isMentor)
+        
 
       const { edgestore } = useEdgeStore();
       const handleSend = async () => {
@@ -157,7 +157,8 @@ export const columns: ColumnDef<CertificateColumn>[] = [
                   const blob = await pdf(
                     <PdfComponent
                       date={moment(new Date()).format("LL")}
-                      mentorName={mentorName as string}
+                      mentorName={mentor?.profile?.fullName as string}
+                      mentorSign={mentor?.signature as string}
                       assignments={mappedAssignments as ExtendedAssignment[]}
                       name={member.profile?.fullName as string}
                       clubName={club?.data.name as string}
@@ -221,6 +222,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           <Button
             variant={"outline"}
             onClick={handleSend}
+            className="text-white"
             disabled={
               isSending || membersWithoutCertificate?.data.members.length === 0
             }
@@ -274,9 +276,9 @@ export const columns: ColumnDef<CertificateColumn>[] = [
         queryKey: ["clubHome"],
         queryFn: () => fetch(`/api/clubs/${id}`).then((res) => res.json()),
       });
-
-      const mentorName = club?.data.members.find((member) => member.isMentor)
-        ?.profile?.fullName;
+      const mentor = club?.data.members.find((member) => member.isMentor);
+      // const mentorName = club?.data.members.find((member) => member.isMentor)
+      //   ?.profile?.fullName;
       // const { mutateAsync: sendCertificate } =
       //   api.certificate.sendCertificate.useMutation();
       const { mutateAsync: sendCertificate } = useMutation({
@@ -292,8 +294,9 @@ export const columns: ColumnDef<CertificateColumn>[] = [
       const handleGenerate = async (name: string) => {
         const blob = await pdf(
           <PdfComponent
-            date={moment(new Date()).format("LL")}
-            mentorName={mentorName as string}
+            date={moment().format("LL")}
+            mentorName={mentor?.profile?.fullName as string}
+            mentorSign={mentor?.signature as string}
             assignments={mappedAssignments as ExtendedAssignment[]}
             name={name}
             clubName={club?.data.name as string}
@@ -314,8 +317,9 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           setSendingCertificate(true);
           const blob = await pdf(
             <PdfComponent
-              date={moment(new Date()).format("LL")}
-              mentorName={mentorName as string}
+              date={moment().format("LL")}
+              mentorSign={mentor?.signature as string}
+              mentorName={mentor?.profile?.fullName as string}
               assignments={mappedAssignments as ExtendedAssignment[]}
               name={name}
               clubName={club?.data.name as string}

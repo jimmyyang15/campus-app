@@ -14,24 +14,22 @@ import { CertificateColumn, columns } from "./columns";
 import Loading from "../loading";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "lucia";
+import UploadSignatureModal from "./upload-signature-modal";
 
 const CertificateComponent = () => {
   const router = useRouter();
   const { id } = useParams();
 
-  const { data:assignments,isLoading } = useQuery<{
-    data:{
-      members:User[]
-    }
+  const { data: assignments, isLoading } = useQuery<{
+    data: {
+      members: User[];
+    };
   }>({
-    queryKey: ['membersCertificate'],
-    queryFn: () =>
-      fetch(`/api/clubs/${id}/members`).then((res) =>
-        res.json(),
-      ),
-  })
+    queryKey: ["membersCertificate"],
+    queryFn: () => fetch(`/api/clubs/${id}/members`).then((res) => res.json()),
+  });
 
-  console.log(assignments)
+  console.log(assignments);
 
   const mappedMembers = useMemo(
     () =>
@@ -41,7 +39,7 @@ const CertificateComponent = () => {
           profilePicture: member.profile?.profilePicture,
           userId: member.id,
           fullName: member.profile?.fullName,
-          email:member.email
+          email: member.email,
         };
       }),
     [assignments?.data],
@@ -55,15 +53,22 @@ const CertificateComponent = () => {
         <ChevronLeft size={18} className="mr-2" />
         Back
       </Button>
-      <h5>Certificates</h5>
 
-      {(isLoading || !mappedMembers)? (
+      {isLoading || !mappedMembers ? (
         <Loading />
       ) : (
-        <div className="mx-auto mt-4 flex  w-full md:w-3/4 flex-col space-y-8 rounded-lg p-2">
-      
-          <DataTable columns={columns} data={mappedMembers as unknown as CertificateColumn[]} />
-        </div>
+        <>
+          <div className="flex items-center justify-between">
+            <h5>Certificates</h5>
+            <UploadSignatureModal />
+          </div>
+          <div className="mx-auto mt-4 flex  w-full flex-col space-y-8 rounded-lg p-2 md:w-3/4">
+            <DataTable
+              columns={columns}
+              data={mappedMembers as unknown as CertificateColumn[]}
+            />
+          </div>
+        </>
       )}
     </div>
   );

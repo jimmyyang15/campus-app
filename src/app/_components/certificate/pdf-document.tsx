@@ -96,13 +96,15 @@ const PdfComponent = ({
   clubName,
   assignments,
   mentorName,
-  date
+  date,
+  mentorSign
 }: {
   name: string;
   clubName: string;
   assignments: ExtendedAssignment[];
   mentorName:string;
-  date:string
+  date:string;
+  mentorSign:string
 }) => {
   return (
     <Document>
@@ -136,7 +138,8 @@ const PdfComponent = ({
         </Table>
         <View style={backStyle.bottomSignature}>
         <Text style={{
-            fontSize:"14px"
+            fontSize:"14px",
+            textAlign:"center"
           }}>Medan, {date}</Text>
         <Text style={{
             fontSize:"14px"
