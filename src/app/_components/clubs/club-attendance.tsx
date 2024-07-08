@@ -49,6 +49,7 @@ const ClubAttendance = () => {
     },
     onError:(err)=>{
       if (axios.isAxiosError(err)) {
+        console.log(err)
         toast.error(err.message, {
           description: err.response?.data,
           // action: {

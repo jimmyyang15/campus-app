@@ -25,7 +25,7 @@ import {
   UserWithProfile,
 } from "@/types";
 import { User } from "lucia";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Certificate } from "@prisma/client";
 export type CertificateColumn = {
   id: string;
@@ -227,7 +227,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
               isSending || membersWithoutCertificate?.data.members.length === 0
             }
           >
-            {isSending ? "Sending..." : "Send to all"}
+            {isSending ? "Sending certificates" : "Send to all"}
           </Button>
         </div>
       );
@@ -347,8 +347,19 @@ export const columns: ColumnDef<CertificateColumn>[] = [
             recipientId,
             email,
           });
-        } catch (error) {
-          console.error(error);
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+              toast.error(err.message, {
+                description: err.response?.data,
+                // action: {
+                //   label: "Dismiss",
+                //   onClick: () => toast.dismiss(),
+                // },
+                closeButton: true,
+              });
+              // Do something with this error...
+            }
+          
         } finally {
           setSendingCertificate(false);
           toast.success("Certificate sent!", {

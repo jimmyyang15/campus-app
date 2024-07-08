@@ -75,21 +75,25 @@ const backStyle = StyleSheet.create({
     textAlign: "center",
     padding: "16px",
   },
-  table:{
-    marginLeft:"32px",
-    marginRight:"32px"
+  table: {
+    marginLeft: "32px",
+    marginRight: "32px",
   },
-  tableCell:{
-    padding:'2px',
-    fontSize:"12px"
+  tableCell: {
+    padding: "2px",
+    fontSize: "12px",
   },
-  bottomSignature:{
-    bottom:"10%",
+  bottomSignature: {
+    bottom: "5%",
     position: "absolute",
-    right: "10%",
-  }
+    right: "5%",
+  },
+  userSignature: {
+    bottom: "5%",
+    position: "absolute",
+    left: "5%",
+  },
 });
-
 
 const PdfComponent = ({
   name,
@@ -97,14 +101,14 @@ const PdfComponent = ({
   assignments,
   mentorName,
   date,
-  mentorSign
+  mentorSign,
 }: {
   name: string;
   clubName: string;
   assignments: ExtendedAssignment[];
-  mentorName:string;
-  date:string;
-  mentorSign:string
+  mentorName: string;
+  date: string;
+  mentorSign: string;
 }) => {
   return (
     <Document>
@@ -124,7 +128,14 @@ const PdfComponent = ({
         </View>
         <Table style={backStyle.table}>
           <TH>
-            <TD style={backStyle.tableCell}>No</TD>
+            <TD style={{
+                ...backStyle.tableCell,
+                width:"20px"
+              }}>
+                <Text style={{
+                  fontWeight:"semibold"
+                }}>No</Text>
+              </TD>
             <TD style={backStyle.tableCell}>Tugas</TD>
             <TD style={backStyle.tableCell}>Mark</TD>
           </TH>
@@ -132,21 +143,77 @@ const PdfComponent = ({
             <TR key={assignment.id}>
               <TD style={backStyle.tableCell}>{i + 1}</TD>
               <TD style={backStyle.tableCell}>{assignment.name}</TD>
-              <TD style={backStyle.tableCell}>{assignment.mark ? assignment.mark : "-"}</TD>
+              <TD style={backStyle.tableCell}>
+                {assignment.mark ? assignment.mark : "-"}
+              </TD>
             </TR>
           ))}
         </Table>
-        <View style={backStyle.bottomSignature}>
-        <Text style={{
-            fontSize:"14px",
-            textAlign:"center"
-          }}>Medan, {date}</Text>
-        <Text style={{
-            fontSize:"14px"
-          }}>STMIK TIME Medan</Text>
-          <Text style={{
-            fontSize:"14px"
-          }}>{mentorName}</Text>
+        <View
+          style={{
+            display: "flex",
+            position: "absolute",
+            bottom: "5%",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <View style={backStyle.bottomSignature}>
+            <Text
+              style={{
+                fontSize: "14px",
+                textAlign: "center",
+              }}
+            >
+              Medan, {date}
+            </Text>
+            <Text
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              STMIK TIME Medan
+            </Text>
+            <Image
+              src={mentorSign}
+              style={{
+                width: "80px",
+                height: "70px",
+                objectFit: "cover",
+              }}
+            />
+
+            <Text
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              {mentorName}
+            </Text>
+            <Text
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              {clubName}'s Mentor
+            </Text>
+          </View>
+          <View style={backStyle.userSignature}>
+            <Text
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              {name}
+            </Text>
+            <Text
+              style={{
+                fontSize: "14px",
+              }}
+            >
+              Signature of holder
+            </Text>
+          </View>
         </View>
       </Page>
     </Document>

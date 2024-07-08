@@ -107,7 +107,7 @@ const ItemDropdown = ({ assignment }: { assignment:AssignmentWithPayload }) => {
   const { mutateAsync: deleteAssignment } = useMutation({
     mutationFn: () => axios.delete(`/api/clubs/${id}/assignments/${assignment.id}`),
     onSuccess: () => {
-      toast.success("Post deleted", {
+      toast.success("Assignment deleted", {
         description: moment().format("LLLL"),
         // action: {
         //   label: "Dismiss",
