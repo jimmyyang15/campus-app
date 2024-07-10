@@ -3,6 +3,7 @@ import React from 'react'
 
 const PostDetail = ({ params }: { params: { id: string } }) => {
     const { id } = params;
+    
   return (
     <main className='container'>
         <PostDetailComponent id={id} />
