@@ -29,7 +29,16 @@ export async function GET(req: NextRequest, { params }: { params: { clubId: stri
 }
 export async function POST(req: NextRequest, { params }: { params: { clubId: string } }) {
     try {
-        const user = await validateRequest()
+        const user = await validateRequest();
+        if (user?.isMentor || user?.role === "ADMIN") {
+
+            return NextResponse.json({
+                status: 403,
+                message: "You're not supposed to request join"
+
+            })
+        }
+
         await db.request.create({
             data: {
                 clubId: params.clubId,

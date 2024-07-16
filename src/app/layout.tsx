@@ -13,7 +13,7 @@ import SessionProvider from "./_components/session-provider";
 import { Session, User } from "lucia";
 import { Metadata } from "next";
 import AdminPanelLayout from "./_components/layout/home-layout";
-
+import NextTopLoader from 'nextjs-toploader';
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -50,6 +50,7 @@ export default async function RootLayout({
             },
           }}
         />
+        <NextTopLoader showSpinner={false} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

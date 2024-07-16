@@ -60,7 +60,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { postId: s
     });
     const user = await validateRequest()
     if (user?.role !== "ADMIN") {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+      return new NextResponse("Forbidden", {
+        status: 403
+      })
     };
     return NextResponse.json({
       status: 201,
