@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 const CertificatePage = async() => {
   const user  = await validateRequest();
 
-  if (user?.role !== "" || user.isMentor) {
+  if (user?.role === "ADMIN" || user?.isMentor) {
     return redirect("/");
   }
 

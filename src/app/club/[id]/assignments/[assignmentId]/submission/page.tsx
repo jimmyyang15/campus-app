@@ -15,7 +15,7 @@ const SubmissionPage = async({ params }:{params:{id:string}}) => {
     }
   });
   const memberOfClub = clubMembers?.members.find((member)=>member.id === user?.id);
-  if(!memberOfClub && !user?.isMentor) {
+  if(!memberOfClub || user?.isMentor) {
     return redirect("/");
   }
   return (

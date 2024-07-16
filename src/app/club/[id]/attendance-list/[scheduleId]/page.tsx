@@ -16,7 +16,7 @@ const AttendanceDetailPage = async({ params }:{params:{id:string}}) => {
   });
   const memberOfClub = clubMembers?.members.find((member)=>member.id === user?.id);
   const mentor = clubMembers?.members.find((member)=>member.isMentor);
-  if(!memberOfClub && mentor?.id === user?.id) {
+  if(!memberOfClub || mentor?.id !== user?.id) {
     return redirect("/");
   }
   return (
