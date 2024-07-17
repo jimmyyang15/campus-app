@@ -14,13 +14,14 @@ import { Session, User } from "lucia";
 import { Metadata } from "next";
 import AdminPanelLayout from "./_components/layout/home-layout";
 import NextTopLoader from 'nextjs-toploader';
+import { env } from "@/env";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000/"),
+  metadataBase: new URL(env.BASE_URL),
   title: "Campus App",
   description: "This is the campus app",
   category: "website",
