@@ -107,7 +107,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           email: string;
         }) => axios.post(`/api/certificates/send-certificate`, payload),
         onSettled: () => {
-          queryClient.invalidateQueries(["memberCertificate"]);
+          // queryClient.invalidateQueries(["memberCertificate"]);
         },
       });
       const { data: assignments } = useQuery<{
@@ -288,7 +288,7 @@ export const columns: ColumnDef<CertificateColumn>[] = [
           email: string;
         }) => axios.post(`/api/certificates/send-certificate`, payload),
         onSettled: () => {
-          queryClient.invalidateQueries(["memberCertificate"]);
+          // queryClient.invalidateQueries(["memberCertificate"]);
         },
       });
       const handleGenerate = async (name: string) => {
