@@ -9,8 +9,17 @@ import moment from "moment";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
 
 const ClubItem = ({ club }: { club: ClubWithPayload }) => {
+  console.log(club);
+  const mentor = club.members?.find((member) => member.isMentor);
   const user = useSession();
   const { data: userRequest } = useQuery({
     queryKey: ["userRequest"],
@@ -61,6 +70,25 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
       queryClient.invalidateQueries(["userRequest"]);
     },
   });
+  const { mutateAsync: deleteClub, isLoading: isDeleting } = useMutation({
+    mutationFn: () =>
+      axios.delete(`/api/clubs/${club.id}`),
+    onSuccess: () => {
+      toast.success("Club deleted", {
+        description: moment().format("LLLL"),
+
+        // action: {
+        //   label: "Dismiss",
+        //   onClick: () => toast.dismiss(),
+        // },
+        closeButton: true,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["clubList"]);
+
+    },
+  });
 
   const handleRequest = async () => {
     await requestJoin();
@@ -69,6 +97,10 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
   const handleCancel = async () => {
     await cancelRequest();
   };
+
+  const handleDeleteClub = async() => {
+    await deleteClub();
+  }
 
   return (
     <div className="space-y-2 overflow-hidden rounded-lg border">
@@ -83,7 +115,31 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
       />
 
       <div className="space-y-2 px-4 py-2">
-        <p className="text-lg font-semibold text-foreground">{club.name}</p>
+        <div className="flex items-center justify-between">
+          <p className="text-lg font-semibold text-foreground">{club.name}</p>
+          {user.role === "ADMIN" ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <IoEllipsisHorizontalSharp />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                className="text-destructive"
+                onClick={handleDeleteClub}
+                disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
+        </div>
+        {mentor ? (
+          <p className="text-sm text-foreground">
+            by {mentor?.profile?.fullName}
+          </p>
+        ) : null}
+
         <p className="text-sm text-gray-500">{club.desc}</p>
         {user.role === "USER" && !user.isMentor && !alreadyInTheClub ? (
           <>

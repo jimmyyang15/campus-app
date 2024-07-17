@@ -9,6 +9,11 @@ export async function GET() {
                 createdAt: 'desc'
             },
             include: {
+                members:{
+                    include:{
+                        profile:true
+                    }
+                },
                 request: {
                     include: {
                         user: true
