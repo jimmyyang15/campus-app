@@ -104,14 +104,11 @@ const ClubItem = ({ club }: { club: ClubWithPayload }) => {
 
   return (
     <div className="space-y-2 overflow-hidden rounded-lg border">
-      <Image
-        unoptimized={true}
+      <img
         src={club.clubImage}
         alt="club image"
-        width={0}
-        height={0}
+   
         className="h-56 w-full object-cover "
-        sizes="100vw"
       />
 
       <div className="space-y-2 px-4 py-2">
